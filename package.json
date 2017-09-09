@@ -4,6 +4,7 @@
   "description": "Tower defence",
   "main": "index.js",
   "scripts": {
+    "start": "node server/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/frontend-park-mail-ru/2017_2_td_team/issues"
   },
-  "homepage": "https://github.com/frontend-park-mail-ru/2017_2_td_team#readme"
+  "homepage": "https://github.com/frontend-park-mail-ru/2017_2_td_team#readme",
+  "dependencies": {
+    "express": "^4.15.4"
+  }
 }
