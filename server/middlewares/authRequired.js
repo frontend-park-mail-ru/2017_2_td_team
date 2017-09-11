@@ -7,14 +7,14 @@ const authRequired = (req, res, next) => {
     const session = req.cookies.user;
 
     if (session === null || session === undefined) {
-        res.status(httpStatus.FORBIDDEN)
-            .json({"status": "Forbidden"});
+        res.status(httpStatus.UNAUTHORIZED)
+            .json({'status': 'unauthorized'});
         return
     }
 
     if (!shared.sessions.has(session)) {
-        res.status(httpStatus.FORBIDDEN)
-            .json({"status": "Forbidden"});
+        res.status(httpStatus.UNAUTHORIZED)
+            .json({'status': 'unauthorized'});
         return
     }
     next()

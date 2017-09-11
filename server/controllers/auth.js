@@ -14,6 +14,22 @@ class User {
     }
 }
 
+const getDefaultAuthCookieParams = () => {
+    const expDate = new Date();
+    expDate.setFullYear(expDate.getFullYear() + 1);
+    return {
+        expires:expDate,
+        httpOnly: true,
+    };
+};
+
+const signinUser = (res, user) => {
+    const uuid = uuidv4();
+    shared.sessions.set(uuid, user);
+    res.cookie('user', uuid, getDefaultAuthCookieParams());
+    res.json({'status': 'ok', uuid});
+};
+
 const signupHandler = (req, res) => {
     const username = req.body.username;
     const email = req.body.email;
@@ -21,22 +37,26 @@ const signupHandler = (req, res) => {
 
     if (!(username && email && password)) {
         res.status(httpStatus.BAD_REQUEST)
-            .json({"status": "bad request"});
+            .json({'status': 'bad request'});
         return
     }
 
-    bcrypt.hash(password, 10, (err, hash) => {
+    if (shared.users.has(username)){
+        res.status(httpStatus.BAD_REQUEST).json({'error':'user already exist'});
+        return
+    }
+
+    const saltRoundsCount = 10;
+
+    bcrypt.hash(password, saltRoundsCount, (err, hash) => {
         if (err !== undefined) {
             res.status(httpStatus.INTERNAL_SERVER_ERROR)
-               .json({"status": "internal server error"});
+                .json({'status': 'internal server error'});
             return
         }
         const user = new User(username, email, hash);
-        const uuid = uuidv4();
         shared.users.set(username, user);
-        shared.sessions.set(uuid, user);
-        res.cookie('user', uuid);
-        res.json({uuid});
+        signinUser(res, user);
     });
 };
 
@@ -46,13 +66,13 @@ const signinHandler = (req, res) => {
 
     if (!(username && password)) {
         res.status(httpStatus.BAD_REQUEST)
-           .json({"status": "bad request"});
+            .json({'status': 'bad request'});
         return
     }
 
     if (!shared.users.has(username)) {
         res.status(httpStatus.BAD_REQUEST)
-           .json({"status": "bad request"});
+            .json({'status': 'bad request'});
         return
     }
 
@@ -62,18 +82,15 @@ const signinHandler = (req, res) => {
     bcrypt.compare(password, correctHash, (err, status) => {
         if (err !== undefined) {
             res.status(httpStatus.INTERNAL_SERVER_ERROR)
-               .json({"status": "internal error"});
+                .json({'status': 'internal error'});
             return
         }
         if (!status) {
             res.status(httpStatus.UNAUTHORIZED)
-                .json({"status": "unauthorized"});
+                .json({'status': 'unauthorized'});
             return
         }
-        const uuid = uuidv4();
-        shared.sessions.set(uuid, user);
-        res.cookie("user", uuid);
-        res.json({uuid});
+        signinUser(res, user);
     });
 };
 
@@ -81,11 +98,11 @@ const logoutHandler = (req, res) => {
     const session = req.cookies.user;
     if (!session) {
         res.status(httpStatus.BAD_REQUEST)
-           .json({"status": "bad request"});
+            .json({'status': 'bad request'});
         return
     }
     shared.sessions.delete(session);
-    res.json({"status": "ok"})
+    res.json({'status': 'ok'})
 };
 
 
