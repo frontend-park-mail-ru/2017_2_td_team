@@ -8,13 +8,13 @@ function displayLoginView() {
     <div class="box">
         <form class="login-form" action="/login">
             <div class="input-block">
-                <label>Login</label><br>
-                <input type="text" name="login-field"><br>
+                <label>Login</label>
+                <input type="text" name="login-field">
             </div>
             
             <div class="input-block">
-                <label>Password</label><br>
-                <input type="password" name="password-field"><br>
+                <label>Password</label>
+                <input type="password" name="password-field">
             </div>
 
             <input class="button" type="submit" value="Log in">
@@ -29,7 +29,7 @@ function displayLoginView() {
 
 function displayMainMenuView() {
     application.innerHTML = `
-    <img class="logo" src="img/TD2.png"></img><br>
+    <img class="logo" src="img/TD2.png"></img>
     <div class="box">
         <button class="button start-button">Start</button>
         <button class="button settings-button">Settings</button>

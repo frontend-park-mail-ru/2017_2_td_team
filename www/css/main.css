@@ -33,27 +33,25 @@ html, body, #application {
 
     border: none;
     border-radius: 0;
-
-    box-shadow: 2px 2px 0px 0px #999;
 }
 
 
 /* Floating box */
 .box {
     width: 25%;
-
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-around;
+    align-items: stretch;
     box-sizing: border-box;
 
     background-color: white;
     text-align: center;
-    
+
     padding: 10px;
 
-    box-shadow: 8px 8px 0px 0px #999;
+    border: solid #999 0.1em;
+
 }
 
 .logo {
@@ -64,27 +62,28 @@ html, body, #application {
 /* Input block */
 .input-block {
     font-size: x-large;
-    margin: 4px;
+    margin-bottom: 0.5em;
     padding: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 
-    width: 100%;
+    flex: 1 1 auto;
 }
 
 .input-block input {
     font-size: medium;
     margin: 2px;
+
     padding: 4px;
-    justify-content: center;
 
-    width: 100%;
-
-    box-shadow: 4px 4px 0px 0px #999;
+    border: solid #999 0.1em;
 }
 
 .input-block label {
     padding: 2px;
-
-    width: 100%;
+    align-self: flex-start;
+    margin-bottom: 0.5em;
 }
 
 
@@ -92,20 +91,22 @@ html, body, #application {
 .login-form {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .login-form .button {
     background-color: #4CAF50;
+    font-size: x-large;
+    padding: 10px;
 }
 
 
 /* Main menu */
 .box > button {
     font-size: x-large;
-    width: 100%;
-
     padding: 10px;
-    margin: 10px;
 }
 
 

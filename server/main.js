@@ -11,13 +11,13 @@ const authMiddleware = require('./middlewares/authRequired');
 
 const app = express();
 
-app.use(express.static('public'));
+app.use(express.static('www'));
 app.use(express.static('node_modules'));
 app.use(body.json());
 app.use(cookie());
 app.use(morgan('dev'));
 
-app.use(/^\/(?!signin|signup).*$/, authMiddleware.authRequired);
+//app.use(/^\/(?!signin|signup).*$/, authMiddleware.authRequired);
 
 app.post('/signup', authControllers.signUp);
 app.post('/signin', authControllers.signIn);
