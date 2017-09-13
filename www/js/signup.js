@@ -43,6 +43,17 @@ function createSignupForm() {
 
     form.setAttribute('action', ' ');
     form.classList.add('login-form');
-    fields.forEach(appendInputBlock);
+    const submit = createInput('submit', 'signup-button', ['register-button', 'button']);
+    fields.map(appendInputBlock)
+        .push(submit)
+        .forEach( elem => form.appendChild(elem));
+    submit.addEventListener('click', elem => signup(form, event));
     application.querySelector('.box').appendChild(form);
+}
+
+function signup(form, event) {
+    alert('signup');
+    console .log(form.elements);
+    console.log(event);
+    displayMainMenuView();
 }

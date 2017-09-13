@@ -51,7 +51,8 @@ function displayAboutView() {
     <img class="logo" src="img/TD2.png"></img><br>
     <div class="box">
         <div class="about-block">
-            TD is multiplayer tower defense game
+           TD is multiplayer tower defense game
+            <br>
             <a href="https://github.com/frontend-park-mail-ru/2017_2_td_team">
                 Github Repo
             </a>
