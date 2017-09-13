@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/frontend-park-mail-ru/2017_2_td_team#readme",
   "dependencies": {
-    "express": "^4.15.4"
+    "express": "^4.15.4",
+    "normalize.css": "^7.0.0"
   }
 }
