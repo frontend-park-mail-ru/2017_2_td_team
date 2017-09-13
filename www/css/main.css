@@ -23,8 +23,8 @@ html, body, #application {
     font-size: x-large;
     color: black;
 
-    padding: 4px;
-    margin: 4px;
+    padding: 0.25rem;
+    margin: 0.25rem;
 
     text-align: center;
     text-decoration: none;
@@ -38,7 +38,7 @@ html, body, #application {
 
 /* Floating box */
 .box {
-    width: 25%;
+    min-width: 25%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -48,10 +48,9 @@ html, body, #application {
     background-color: white;
     text-align: center;
 
-    padding: 10px;
+    padding: 0.5rem;
 
-    border: solid #999 0.1em;
-
+    border: solid #999 0.1rem;
 }
 
 .logo {
@@ -62,8 +61,8 @@ html, body, #application {
 /* Input block */
 .input-block {
     font-size: x-large;
-    margin-bottom: 0.5em;
-    padding: 4px;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -73,17 +72,16 @@ html, body, #application {
 
 .input-block input {
     font-size: medium;
-    margin: 2px;
 
-    padding: 4px;
+    margin: 0.25rem;
+    padding: 0.25rem;
 
-    border: solid #999 0.1em;
+    border: solid #999 0.1rem;
 }
 
 .input-block label {
-    padding: 2px;
-    align-self: flex-start;
-    margin-bottom: 0.5em;
+    padding: 0.25rem;
+    margin-bottom: 0.25rem;
 }
 
 
@@ -91,6 +89,7 @@ html, body, #application {
 .login-form {
     width: 100%;
     height: 100%;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -99,14 +98,14 @@ html, body, #application {
 .login-form .button {
     background-color: #4CAF50;
     font-size: x-large;
-    padding: 10px;
+    padding: 0.75rem;
 }
 
 
 /* Main menu */
 .box > button {
     font-size: x-large;
-    padding: 10px;
+    padding: 0.75rem;
 }
 
 
@@ -114,3 +113,21 @@ html, body, #application {
 .about-block {
     line-height: 2;
 }
+
+/*@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}*/

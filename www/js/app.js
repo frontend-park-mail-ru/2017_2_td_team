@@ -17,14 +17,14 @@ function displayLoginView() {
                 <input type="password" name="password-field">
             </div>
 
-            <input class="button" type="submit" value="Log in">
+            <input class="button login-button" type="submit" value="Log in">
+            <button class="button register-button" type="submit">Register</button>
         </form>
     </div>
     `;
 
-    application.querySelector('.login-form').addEventListener('submit', () => {
-        displayMainMenuView();
-    });
+    application.querySelector('.login-button').addEventListener('click', displayMainMenuView);
+    application.querySelector('.register-button').addEventListener('click', displayRegisterView);
 };
 
 function displayMainMenuView() {
@@ -32,24 +32,18 @@ function displayMainMenuView() {
     <img class="logo" src="img/TD2.png"></img>
     <div class="box">
         <button class="button start-button">Start</button>
-        <button class="button settings-button">Settings</button>
         <button class="button help-button">Help</button>
+        <button class="button settings-button">Settings</button>
         <button class="button about-button">About</button>
         <button class="button logout-button">Log out</button>
     </div>
     `;
 
-    application.querySelector('.start-button').addEventListener('click', () => {
-        startGame();
-    });
+    application.querySelector('.start-button').addEventListener('click', startGame);
 
-    application.querySelector('.about-button').addEventListener('click', () => {
-        displayAboutView();
-    });
+    application.querySelector('.about-button').addEventListener('click', displayAboutView);
 
-    application.querySelector('.logout-button').addEventListener('click', () => {
-        displayLoginView();
-    });
+    application.querySelector('.logout-button').addEventListener('click', displayLoginView);
 };
 
 function displayAboutView() {
@@ -66,10 +60,12 @@ function displayAboutView() {
     </div>
     `;
 
-    application.querySelector('.back-button').addEventListener('click', () => {
-        displayMainMenuView();
-    });
+    application.querySelector('.back-button').addEventListener('click', displayMainMenuView);
 };
+
+function displayRegisterView() {
+    console.log('lolkek');
+}
 
 function startGame() {
     alert("It works!");
