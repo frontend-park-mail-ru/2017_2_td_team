@@ -5,19 +5,24 @@ function renderSignupForm(section) {
         ['Name', 'text', 'name-field'],
         ['E-Mail', 'email', 'email-field'],
         ['Password', 'password', 'password-field'],
-        ['Repeat password', 'password', 'repeate-password-field'],
+        ['Repeat password', 'password', 'repeat-password-field'],
     ];
 
     const submit = createInput('submit', 'signup-button', ['register-button', 'button']);
+
     const form = createInputForm(inputs, [submit], ['login-form']);
 
     submit.setAttribute('value', 'Sign Up');
-    submit.addEventListener('click', event => signup(form, event));
 
     const back = createButton(['Back', ['back-button'], displayLoginView]);
 
-    section.appendChild(form)
-        .appendChild(back);
+    section.appendChild(form);
+    section.appendChild(back);
+
+    form.addEventListener('submit', signup);
+
+
+    return form
 }
 
 function renderSigninForm(section) {
@@ -29,17 +34,12 @@ function renderSigninForm(section) {
     const submit = createInput('submit', 'login-button', ['login-button', 'button']);
     submit.setAttribute('value', 'Sign In');
 
-    submit.addEventListener('click', event => {
-        event.preventDefault();
-        displayMainMenuView()
-    });
-
-    const signupButton = createButton(['Sign up', ['button'], displaySignupView]);
+    const signupButton = createButton(['Sign Up', ['button'], displaySignupView]);
 
     const form = createInputForm(fields, [submit, signupButton], ['login-form']);
-
     section.appendChild(form);
 
+    form.addEventListener('submit', signin);
     return form
 }
 
@@ -49,7 +49,7 @@ function renderMainMenu(section) {
         ['Help', ['help-button'], displayHelpView],
         // ['Settings', 'settings-button', displaySettingsView],
         ['About', ['about-button'], displayAboutView],
-        ['Logout', ['logout-button'], displayLoginView],
+        ['Logout', ['logout-button'], signout],
     ].forEach(buttonScheme => section.appendChild(
         createButton(buttonScheme)
     ));
@@ -140,8 +140,8 @@ function createButton(buttonScheme) {
 
     buttonScheme[1].forEach(className => button.classList.add(className));
     button.classList.add('button');
-    button.addEventListener('click', buttonScheme[2]);
 
+    button.addEventListener('click', buttonScheme[2]);
     return button
 }
 
