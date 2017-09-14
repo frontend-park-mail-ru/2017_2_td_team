@@ -17,7 +17,7 @@ app.use(body.json());
 app.use(cookie());
 app.use(morgan('dev'));
 
-//app.use(/^\/(?!signin|signup).*$/, authMiddleware.authRequired);
+app.use(/^\/(?!signin|signup).*$/, authMiddleware.authRequired);
 
 app.post('/signup', authControllers.signUp);
 app.post('/signin', authControllers.signIn);
