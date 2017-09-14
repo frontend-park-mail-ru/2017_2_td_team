@@ -73,8 +73,9 @@ function renderAboutPage(section) {
     section.appendChild(about);
     section.appendChild(back);
 
-    about.appendChild(repLink);
     about.appendChild(br);
+    about.appendChild(repLink);
+
     return about
 }
 
