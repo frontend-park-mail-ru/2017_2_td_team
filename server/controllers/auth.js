@@ -18,10 +18,19 @@ const getDefaultAuthCookieParams = () => {
     const expDate = new Date();
     expDate.setFullYear(expDate.getFullYear() + 1);
     return {
-        expires:expDate,
+        expires: expDate,
         httpOnly: true,
     };
 };
+
+const deleteCookie = (res, cookie) => {
+    const expired = {
+        expires: new Date(0),
+        httpOnly: true,
+    };
+    res.cookie(cookie, ' ', expired);
+};
+
 
 const signinUser = (res, user) => {
     const uuid = uuidv4();
@@ -31,6 +40,7 @@ const signinUser = (res, user) => {
 };
 
 const signupHandler = (req, res) => {
+
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
@@ -41,8 +51,8 @@ const signupHandler = (req, res) => {
         return
     }
 
-    if (shared.users.has(username)){
-        res.status(httpStatus.BAD_REQUEST).json({'error':'user already exist'});
+    if (shared.users.has(email)) {
+        res.status(httpStatus.BAD_REQUEST).json({'error': 'user already exist'});
         return
     }
 
@@ -55,28 +65,28 @@ const signupHandler = (req, res) => {
             return
         }
         const user = new User(username, email, hash);
-        shared.users.set(username, user);
+        shared.users.set(email, user);
         signinUser(res, user);
     });
 };
 
 const signinHandler = (req, res) => {
-    const username = req.body.username;
+    const email = req.body.email;
     const password = req.body.password;
 
-    if (!(username && password)) {
+    if (!(email && password)) {
         res.status(httpStatus.BAD_REQUEST)
             .json({'status': 'bad request'});
         return
     }
 
-    if (!shared.users.has(username)) {
+    if (!shared.users.has(email)) {
         res.status(httpStatus.BAD_REQUEST)
             .json({'status': 'bad request'});
         return
     }
 
-    const user = shared.users.get(username);
+    const user = shared.users.get(email);
     const correctHash = user.password;
 
     bcrypt.compare(password, correctHash, (err, status) => {
@@ -102,6 +112,7 @@ const logoutHandler = (req, res) => {
         return
     }
     shared.sessions.delete(session);
+    deleteCookie(res, 'user');
     res.json({'status': 'ok'})
 };
 
