@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/main.js",
+    "lint": "eslint www/js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,5 +27,13 @@
     "morgan": "^1.8.2",
     "normalize.css": "^7.0.0",
     "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.7.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }
