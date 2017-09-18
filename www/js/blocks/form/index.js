@@ -6,7 +6,7 @@ export class Form extends Block {
   constructor(submitButton = null,inputs = [], attrs = {}) {
     const form = document.createElement('form');
     super(form);
-    fields.forEach(field => this.append(field));
+    inputs.forEach(field => this.append(field));
     if (submitButton){
       this.append(submitButton);
     }

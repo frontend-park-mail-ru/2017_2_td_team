@@ -1,0 +1,1 @@
+function aboutTemplate(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cspan\u003ETD is a multiplayer online game\u003C\u002Fspan\u003E\u003Cbr\u002F\u003E\u003Ca href=\"https:\u002F\u002Fgithub.com\u002Ffrontend-park-mail-ru\u002F2017_2_td_team\"\u003EGitHub repo\u003C\u002Fa\u003E";;return pug_html;}
