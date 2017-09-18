@@ -5,26 +5,31 @@ export default class Block {
   }
 
   static Create(tag = 'div', attrs = {}, classes = [], text = null) {
-    const elem = document.createElement(tag);
-    classes.forEach(className => elem.classList.add(className));
-
-    for (let key in attrs) {
-      elem.setAttribute(key, attrs[key]);
-    }
-
-    if (text) {
-      elem.textContent = text;
-    }
-    return new Block(elem);
-  }
-
-  get text() {
-    return this._element.textContent;
+    const block = new Block(document.createElement(tag));
+    block.setAttributes(attrs);
+    block.setClasses(classes);
+    block.text = text;
+    return block;
   }
 
   set text(content) {
     this._element.textContent = content;
   }
+
+  set html(inner) {
+    this._element.innerHTML = inner;
+  }
+
+  setAttributes(attrs = {}) {
+    for (let key in attrs) {
+      this._element.setAttribute(key, attrs[key]);
+    }
+  }
+
+  setClasses(classes = []) {
+    classes.forEach(className => this._element.classList.add(className));
+  }
+
 
   clear() {
     this._element.innerHTML = '';
@@ -42,7 +47,7 @@ export default class Block {
   }
 
   append(element) {
-    this._element.appendChild(element);
+    this._element.appendChild(element._element);
     return this;
   }
 
