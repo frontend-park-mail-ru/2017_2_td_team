@@ -2,6 +2,7 @@ export const MenuButtons = [
   {
     attrs: {
       type: 'button',
+      'data-section': 'start',
     },
     text: 'Start',
     classes: ['button', 'menu-button'],
@@ -9,6 +10,7 @@ export const MenuButtons = [
   {
     attrs: {
       type: 'button',
+      'data-section': 'about'
     },
     text: 'About',
     classes: ['button', 'menu-button'],
@@ -16,15 +18,17 @@ export const MenuButtons = [
   {
     attrs: {
       type: 'button',
+      'data-section': 'setting',
     },
-    text: 'Logout',
+    text: 'Settings',
     classes: ['button', 'menu-button'],
   },
   {
     attrs: {
       type: 'button',
+      'data-section': 'logout',
     },
-    text: 'Settings',
+    text: 'Logout',
     classes: ['button', 'menu-button'],
   },
 ];

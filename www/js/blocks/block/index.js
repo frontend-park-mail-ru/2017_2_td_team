@@ -30,11 +30,11 @@ export default class Block {
     classes.forEach(className => this._element.classList.add(className));
   }
 
-  set id(id){
+  set id(id) {
     return this._element.setIdAttribute(id);
   }
 
-  get id(){
+  get id() {
     return this._element.id;
   }
 

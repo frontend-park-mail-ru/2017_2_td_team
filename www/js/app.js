@@ -8,6 +8,7 @@ import {Button} from './blocks/buttons/index.js';
 import {Menu} from './blocks/menu/index.js';
 import {InputBlock} from './blocks/inputBlock/index.js';
 import {SigninButton} from './configs/signin-fields.js';
+import {SignupButton} from './configs/signup-fields.js';
 import {AboutPage} from './blocks/about/index.js';
 import {Logo} from './blocks/logo/index.js';
 
@@ -24,18 +25,27 @@ const routes = sections.reduce(((prev, curr) => {
 sections.forEach(section => application.append(section));
 
 const menuButtons = MenuButtons.map(button => new Button(button));
-const menu = new Menu(menuButtons, {}, ['box']);
 
+const menu = new Menu(menuButtons, {}, ['box']);
 
 const signinButton = new Button(SigninButton);
 const signinInputs = SigninFields.map(field => new InputBlock(field));
 const signinForm = new Form(signinButton, signinInputs, {action: '', method: 'post'});
 
 
-const signupButton = new Button(SigninButton);
+const signupButton = new Button(SignupButton);
 const signupInputs = SignupFields.map(field => new InputBlock(field));
 const signupForm = new Form(signupButton, signupInputs, {action: '', method: 'post'});
 
+const toggleOn = id => {
+  for(let key in routes){
+    (routes[key].id === id) ? routes[key].show(): routes[key].hide();
+  }
+};
+const menuToggle = () => toggleOn('menu-section');
+const signinToggle = () => toggleOn('signin-section');
+const signupToggle = () => toggleOn('signup-section');
+const aboutToggle = () => toggleOn('about-section');
 
 const about = new AboutPage();
 
@@ -47,16 +57,8 @@ const toSignupButton = new Button(
     text: 'Sign Up',
     classes: ['button', 'register-button'],
   });
+toSignupButton.on('click', signupToggle);
 
-const backButton = () => new Button(
-  {
-    attrs: {
-      type: 'button',
-    },
-    text: 'Back',
-    classes: ['button', 'back-button'],
-  }
-);
 
 
 const flexWrapper = () => Block.Create('div', {}, ['flex-wrapper']);
@@ -69,7 +71,42 @@ const withLogo = () => new Logo('TD', {}, ['logo']);
 
 signinForm.append(toSignupButton);
 
+
+
+const backButton = (prevSection) =>{
+
+  const button = new Button(
+    {
+      attrs: {
+        type: 'button',
+      },
+      text: 'Back',
+      classes: ['button', 'back-button'],
+    });
+  button.on('click',event =>{
+    event.preventDefault();
+    toggleOn(prevSection)
+  });
+  return button;
+};
+
+menu.on('click', event =>{
+  event.preventDefault();
+  const section = event.target.getAttribute('data-section');
+  switch (section){
+   case 'about':
+      aboutToggle();
+      break;
+    case 'logout':
+      signinToggle();
+      break
+   }
+});
+
+signinForm.onSubmit(menuToggle);
+signupForm.onSubmit(menuToggle);
+
 routes['menu-section'].append(flexed(withLogo()).append(menu)).show();
-routes['signin-section'].append(flexed(withLogo()).append(boxed(signinForm).append(backButton())));
-routes['signup-section'].append(flexed(withLogo()).append(boxed(signupForm).append(backButton())));
-routes['about-section'].append(flexed(withLogo()).append(boxed(about).append(backButton())));
+routes['signin-section'].append(flexed(withLogo()).append(boxed(signinForm)));
+routes['signup-section'].append(flexed(withLogo()).append(boxed(signupForm).append(backButton('signin-section'))));
+routes['about-section'].append(flexed(withLogo()).append(boxed(about).append(backButton('menu-section'))));
