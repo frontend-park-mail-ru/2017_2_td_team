@@ -30,5 +30,5 @@ export const SignupButton = {
     type: 'submit'
   },
   text: 'Sign Up',
-  classes: ['button'],
+  classes: ['button','form-button'],
 };

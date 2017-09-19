@@ -1,19 +1,18 @@
 import Block from '../block/index.js';
-import {InputBlock} from '../inputBlock/index.js';
 
 export class Form extends Block {
 
-  constructor(submitButton = null,inputs = [], attrs = {}, classes = []) {
+  constructor(submitButton = null, inputs = [], attrs = {}, classes = []) {
     const form = document.createElement('form');
     super(form);
     inputs.forEach(field => this.append(field));
-    if (submitButton){
+    if (submitButton) {
       this.append(submitButton);
     }
     this.setClasses(classes);
   }
 
-   onSubmit(callback) {
+  onSubmit(callback) {
     this._element.addEventListener('submit', event => {
       event.preventDefault();
       const formdata = {};

@@ -1,3 +1,3 @@
-export class Auth{
+export class Auth {
 
 }

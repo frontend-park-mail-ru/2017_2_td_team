@@ -30,12 +30,12 @@ const menu = new Menu(menuButtons, {}, ['box']);
 
 const signinButton = new Button(SigninButton);
 const signinInputs = SigninFields.map(field => new InputBlock(field));
-const signinForm = new Form(signinButton, signinInputs, {action: '', method: 'post'},['login-form']);
+const signinForm = new Form(signinButton, signinInputs, {action: '', method: 'post'},['default-form']);
 
 
 const signupButton = new Button(SignupButton);
 const signupInputs = SignupFields.map(field => new InputBlock(field));
-const signupForm = new Form(signupButton, signupInputs, {action: '', method: 'post'}, ['login-form']);
+const signupForm = new Form(signupButton, signupInputs, {action: '', method: 'post'}, ['default-form']);
 
 const toggleOn = id => {
   for(let key in routes){
@@ -55,7 +55,7 @@ const toSignupButton = new Button(
       type: 'button',
     },
     text: 'Sign Up',
-    classes: ['button', 'register-button'],
+    classes: ['button', 'form-button'],
   });
 toSignupButton.on('click', signupToggle);
 
@@ -81,7 +81,7 @@ const backButton = (prevSection) =>{
         type: 'button',
       },
       text: 'Back',
-      classes: ['button', 'back-button'],
+      classes: ['button', 'menu-button'],
     });
   button.on('click',event =>{
     event.preventDefault();

@@ -37,24 +37,6 @@ body {
 
 }
 
-.button {
-    font-family: 'Press Start 2P', cursive;
-    font-size: x-large;
-    color: black;
-
-    padding: 0.25rem;
-    margin: 0.25rem;
-
-    text-align: center;
-    text-decoration: none;
-
-    display: inline-block;
-
-    border: none;
-    border-radius: 0;
-}
-
-/* Floating box */
 .box {
     min-width: 25%;
     display: flex;
@@ -68,66 +50,6 @@ body {
 
     padding: 0.5rem;
     border: solid #999 0.1rem;
-}
-
-.logo {
-    max-width: 25%;
-    height: auto;
-    flex: 0 0 auto;
-    margin-top: auto;
-}
-
-/* Input block */
-.input-block {
-    font-size: x-large;
-    margin-bottom: 0.5rem;
-    padding: 0.25rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-
-    flex: 1 1 auto;
-}
-
-.input-block input {
-    font-size: medium;
-
-    margin: 0.25rem;
-    padding: 0.25rem;
-
-    border: solid #999 0.1rem;
-}
-
-.input-block label {
-    padding: 0.25rem;
-    margin-bottom: 0.25rem;
-}
-
-/* Login form */
-.login-form {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.login-form .button {
-    background-color: #4CAF50;
-    font-size: x-large;
-    padding: 0.75rem;
-}
-
-/* Main menu */
-.box > button {
-    font-size: x-large;
-    padding: 0.75rem;
-}
-
-/* About */
-.about-block {
-    line-height: 2;
 }
 
 /*@media (min-width: 768px) {

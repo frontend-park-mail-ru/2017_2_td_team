@@ -17,5 +17,5 @@ export const SigninButton = {
     type: 'submit'
   },
   text: 'Sign In',
-  classes: ['button'],
+  classes: ['button', 'form-button'],
 };
