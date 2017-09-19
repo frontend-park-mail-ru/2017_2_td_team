@@ -30,12 +30,12 @@ const menu = new Menu(menuButtons, {}, ['box']);
 
 const signinButton = new Button(SigninButton);
 const signinInputs = SigninFields.map(field => new InputBlock(field));
-const signinForm = new Form(signinButton, signinInputs, {action: '', method: 'post'});
+const signinForm = new Form(signinButton, signinInputs, {action: '', method: 'post'},['login-form']);
 
 
 const signupButton = new Button(SignupButton);
 const signupInputs = SignupFields.map(field => new InputBlock(field));
-const signupForm = new Form(signupButton, signupInputs, {action: '', method: 'post'});
+const signupForm = new Form(signupButton, signupInputs, {action: '', method: 'post'}, ['login-form']);
 
 const toggleOn = id => {
   for(let key in routes){
