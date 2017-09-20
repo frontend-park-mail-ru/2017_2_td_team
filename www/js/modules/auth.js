@@ -10,7 +10,7 @@ export class Auth {
         if (formData[SigninFields['PasswordField'].name])
             return Promise.reject(new Error('Password field is empty'));
 
-        return Http.post('/login', formData);
+        return Http.post('/auth/signin', formData);
     }
 
     static signUp(formData) {
@@ -30,7 +30,7 @@ export class Auth {
                 formData[SignupFields['PasswordField'].name])
             return Promise.reject(new Error('Passwords are not equal'));
 
-        return Http.post('/logout', formData);
+        return Http.post('/auth/signup', formData);
     }
 
     static signOut() {
