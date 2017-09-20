@@ -1,0 +1,16 @@
+form.default-form(action="", method="post")
+
+    div.input-block
+        label Login
+        input(name="login-field" type="text" value=context.name)
+
+    div.input-block
+        label Email
+        input(name="email-field" type="email" value=context.email)
+
+    div.input-block
+        label Password
+        input(name="password-field" type="password")
+
+    button(class=['button', 'form-button'] type="submit") Save
+    button(class=['button', 'menu-button'] type="button") Back
