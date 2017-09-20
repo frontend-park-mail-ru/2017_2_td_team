@@ -34,6 +34,6 @@ export class Auth {
     }
 
     static signOut() {
-        return Http.get('/logout');
+        return Http.post('/logout');
     }
 }
