@@ -9,7 +9,7 @@ import {Menu} from './blocks/menu/index.js';
 import {InputBlock} from './blocks/inputBlock/index.js';
 import {AboutPage} from './blocks/about/index.js';
 import {Logo} from './blocks/logo/index.js';
-
+import {Profile} from './blocks/profile/index.js';
 
 const application = new Block(document.getElementById('application'));
 
@@ -27,13 +27,17 @@ const menuButtons = MenuButtons.map(button => new Button(button));
 const menu = new Menu(menuButtons, {}, ['box']);
 
 const signinButton = new Button(SigninButton);
-const signinInputs = SigninFields.map(field => new InputBlock(field));
+const signinInputs = Array.from(SigninFields.values()).map(field => new InputBlock(field));
 const signinForm = new Form(signinButton, signinInputs, {action: '', method: 'post'}, ['default-form']);
 
 
 const signupButton = new Button(SignupButton);
-const signupInputs = SignupFields.map(field => new InputBlock(field));
+const signupInputs = Array.from(SignupFields.values()).map(field => new InputBlock(field));
 const signupForm = new Form(signupButton, signupInputs, {action: '', method: 'post'}, ['default-form']);
+
+const profile = new Profile(window.profileTemplate);
+
+
 
 const toggleOn = id => {
     for (let key in routes) {
