@@ -1,4 +1,4 @@
-export const SignupFields = new Map(
+export const SignupFields = new Map([
     ['NameField', {
         type: 'text',
         label: 'Name',
@@ -23,7 +23,7 @@ export const SignupFields = new Map(
         name: 'repeat-password-field',
         classes: ['input-block']
     }]
-);
+]);
 
 export const SignupButton = {
     attrs: {

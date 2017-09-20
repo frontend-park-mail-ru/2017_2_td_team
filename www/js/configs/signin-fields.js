@@ -1,4 +1,4 @@
-export const SigninFields =  new Map(
+export const SigninFields =  new Map([
     ['EmailField', {
         type: 'email',
         label: 'E-Mail',
@@ -11,7 +11,7 @@ export const SigninFields =  new Map(
         name: 'password-field',
         classes: ['input-block'],
     }],
-);
+]);
 
 export const SigninButton = {
     attrs: {
