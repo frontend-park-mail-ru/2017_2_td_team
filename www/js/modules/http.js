@@ -2,7 +2,7 @@ export class Http {
   static get(address) {
     return fetch(address, {
       method: 'get',
-      credential: 'include'
+      credentials: 'include'
     })
       .then(Http.checkStatus)
       .then(res => res.json());
@@ -11,7 +11,7 @@ export class Http {
   static post(address, body) {
     return fetch(address, {
       method: 'post',
-      credential: 'include',
+      credentials: 'include',
       headers: {'Content-Type': 'application/json; charset=utf8'},
       body: JSON.stringify(body)
     })
