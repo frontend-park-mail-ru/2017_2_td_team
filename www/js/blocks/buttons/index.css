@@ -1,8 +1,8 @@
-
 .button {
     font-family: 'Press Start 2P', cursive;
     font-size: x-large;
     color: black;
+    background-color: #c0c0c0;
 
     padding: 0.25rem;
     margin: 0.25rem;
