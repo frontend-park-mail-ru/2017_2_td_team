@@ -180,7 +180,6 @@ menu.on('click', event => {
 routes['menu-section']
     .append(flexed(withLogo())
         .append(menu))
-    .show();
 routes['signin-section'].append(flexed(withLogo()).append(boxed(signinForm)));
 routes['signup-section'].append(flexed(withLogo()).append(boxed(signupForm).append(backButton('signin-section'))));
 routes['about-section'].append(flexed(withLogo()).append(boxed(about).append(backButton('menu-section'))));
