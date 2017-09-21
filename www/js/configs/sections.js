@@ -17,6 +17,11 @@ export const SectionsData = [
     {
         'id': 'about-section',
         'hidden': true,
+    },
+
+    {
+        'id': 'settings-section',
+        'hidden': true,
     }
 
 ];

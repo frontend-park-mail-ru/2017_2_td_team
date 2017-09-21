@@ -38,7 +38,6 @@ const signupForm = new Form(signupButton, signupInputs, {action: '', method: 'po
 const profile = new Profile(window.profileTemplate);
 
 
-
 const toggleOn = id => {
     for (let key in routes) {
         (routes[key].id === id) ? routes[key].show() : routes[key].hide();
@@ -48,7 +47,7 @@ const menuToggle = () => toggleOn('menu-section');
 const signinToggle = () => toggleOn('signin-section');
 const signupToggle = () => toggleOn('signup-section');
 const aboutToggle = () => toggleOn('about-section');
-
+const settignsToggle = () => toggleOn('settings-section');
 const about = new AboutPage();
 
 const toSignupButton = new Button(
@@ -89,6 +88,75 @@ const backButton = (prevSection) => {
     });
     return button;
 };
+const signin = (formdata) => {
+    const email = formdata[SignupFields.get('EmailField').name];
+    const password = formdata[SignupFields.get('PasswordField').name];
+
+    if (!email) {
+        return Promise.reject(new Error('Email field is empty'));
+    }
+
+    if (!password) {
+        return Promise.reject(new Error('Password field is empty'));
+    }
+    fetch(buildBackUrl('/auth/signin'), initPost({email, password}))
+        .then(res => res.json())
+        .then(user => {
+            profile.setContent(user);
+            menuToggle();
+        })
+        .catch(err => console.log(err));
+};
+const signup = (formdata) => {
+    const email = formdata[SignupFields.get('EmailField').name];
+    const password = formdata[SignupFields.get('PasswordField').name];
+    const login = formdata[SignupFields.get('PasswordField').name];
+    const repeatePassword = formdata[SignupFields.get('RepeatPasswordField').name];
+
+    if (!login) {
+        return Promise.reject(new Error('Name field is empty'));
+    }
+
+    if (!email) {
+        return Promise.reject(new Error('Email field is empty'));
+    }
+
+    if (!password) {
+        return Promise.reject(new Error('Password field is empty'));
+    }
+
+    if (!repeatePassword) {
+        return Promise.reject(new Error('Repeat password field is empty'));
+    }
+
+    if (repeatePassword !== password) {
+        return Promise.reject(new Error('Passwords are not equal'));
+    }
+    fetch(buildBackUrl('/auth/signup'), initPost({email, password, login}))
+        .then(res => res.json())
+        .then(user => {
+            profile.setContent(user);
+            menuToggle();
+        })
+        .catch(err => console.log(err));
+};
+const updateProfile = () => {
+    fetch(buildBackUrl('/user'), initGet())
+        .then(res => res.json())
+        .then(user => {
+            profile.setContent(user);
+        })
+        .catch(err => console.log(err));
+};
+const signout = () => {
+    fetch(buildBackUrl('/logout'), initPost({}))
+        .then(res => res.json())
+        .then(res => {
+            console.log(res);
+            signinToggle();
+        })
+        .catch(err => console.log(err));
+};
 
 menu.on('click', event => {
     event.preventDefault();
@@ -97,14 +165,17 @@ menu.on('click', event => {
         case 'about':
             aboutToggle();
             break;
+        case 'settings':
+            updateProfile();
+            settignsToggle();
+            break;
         case 'logout':
+            signout();
             signinToggle();
             break;
     }
 });
 
-signinForm.onSubmit(menuToggle);
-signupForm.onSubmit(menuToggle);
 
 routes['menu-section']
     .append(flexed(withLogo())
@@ -113,3 +184,39 @@ routes['menu-section']
 routes['signin-section'].append(flexed(withLogo()).append(boxed(signinForm)));
 routes['signup-section'].append(flexed(withLogo()).append(boxed(signupForm).append(backButton('signin-section'))));
 routes['about-section'].append(flexed(withLogo()).append(boxed(about).append(backButton('menu-section'))));
+const backendURL = 'https://td-java.herokuapp.com';
+const buildBackUrl = (path) => backendURL.concat(path);
+
+const initGet = () => {
+    return {
+        headers: {'Content-Type': 'application/json'},
+        method: 'get',
+        mode: 'cors',
+        credentials: 'include',
+
+    };
+};
+const initPost = (body) => {
+    return {
+        headers: {'Content-Type': 'application/json'},
+        method: 'post',
+        body: JSON.stringify(body),
+        mode: 'cors',
+        credentials: 'include',
+
+    };
+};
+
+fetch(buildBackUrl('/user'), initGet())
+    .then(res => res.json())
+    .then(res => {
+        profile.setContent(res);
+    })
+    .catch(err => {
+        console.log(err);
+        signinToggle();
+    });
+
+
+signinForm.onSubmit(signin);
+signupForm.onSubmit(signup);

@@ -18,7 +18,7 @@ export const MenuButtons = [
     {
         attrs: {
             type: 'button',
-            'data-section': 'setting',
+            'data-section': 'settings',
         },
         text: 'Settings',
         classes: ['button', 'menu-button'],
