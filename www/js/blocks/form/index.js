@@ -13,14 +13,19 @@ export class Form extends Block {
         this.setClasses(classes);
     }
 
+    static ExtractFormData(rawForm) {
+        const formdata = {};
+        const elements = rawForm.elements;
+        for (let key in elements) {
+            formdata[key] = elements[key].value;
+        }
+        return formdata;
+    }
+
     onSubmit(callback) {
         this._element.addEventListener('submit', event => {
             event.preventDefault();
-            const formdata = {};
-            const elements = this._element.elements;
-            for (let key in elements) {
-                formdata[key] = elements[key].value;
-            }
+            const formdata = Form.ExtractFormData(event.target);
             callback(formdata);
         });
     }

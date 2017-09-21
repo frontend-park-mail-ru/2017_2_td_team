@@ -1,4 +1,4 @@
-export const SigninFields =  new Map([
+export const SigninFields = new Map([
     ['EmailField', {
         type: 'email',
         label: 'E-Mail',

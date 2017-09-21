@@ -10,6 +10,8 @@ import {InputBlock} from './blocks/inputBlock/index.js';
 import {AboutPage} from './blocks/about/index.js';
 import {Logo} from './blocks/logo/index.js';
 import {Profile} from './blocks/profile/index.js';
+import {UserService} from './services/user-service.js';
+import {Auth} from './modules/auth.js';
 
 const application = new Block(document.getElementById('application'));
 
@@ -71,7 +73,6 @@ const withLogo = () => new Logo('TD', {}, ['logo']);
 
 signinForm.append(toSignupButton);
 
-
 const backButton = (prevSection) => {
 
     const button = new Button(
@@ -88,75 +89,6 @@ const backButton = (prevSection) => {
     });
     return button;
 };
-const signin = (formdata) => {
-    const email = formdata[SignupFields.get('EmailField').name];
-    const password = formdata[SignupFields.get('PasswordField').name];
-
-    if (!email) {
-        return Promise.reject(new Error('Email field is empty'));
-    }
-
-    if (!password) {
-        return Promise.reject(new Error('Password field is empty'));
-    }
-    fetch(buildBackUrl('/auth/signin'), initPost({email, password}))
-        .then(res => res.json())
-        .then(user => {
-            profile.setContent(user);
-            menuToggle();
-        })
-        .catch(err => console.log(err));
-};
-const signup = (formdata) => {
-    const email = formdata[SignupFields.get('EmailField').name];
-    const password = formdata[SignupFields.get('PasswordField').name];
-    const login = formdata[SignupFields.get('PasswordField').name];
-    const repeatePassword = formdata[SignupFields.get('RepeatPasswordField').name];
-
-    if (!login) {
-        return Promise.reject(new Error('Name field is empty'));
-    }
-
-    if (!email) {
-        return Promise.reject(new Error('Email field is empty'));
-    }
-
-    if (!password) {
-        return Promise.reject(new Error('Password field is empty'));
-    }
-
-    if (!repeatePassword) {
-        return Promise.reject(new Error('Repeat password field is empty'));
-    }
-
-    if (repeatePassword !== password) {
-        return Promise.reject(new Error('Passwords are not equal'));
-    }
-    fetch(buildBackUrl('/auth/signup'), initPost({email, password, login}))
-        .then(res => res.json())
-        .then(user => {
-            profile.setContent(user);
-            menuToggle();
-        })
-        .catch(err => console.log(err));
-};
-const updateProfile = () => {
-    fetch(buildBackUrl('/user'), initGet())
-        .then(res => res.json())
-        .then(user => {
-            profile.setContent(user);
-        })
-        .catch(err => console.log(err));
-};
-const signout = () => {
-    fetch(buildBackUrl('/logout'), initPost({}))
-        .then(res => res.json())
-        .then(res => {
-            console.log(res);
-            signinToggle();
-        })
-        .catch(err => console.log(err));
-};
 
 menu.on('click', event => {
     event.preventDefault();
@@ -166,56 +98,76 @@ menu.on('click', event => {
             aboutToggle();
             break;
         case 'settings':
-            updateProfile();
-            settignsToggle();
+            UserService
+                .requestCurrentUser()
+                .then(user => {
+                    console.log(user);
+                    profile.setContent(user);
+                    settignsToggle();
+                })
+                //TODO: redirect to error page
+                .catch(errJson => console.log(errJson));
             break;
         case 'logout':
-            signout();
+            Auth
+                .requestSingOut()
+                //TODO: redirect to error page
+                .catch(err => err
+                    .json()
+                    .then(errBody => console.log(errBody)));
             signinToggle();
             break;
     }
 });
 
 
-routes['menu-section']
-    .append(flexed(withLogo())
-        .append(menu))
+routes['menu-section'].append(flexed(withLogo()).append(menu));
 routes['signin-section'].append(flexed(withLogo()).append(boxed(signinForm)));
 routes['signup-section'].append(flexed(withLogo()).append(boxed(signupForm).append(backButton('signin-section'))));
 routes['about-section'].append(flexed(withLogo()).append(boxed(about).append(backButton('menu-section'))));
-const backendURL = 'https://td-java.herokuapp.com';
-const buildBackUrl = (path) => backendURL.concat(path);
+routes['settings-section'].append(flexed(withLogo()).append(boxed(profile).append(backButton('menu-section'))));
 
-const initGet = () => {
-    return {
-        headers: {'Content-Type': 'application/json'},
-        method: 'get',
-        mode: 'cors',
-        credentials: 'include',
-
-    };
-};
-const initPost = (body) => {
-    return {
-        headers: {'Content-Type': 'application/json'},
-        method: 'post',
-        body: JSON.stringify(body),
-        mode: 'cors',
-        credentials: 'include',
-
-    };
-};
-
-fetch(buildBackUrl('/user'), initGet())
-    .then(res => res.json())
-    .then(res => {
-        profile.setContent(res);
+UserService
+    .requestCurrentUser()
+    .then(user => {
+        UserService.currentUser = user;
+        profile.setContent(user);
+        menuToggle();
     })
-    .catch(err => {
-        console.log(err);
+    //TODO: redirect to error page
+    .catch(errJson => {
+        console.log(errJson);
         signinToggle();
     });
 
 
-signinForm.onSubmit(signin);
-signupForm.onSubmit(signup);
+signinForm.onSubmit(formdata => {
+    Auth
+        .requestSignIn(formdata)
+        .then(user => {
+            UserService.currentUser = user;
+            menuToggle();
+        })
+        //TODO: show error in form
+        .catch(err => console.log(err));
+});
+
+profile.onUpdate(formdata => {
+    UserService
+        .updateCurrentUser(formdata)
+        .then(profile.setContent(UserService.currentUser))
+        //TODO: show error in form
+        .catch(err => console.log(err));
+});
+
+signupForm.onSubmit(formdata => {
+    Auth
+        .requestSignUp(formdata)
+        .then(user => {
+
+            UserService.currentUser = user;
+            menuToggle();
+        })
+        //TODO: show error in form
+        .catch(err => console.log(err));
+});

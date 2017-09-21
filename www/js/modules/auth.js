@@ -1,11 +1,13 @@
-import Http from './http.js';
-import SignupFields from '../configs/signup-fields.js';
+import {Http} from './http.js';
+import {SignupFields} from '../configs/signup-fields.js';
+import {buildBackendUrl} from '../configs/backend.js';
+import {SigninFields} from '../configs/signin-fields.js';
 
 export class Auth {
-    static signIn(formData) {
+    static requestSignIn(formData) {
 
-        const email = formData[SignupFields.get('EmailField').name];
-        const password = formData[SignupFields.get('PasswordField').name];
+        const email = formData[SigninFields.get('EmailField').name];
+        const password = formData[SigninFields.get('PasswordField').name];
 
         if (!email) {
             return Promise.reject(new Error('Email field is empty'));
@@ -15,10 +17,15 @@ export class Auth {
             return Promise.reject(new Error('Password field is empty'));
         }
 
-        return Http.post('http://td-java.herokuapp.com/auth/signin', {email, password});
+        return Http
+            .post(buildBackendUrl('/auth/signin'), {email, password})
+            .then(res => res.json())
+            .catch(err =>
+                err.json()
+                    .then(errJson => Promise.reject(errJson)));
     }
 
-    static signUp(formData) {
+    static requestSignUp(formData) {
         const email = formData[SignupFields.get('EmailField').name];
         const password = formData[SignupFields.get('PasswordField').name];
         const login = formData[SignupFields.get('PasswordField').name];
@@ -43,11 +50,20 @@ export class Auth {
         if (repeatePassword !== password) {
             return Promise.reject(new Error('Passwords are not equal'));
         }
-        //http://td-java.herokuapp.com/auth/signup'
-        return Http.post('http://localhost:8080/auth/signup', {login, email, password});
+        return Http.post(buildBackendUrl('/auth/signup'), {login, email, password})
+            .then(res => res.json())
+            .catch(err =>
+                err.json()
+                    .then(errJson => Promise.reject(errJson)));
+
     }
 
-    static signOut() {
-        return Http.post('http://td-java.herokuapp.com/logout');
+    static requestSingOut() {
+        return Http.post(buildBackendUrl('/auth/logout'))
+            .then(res => res.json())
+            .catch(err =>
+                err.json()
+                    .then(errJson => Promise.reject(errJson)));
+
     }
 }

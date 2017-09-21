@@ -5,8 +5,7 @@ export class Http {
             credentials: 'include',
             mode: 'cors',
         })
-            .then(Http.checkStatus)
-            .then(res => res.json());
+            .then(Http.checkStatus);
     }
 
     static post(address, body) {
@@ -17,14 +16,14 @@ export class Http {
             headers: {'Content-Type': 'application/json; charset=utf8'},
             body: JSON.stringify(body)
         })
-            .then(Http.checkStatus)
-            .then(res => res.json());
+            .then(Http.checkStatus);
     }
 
     static checkStatus(res) {
-        if (res.status < 400)
+        if (res.status < 400) {
             return Promise.resolve(res);
-        else
-            return Promise.reject(new Error(res));
+        } else {
+            return Promise.reject(res);
+        }
     }
 }
