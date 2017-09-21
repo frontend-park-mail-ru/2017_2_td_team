@@ -1,4 +1,4 @@
-import Block from '../block/index.jsstar';
+import Block from '../block/index.js';
 
 export class Profile extends Block {
     constructor(template) {
