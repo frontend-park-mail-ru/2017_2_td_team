@@ -25,6 +25,7 @@
             "error",
             "always"
         ],
-        "curly":"error"
+        "curly":"error",
+        "no-console":["error", { "allow" :["log"] }]
     }
 }
