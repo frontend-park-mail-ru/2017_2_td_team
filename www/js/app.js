@@ -164,7 +164,6 @@ signupForm.onSubmit(formdata => {
     Auth
         .requestSignUp(formdata)
         .then(user => {
-
             UserService.currentUser = user;
             menuToggle();
         })

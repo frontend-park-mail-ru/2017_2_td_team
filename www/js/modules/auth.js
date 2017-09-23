@@ -28,7 +28,7 @@ export class Auth {
     static requestSignUp(formData) {
         const email = formData[SignupFields.get('EmailField').name];
         const password = formData[SignupFields.get('PasswordField').name];
-        const login = formData[SignupFields.get('PasswordField').name];
+        const login = formData[SignupFields.get('NameField').name];
         const repeatePassword = formData[SignupFields.get('RepeatPasswordField').name];
 
         if (!login) {
