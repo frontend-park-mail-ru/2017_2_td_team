@@ -58,7 +58,7 @@ export class Auth {
 
     }
 
-    static requestSingOut() {
+    static requestSignOut() {
         return Http.post(buildBackendUrl('/auth/logout'))
             .then(res => res.json())
             .catch(err =>

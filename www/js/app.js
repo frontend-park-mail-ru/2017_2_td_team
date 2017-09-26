@@ -110,7 +110,7 @@ menu.on('click', event => {
             break;
         case 'logout':
             Auth
-                .requestSingOut()
+                .requestSignOut()
                 //TODO: redirect to error page
                 .catch(err => err
                     .json()
