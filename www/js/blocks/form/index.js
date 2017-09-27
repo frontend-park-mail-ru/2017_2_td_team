@@ -1,7 +1,20 @@
 import {Block} from '../block/index.js';
 
+/**
+ * Компонент формы
+ *
+ * @module Form
+ */
 export class Form extends Block {
 
+    /**
+     * Конструирует компонент формы из переданных параметров
+     *
+     * @param {Button}submitButton - кнопка отправки формы
+     * @param {Array<InputBlock>}inputs - список блоков ввода
+     * @param {*}attrs - объект с полями, содержищими аттрибуты компонента
+     * @param {Array<string>}classes - список классов компонента
+     */
     constructor(submitButton = null, inputs = [], attrs = {}, classes = []) {
         const form = document.createElement('form');
         super(form);
@@ -13,6 +26,11 @@ export class Form extends Block {
         this.setClasses(classes);
     }
 
+    /**
+     * Извлекает поля ввода и их значения из domNode формы
+     * @param {*}rawForm - node формы
+     * @returns {*}
+     */
     static ExtractFormData(rawForm) {
         const formdata = {};
         const elements = rawForm.elements;
@@ -22,6 +40,11 @@ export class Form extends Block {
         return formdata;
     }
 
+    /**
+     * Задает callback на обработку данных формы при ее отправке
+     *
+     * @param {Function}callback - callback на submit для обработки данных формы
+     */
     onSubmit(callback) {
         this._element.addEventListener('submit', event => {
             event.preventDefault();

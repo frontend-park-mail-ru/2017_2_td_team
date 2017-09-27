@@ -1,6 +1,16 @@
 import {Block} from '../block/index.js';
 
+/**
+ * Компонент блока ввода
+ *
+ * @module InputBlock
+ */
 export class InputBlock extends Block {
+    /**
+     * Конструирет компонент ввода по переданному описанию
+     * [Шаблон]{@link 'inputBlock.pug'}
+     * @param {*}description - описание блока
+     */
     constructor(description) {
         const input = document.createElement('div');
         super(input);
