@@ -7,7 +7,7 @@ import {Block} from '../block/index.js';
 export class AboutPage extends Block {
     /**
      * Создает компонент по шаблону window.aboutTemplate
-     * [Шаблон] {@link 'about.pug'}
+     *
      */
     constructor() {
         super(document.createElement('div'));

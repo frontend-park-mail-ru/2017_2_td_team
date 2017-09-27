@@ -7,8 +7,8 @@ import {Form} from '../form/index.js';
  */
 export class Profile extends Block {
     /**
-     * Констуирует Profile и устанавливает шаблон для генерации соответствующего html
-     * [Шаблон]@link{'profile.pug'}
+     * Констуирует Profile и устанавливает шаблон для генерации соответствующего html.
+     *
      *
      * @param {Function}template функция-шаблонизатор
      */

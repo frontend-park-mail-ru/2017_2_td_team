@@ -8,7 +8,7 @@ import {Block} from '../block/index.js';
 export class InputBlock extends Block {
     /**
      * Конструирет компонент ввода по переданному описанию
-     * [Шаблон]{@link 'inputBlock.pug'}
+     *  {@link 'inputBlock.pug'}
      * @param {*}description - описание блока
      */
     constructor(description) {

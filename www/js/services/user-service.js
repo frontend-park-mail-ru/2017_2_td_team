@@ -5,7 +5,6 @@ import {buildBackendUrl} from '../configs/backend.js';
  * Модуль, предоставляющий API для работы с пользователем
  *
  * @module UserService
- *  [Документация на API] {@link https://app.swaggerhub.com/apis/td-team/TheTD/0.1.2}
  */
 export class UserService {
 
