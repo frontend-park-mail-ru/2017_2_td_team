@@ -1,6 +1,6 @@
-export default class Block {
+export class Block {
 
-    constructor(element) {
+    constructor(element = document.createElement('div')) {
         this._element = element;
     }
 
@@ -10,6 +10,10 @@ export default class Block {
 
     set html(inner) {
         this._element.innerHTML = inner;
+    }
+
+    get html() {
+        return this._element.innerHTML;
     }
 
     get id() {

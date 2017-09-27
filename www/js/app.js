@@ -1,5 +1,5 @@
 import {Form} from './blocks/form/index.js';
-import Block from './blocks/block/index.js';
+import {Block} from './blocks/block/index.js';
 import {SignupButton, SignupFields} from './configs/signup-fields.js';
 import {SigninButton, SigninFields} from './configs/signin-fields.js';
 import {SectionsData} from './configs/sections.js';

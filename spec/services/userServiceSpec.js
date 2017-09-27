@@ -1,9 +1,6 @@
 import {UserService} from '../../www/js/services/user-service.js';
 import {Auth} from '../../www/js/modules/auth.js';
 
-const [describe, it, beforeAll, afterAll, expect, fail] = [window.describe, window.it, window.beforeAll, window.afterAll, window.expect, window.fail];
-
-
 describe('User-Service', () => {
 
     const randomStr = Math.random().toString(36).slice(2);

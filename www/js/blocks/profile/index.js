@@ -1,4 +1,4 @@
-import Block from '../block/index.js';
+import {Block} from '../block/index.js';
 import {Form} from '../form/index.js';
 
 export class Profile extends Block {

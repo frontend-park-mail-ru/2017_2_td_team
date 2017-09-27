@@ -1,4 +1,4 @@
-import Block from '../block/index.js';
+import {Block} from '../block/index.js';
 
 export class Button extends Block {
     constructor(description) {

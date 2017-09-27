@@ -1,7 +1,5 @@
 import {Http} from '../../www/js/modules/http.js';
 
-const [describe, it, beforeAll, afterAll, expect, fail] = [window.describe, window.it, window.beforeAll, window.afterAll, window.expect, window.fail];
-
 describe('Http', () => {
 
     const buildHttpTestUrl = (path) => 'http://httpbin.org'.concat(path);
