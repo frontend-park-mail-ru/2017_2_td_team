@@ -29,7 +29,7 @@ describe('Auth', () => {
             });
     }, 123456);
 
-    it('Регистрирует пользователя', done => {
+    it('регистрирует пользователя', done => {
         const userFormData = {
             'username-field': randomStr,
             'email-field': randomStr + '@nonexisting.ru',
@@ -56,7 +56,7 @@ describe('Auth', () => {
     }, 123456);
 
 
-    it(' Не аутентифицирует пользователя по неверному паролю', done => {
+    it('не аутентифицирует пользователя по неверному паролю', done => {
         Auth.requestSignIn({
             'email-field': randomStr + '@nonexisting.ru',
             'password-field': 'paswrd',
@@ -71,7 +71,7 @@ describe('Auth', () => {
             });
     }, 123456);
 
-    it('Не регистрирует невалидные данные', done => {
+    it('не регистрирует невалидные данные', done => {
         const invalids = [
             {
                 'username-field': 'a',

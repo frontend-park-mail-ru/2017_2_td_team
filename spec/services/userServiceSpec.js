@@ -34,8 +34,8 @@ describe('User-Service', () => {
     }, 123456);
 
     describe('После регистрации', () => {
-        it('Возвращает текущего пользователя', done => {
-            UserService
+        it('Возвращает текущего пользователя', () => {
+            return UserService
                 .requestCurrentUser()
                 .then(user => {
                     expect(user instanceof Object).toBe(true);
@@ -45,16 +45,14 @@ describe('User-Service', () => {
                         'id'
                     ]);
                     UserService.currentUser = user;
-                    done();
                 })
                 .catch(errJson => {
                     fail(errJson);
-                    done();
                 });
         }, 123456);
 
-        it(' UserService.updateCurrentUser изменяет данные текущего пользователя', done => {
-            UserService
+        it(' UserService.updateCurrentUser изменяет данные текущего пользователя', () => {
+            return UserService
                 .updateCurrentUser({
                     'login': 'test_new'
                 })
@@ -66,11 +64,10 @@ describe('User-Service', () => {
                         'id'
                     ]);
                     expect(user['login']).toEqual('test_new');
-                    done();
+
                 })
                 .catch(errJson => {
                     fail(errJson);
-                    done();
                 });
         }, 123456);
     });
