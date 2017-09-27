@@ -1,4 +1,5 @@
 import {Http} from '../../www/js/modules/http.js';
+import {describe, fail, it, expect} from '../helpers/jasmineES6';
 
 describe('Http', () => {
 

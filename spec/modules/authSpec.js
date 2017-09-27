@@ -1,4 +1,5 @@
 import {Auth} from '../../www/js/modules/auth.js';
+import {beforeEach, describe, fail, expect, it} from '../helpers/jasmineES6.js';
 
 describe('Auth', () => {
     const randomStr = Math.random().toString(36).slice(2);

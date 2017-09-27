@@ -1,5 +1,6 @@
 import {Block} from '../../www/js/blocks/block/index.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
+import {describe, it, expect} from '../helpers/jasmineES6.js';
 
 describe('Block', () => {
     it('Создает пустой div', () => {
@@ -18,11 +19,11 @@ describe('Block', () => {
         expect(node.getAttribute('name')).toBe('somename');
     });
 
-    it(`Дает возможность записи innerHTML через .html <div></div>`, () => {
+    it('Дает возможность записи innerHTML через .html <div></div>', () => {
         const block = new Block();
         const node = injectBlockNodeAccessor(block).node;
-        block.html = `<div></div>`;
-        expect(node.innerHTML).toBe(`<div></div>`);
+        block.html = '<div></div>';
+        expect(node.innerHTML).toBe('<div></div>');
     });
 
 
