@@ -15,19 +15,19 @@ describe('Auth', () => {
                 Auth.requestSignOut()
                     .then(unexpected => {
                         fail(unexpected);
-                        done(false);
+                        done();
                     })
                     .catch(expectedErr => {
                         expect(expectedErr).toBeDefined();
                         expect(expectedErr['type']).toBe('authorization_error');
-                        done(true);
+                        done();
                     });
             })
             .catch(signoutError => {
                 expect(signoutError).toBeDefined();
-                done(true);
+                done();
             });
-    });
+    }, 123456);
 
     it('Регистрирует пользователя', done => {
         const userFormData = {
@@ -63,11 +63,11 @@ describe('Auth', () => {
         })
             .then(unsexpectedSucc => {
                 fail(unsexpectedSucc);
-                done(false);
+                done();
             })
             .catch(expectedErr => {
                 expect(expectedErr).toBeDefined();
-                done(true);
+                done();
             });
     }, 123456);
 
@@ -105,13 +105,13 @@ describe('Auth', () => {
                         .requestSignUp(userData)
                         .then(unexpectedSucc => {
                             fail(unexpectedSucc);
-                            done(false);
+                            done();
                         })
                         .catch(expectedErr => {
                             expect(expectedErr).toBeDefined();
                             return expectedErr;
                         });
-                })).then(() => done(true));
+                })).then(() => done());
 
     }, 123456);
 

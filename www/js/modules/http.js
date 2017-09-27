@@ -8,7 +8,7 @@ export class Http {
             .then(Http.checkStatus);
     }
 
-    static post(address, body) {
+    static post(address, body = {}) {
         return fetch(address, {
             method: 'post',
             credentials: 'include',
