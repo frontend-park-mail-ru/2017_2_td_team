@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/main.js",
-    "lint": "eslint www/js",
+    "lint": "eslint www/js spec/",
     "test": "./node_modules/karma/bin/karma start"
   },
   "repository": {
