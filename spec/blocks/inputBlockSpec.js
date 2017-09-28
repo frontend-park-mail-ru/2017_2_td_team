@@ -19,11 +19,12 @@ describe('InputBlock', () => {
 
         const label = node.childNodes[0];
         expect(label.tagName.toLowerCase()).toBe('label');
-        expect(label.name).toBe('somename');
-        expect(label.text).toBe('somelabel');
+
+        expect(label.innerText).toBe('somelabel');
 
         const input = node.childNodes[1];
         expect(input.tagName.toLowerCase()).toBe('input');
+        expect(input.getAttribute('name')).toBe('somename');
         expect(input.type).toBe('text');
     });
 });

@@ -1,11 +1,11 @@
-import {describe, expect} from '../helpers/jasmineES6';
-import {Button} from '../../www/js/blocks/buttons/index';
-import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin';
+import {describe, expect} from '../helpers/jasmineES6.js';
+import {Button} from '../../www/js/blocks/buttons/index.js';
+import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
 
 describe('Button', () => {
     it('конструктор создает пустую кнопку по-умолчанию', () => {
         const button = new Button();
-        expect(button.innerHTML).toBe('');
+        expect(button.html).toBe('');
         const node = injectBlockNodeAccessor(button).node;
         expect(node.tagName.toLowerCase()).toBe('button');
         expect(node.attributes.length).toBe(0);
@@ -15,13 +15,15 @@ describe('Button', () => {
         const button = new Button({
             classes: ['someclass'],
             attrs: {name: 'someattr'},
-            text: 'text'
+            text: 'text',
         });
+        console.info(button);
+        expect(button.text).toBe('text');
         const node = injectBlockNodeAccessor(button).node;
+
         expect(node.classList.length).toBe(1);
         expect(node.classList[0]).toBe('someclass');
-        expect(node.attributes.length).toBe(1);
         expect(node.getAttribute('name')).toBe('someattr');
-        expect(node.text).toBe('text');
+
     });
 });

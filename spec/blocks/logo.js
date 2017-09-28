@@ -1,5 +1,5 @@
-import {describe} from '../helpers/jasmineES6';
-import {Logo} from '../../www/js/blocks/logo/index';
+import {describe} from '../helpers/jasmineES6.js';
+import {Logo} from '../../www/js/blocks/logo/index.js';
 
 describe('Logo', () => {
     it('По-умолчанию создается пустой логотип', () => {

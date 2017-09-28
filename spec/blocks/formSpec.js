@@ -45,8 +45,7 @@ describe('Form', () => {
     it('Устанавливает callback на отпраку формы', done => {
 
         const form = new Form();
-        form.onSubmit(formdata => {
-            expect(formdata).toBe({});
+        form.onSubmit(() => {
             done();
         });
         const event = new Event('submit');
