@@ -77,6 +77,9 @@ export class Form extends Block {
         });
     }
 
+    /**
+     * Обнуление данных в форме
+     */
     reset(){
         this._element.reset();
     }

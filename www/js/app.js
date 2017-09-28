@@ -225,28 +225,29 @@ signupForm.onInput((input, form) => {
         const passwordField = SignupFields.get('PasswordField').name;
         const repeatePasswordField = SignupFields.get('RepeatPasswordField').name;
         const loginField = SignupFields.get('NameField').name;
+        const validatePasswordsEquality = () => {
+            const password = form.elements[passwordField];
+            const repeatPassword = form.elements[repeatePasswordField];
+
+            if (password.value !== repeatPassword.value) {
+                repeatPassword.setCustomValidity('Passwords are not equal');
+            }
+        };
         switch (input.name) {
             case passwordField: {
                 const passwordLength = input.value.length;
                 if (passwordLength > 25) {
                     input.setCustomValidity('Password too long');
+                    break;
                 } else if (passwordLength < 5) {
                     input.setCustomValidity('Password too short');
+                    break;
                 }
-                const password = form.elements[passwordField];
-                const repeatPassword = form.elements[repeatePasswordField];
-                if (password.value !== repeatPassword.value) {
-                    input.setCustomValidity('Passwords are not equal');
-                }
+                validatePasswordsEquality();
                 break;
             }
             case repeatePasswordField: {
-                const password = form.elements[passwordField];
-                const repeatPassword = form.elements[repeatePasswordField];
-
-                if (password.value !== repeatPassword.value) {
-                    input.setCustomValidity('Passwords are not equal');
-                }
+                validatePasswordsEquality();
                 break;
             }
             case loginField: {

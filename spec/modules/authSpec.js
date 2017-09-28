@@ -1,5 +1,5 @@
 import {Auth} from '../../www/js/modules/auth.js';
-import {beforeEach, describe, fail, expect, it} from '../helpers/jasmineES6.js';
+import {beforeEach, describe, expect, fail, it} from '../helpers/jasmineES6.js';
 
 describe('Auth', () => {
     const randomStr = Math.random().toString(36).slice(2);
@@ -73,27 +73,18 @@ describe('Auth', () => {
         const invalids = [
             {
                 'username-field': 'a',
-                'email-field': 'a@nonexisting.ru',
+                'email-field': randomStr + 'a@nonexisting.ru',
                 'password-field': 'password',
-                'repeat-password-field': 'password',
             },
             {
                 'username-field': 'login',
-                'email-field': 'invalid.ru',
+                'email-field': randomStr + 'invalid.ru',
                 'password-field': 'password',
-                'repeat-password-field': 'password',
             },
             {
                 'username-field': 'login',
-                'email-field': 'login@nonexisting.ru',
+                'email-field': randomStr + 'login@nonexisting.ru',
                 'password-field': 'd',
-                'repeat-password-field': 'd',
-            },
-            {
-                'username-field': 'login',
-                'email-field': 'login@nonexisting.ru',
-                'password-field': 'password',
-                'repeat-password-field': 'randomword',
             },
         ];
         Promise
