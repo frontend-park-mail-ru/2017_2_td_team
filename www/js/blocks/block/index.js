@@ -158,4 +158,5 @@ export class Block {
             this._element.removeEventListener(event);
         }.bind(this);
     }
+
 }

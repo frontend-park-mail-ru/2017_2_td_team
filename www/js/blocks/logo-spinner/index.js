@@ -1,4 +1,4 @@
-import Block from '../block/index.js';
+import {Block} from '../block/index.js';
 
 export class LogoSpinner extends Block {
 
@@ -13,7 +13,7 @@ export class LogoSpinner extends Block {
         this.generateSpinner();
     }
 
-    generateSpinner() {        
+    generateSpinner() {
         const image = [
             [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0],
             [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0],

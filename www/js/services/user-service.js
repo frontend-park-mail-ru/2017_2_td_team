@@ -55,7 +55,7 @@ export class UserService {
             for (let key in updateData) {
                 if (updateData[key] && updateData[key] !== current[key]) {
                     current[key] = updateData[key];
-                    updateDto[key] = updateData[key]
+                    updateDto[key] = updateData[key];
                 }
             }
             updateDto['id'] = current['id'];

@@ -46,7 +46,7 @@ export class Form extends Block {
         }
         return formdata;
     }
-    
+
     /**
      * Задает callback на обработку данных формы при вводе в поле
      *
@@ -58,7 +58,7 @@ export class Form extends Block {
         for (let key in elements) {
             const element = elements[key];
 
-            if (element.tagName == 'INPUT'){
+            if (element.tagName.toLowerCase() === 'input'){
                 element.addEventListener('input', event => {
                     callback(event.target, this._element);
                 });
@@ -78,4 +78,5 @@ export class Form extends Block {
             callback(formdata);
         });
     }
+
 }
