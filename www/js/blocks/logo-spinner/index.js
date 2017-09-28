@@ -13,7 +13,6 @@ export class LogoSpinner extends Block {
         this.generateSpinner();
     }
 
-
     generateSpinner() {        
         const image = [
             [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0],
@@ -25,7 +24,7 @@ export class LogoSpinner extends Block {
             [0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0],
         ];
 
-        image.forEach((row, j) => row.forEach((pixel, i, pixels) => {
+        image.forEach((row, j, rows) => row.forEach((pixel, i, pixels) => {
             let pixelElement = document.createElement('div');
             pixelElement.className = 'pixel';
 
