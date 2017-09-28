@@ -9,6 +9,7 @@ import {Menu} from './blocks/menu/index.js';
 import {InputBlock} from './blocks/inputBlock/index.js';
 import {AboutPage} from './blocks/about/index.js';
 import {Logo} from './blocks/logo/index.js';
+import {LogoSpinner} from './blocks/logo-spinner/index.js';
 import {Profile} from './blocks/profile/index.js';
 import {UserService} from './services/user-service.js';
 import {Auth} from './modules/auth.js';
@@ -30,13 +31,13 @@ const signinButton = new Button(SigninButton);
 const signinInputs = Array.from(SigninFields.values()).map(field => new InputBlock(field));
 const signinForm = new Form(signinButton, signinInputs, {action: '', method: 'post'}, ['default-form']);
 
-
 const signupButton = new Button(SignupButton);
 const signupInputs = Array.from(SignupFields.values()).map(field => new InputBlock(field));
 const signupForm = new Form(signupButton, signupInputs, {action: '', method: 'post'}, ['default-form']);
 
 const profile = new Profile(window.profileTemplate);
 
+const logoSpinner = new LogoSpinner();
 
 const toggleOn = id => {
     for (let key in routes) {
@@ -52,6 +53,7 @@ const signinToggle = () => toggleOn('signin-section');
 const signupToggle = () => toggleOn('signup-section');
 const aboutToggle = () => toggleOn('about-section');
 const settingsToggle = () => toggleOn('settings-section');
+const spinnerToggle = () => toggleOn('spinner-section');
 const about = new AboutPage();
 
 const toSignupButton = new Button({
@@ -125,7 +127,9 @@ routes['signin-section'].append(flexed(withLogo()).append(boxed(signinForm)));
 routes['signup-section'].append(flexed(withLogo()).append(boxed(signupForm).append(backButton('signin-section'))));
 routes['about-section'].append(flexed(withLogo()).append(boxed(about).append(backButton('menu-section'))));
 routes['settings-section'].append(flexed(withLogo()).append(boxed(profile).append(backButton('menu-section'))));
+routes['spinner-section'].append(flexed(logoSpinner));
 
+spinnerToggle();
 UserService
     .requestCurrentUser()
     .then(user => {

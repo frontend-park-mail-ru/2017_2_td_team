@@ -1,16 +1,13 @@
 .logo-spinner {
-    position: fixed;
     width: 28vw;
     height: 14vw;
-    margin: 100px auto;
-
 }
 
 .logo-spinner .pixel {
     width: 2vw;
     height: 2vw;
     float: left;
-    animation: logo-spinner-animation 2s infinite ease-in-out; 
+    animation: logo-spinner-animation 5s infinite ease-in-out; 
 }
 
 @keyframes logo-spinner-animation {

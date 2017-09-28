@@ -22,6 +22,11 @@ export const SectionsData = [
     {
         'id': 'settings-section',
         'hidden': true,
+    },
+
+    {
+        'id': 'spinner-section',
+        'hidden': true,
     }
 
 ];

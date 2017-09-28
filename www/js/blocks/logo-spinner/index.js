@@ -29,8 +29,8 @@ export class LogoSpinner extends Block {
             pixelElement.className = 'pixel';
 
             if (pixel) {
-                pixelElement.style.animationDelay = `${0.2 * (i + j)}s`;
-                pixelElement.style.backgroundColor = 'red';
+                pixelElement.style.animationDelay = `${0.1 * (i + j)}s`;
+                pixelElement.style.backgroundColor = 'black';
             } else {
                 pixelElement.style.backgroundColor = 'transparent';
             }
