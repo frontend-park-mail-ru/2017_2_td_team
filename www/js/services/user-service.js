@@ -50,18 +50,20 @@ export class UserService {
      */
     static updateCurrentUser(updateData) {
         const current = Object.assign({}, UserService.currentUser);
+        const updateDto = {};
         if (UserService.currentUser) {
             for (let key in updateData) {
-                if (updateData[key] !== current[key]) {
+                if (updateData[key] && updateData[key] !== current[key]) {
                     current[key] = updateData[key];
+                    updateDto[key] = updateData[key]
                 }
             }
-            updateData['id'] = current['id'];
+            updateDto['id'] = current['id'];
         }
         return Http
-            .post(buildBackendUrl('/user/edit'), updateData)
+            .post(buildBackendUrl('/user/edit'), updateDto)
             .then(res => {
-                UserService.currentUser = current;
+                Object.assign(UserService.currentUser, current);
                 return res.json();
             })
             .catch(err =>

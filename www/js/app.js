@@ -101,7 +101,6 @@ menu.on('click', event => {
             UserService
                 .requestCurrentUser()
                 .then(user => {
-                    console.log(user);
                     profile.setContent(user);
                     settignsToggle();
                 })
@@ -218,6 +217,7 @@ signupForm.onInput((input, form) => {
         input.setCustomValidity('');
         const passwordField = SignupFields.get('PasswordField').name;
         const repeatePasswordField = SignupFields.get('RepeatPasswordField').name;
+        const loginField = SignupFields.get('NameField').name;
         switch (input.name) {
             case passwordField: {
                 const passwordLength = input.value.length;
@@ -234,6 +234,13 @@ signupForm.onInput((input, form) => {
 
                 if (password.value !== repeatPassword.value) {
                     repeatPassword.setCustomValidity('Passwords are not equal');
+                }
+                break;
+            }
+            case loginField: {
+                const loginLength = input.value.length;
+                if (loginLength < 3 || loginLength > 25) {
+                    input.setCustomValidity('Login is too short');
                 }
                 break;
             }
