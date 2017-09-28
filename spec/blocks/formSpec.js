@@ -1,4 +1,4 @@
-import {describe, expect} from '../helpers/jasmineES6.js';
+import {describe, expect, it} from '../helpers/jasmineES6.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
 import {Button} from '../../www/js/blocks/buttons/index.js';
 import {InputBlock} from '../../www/js/blocks/inputBlock/index.js';

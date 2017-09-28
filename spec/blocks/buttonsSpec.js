@@ -1,4 +1,4 @@
-import {describe, expect} from '../helpers/jasmineES6.js';
+import {describe, expect, it} from '../helpers/jasmineES6.js';
 import {Button} from '../../www/js/blocks/buttons/index.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
 
@@ -17,7 +17,6 @@ describe('Button', () => {
             attrs: {name: 'someattr'},
             text: 'text',
         });
-        console.info(button);
         expect(button.text).toBe('text');
         const node = injectBlockNodeAccessor(button).node;
 

@@ -19,7 +19,7 @@ describe('Block', () => {
         expect(node.getAttribute('name')).toBe('somename');
     });
 
-    it('Дает возможность записи innerHTML через .html <div></div>', () => {
+    it('Дает возможность записи innerHTML через .html', () => {
         const block = new Block();
         const node = injectBlockNodeAccessor(block).node;
         block.html = '<div></div>';
