@@ -19,6 +19,13 @@ export class Form extends Block {
         const form = document.createElement('form');
         super(form);
         inputs.forEach(field => this.append(field));
+
+        for (let key in this._element.elements) {
+            if (this._element.elements[key].tagName === 'INPUT') {
+                this._element.elements[key].setCustomValidity('Field is empty');
+            }
+        }
+
         if (submitButton) {
             this.append(submitButton);
         }
@@ -38,6 +45,20 @@ export class Form extends Block {
             formdata[key] = elements[key].value;
         }
         return formdata;
+    }
+    
+    onInput(callback) {
+        const elements = this._element.elements;
+
+        for (let key in elements) {
+            const element = elements[key];
+
+            if (element.tagName == 'INPUT'){
+                element.addEventListener('input', event => {
+                    callback(event.target, this._element);
+                });
+            }
+        }
     }
 
     /**

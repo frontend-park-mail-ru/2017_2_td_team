@@ -9,14 +9,6 @@ export class Auth {
         const email = formData[SigninFields.get('EmailField').name];
         const password = formData[SigninFields.get('PasswordField').name];
 
-        if (!email) {
-            return Promise.reject(new Error('Email field is empty'));
-        }
-
-        if (!password) {
-            return Promise.reject(new Error('Password field is empty'));
-        }
-
         return Http
             .post(buildBackendUrl('/auth/signin'), {email, password})
             .then(res => res.json())
@@ -29,28 +21,9 @@ export class Auth {
         const email = formData[SignupFields.get('EmailField').name];
         const password = formData[SignupFields.get('PasswordField').name];
         const login = formData[SignupFields.get('NameField').name];
-        const repeatePassword = formData[SignupFields.get('RepeatPasswordField').name];
 
-        if (!login) {
-            return Promise.reject(new Error('Name field is empty'));
-        }
-
-        if (!email) {
-            return Promise.reject(new Error('Email field is empty'));
-        }
-
-        if (!password) {
-            return Promise.reject(new Error('Password field is empty'));
-        }
-
-        if (!repeatePassword) {
-            return Promise.reject(new Error('Repeat password field is empty'));
-        }
-
-        if (repeatePassword !== password) {
-            return Promise.reject(new Error('Passwords are not equal'));
-        }
-        return Http.post(buildBackendUrl('/auth/signup'), {login, email, password})
+        return Http
+            .post(buildBackendUrl('/auth/signup'), {login, email, password})
             .then(res => res.json())
             .catch(err =>
                 err.json()
