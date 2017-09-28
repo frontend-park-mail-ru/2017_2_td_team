@@ -16,16 +16,14 @@ import {Auth} from './modules/auth.js';
 const application = new Block(document.getElementById('application'));
 
 const sections = SectionsData.map(section => Block.Create('section', section));
+sections.forEach(section => application.append(section));
 
 const routes = sections.reduce(((prev, curr) => {
     prev[curr.id] = curr;
     return prev;
 }), {});
 
-sections.forEach(section => application.append(section));
-
 const menuButtons = MenuButtons.map(button => new Button(button));
-
 const menu = new Menu(menuButtons, {}, ['box']);
 
 const signinButton = new Button(SigninButton);
@@ -42,24 +40,27 @@ const profile = new Profile(window.profileTemplate);
 
 const toggleOn = id => {
     for (let key in routes) {
-        (routes[key].id === id) ? routes[key].show() : routes[key].hide();
+        if (routes[key].id === id) {
+            routes[key].show();
+        } else {
+            routes[key].hide();
+        }
     }
 };
 const menuToggle = () => toggleOn('menu-section');
 const signinToggle = () => toggleOn('signin-section');
 const signupToggle = () => toggleOn('signup-section');
 const aboutToggle = () => toggleOn('about-section');
-const settignsToggle = () => toggleOn('settings-section');
+const settingsToggle = () => toggleOn('settings-section');
 const about = new AboutPage();
 
-const toSignupButton = new Button(
-    {
-        attrs: {
-            type: 'button',
-        },
-        text: 'Sign Up',
-        classes: ['button', 'form-button'],
-    });
+const toSignupButton = new Button({
+    attrs: {
+        type: 'button',
+    },
+    text: 'Sign Up',
+    classes: ['button', 'form-button'],
+});
 toSignupButton.on('click', signupToggle);
 
 
@@ -75,14 +76,13 @@ signinForm.append(toSignupButton);
 
 const backButton = (prevSection) => {
 
-    const button = new Button(
-        {
-            attrs: {
-                type: 'button',
-            },
-            text: 'Back',
-            classes: ['button', 'menu-button'],
-        });
+    const button = new Button({
+        attrs: {
+            type: 'button',
+        },
+        text: 'Back',
+        classes: ['button', 'menu-button'],
+    });
     button.on('click', event => {
         event.preventDefault();
         toggleOn(prevSection);
@@ -102,7 +102,7 @@ menu.on('click', event => {
                 .requestCurrentUser()
                 .then(user => {
                     profile.setContent(user);
-                    settignsToggle();
+                    settingsToggle();
                 })
                 //TODO: redirect to error page
                 .catch(errJson => console.log(errJson));

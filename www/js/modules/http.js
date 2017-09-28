@@ -7,7 +7,7 @@ export class Http {
      * Совершает GET запрос по address, с передачей cookies, рассчитан на CORS
      *
      * @param {string} address - url по которому совершается запрос
-     * @returns {Promise.<Response>} - rejected, если status < 400, resolved в остальных случаях
+     * @returns {Promise.<Response>} - resolved, если status < 400, rejected в остальных случаях
      */
     static get(address) {
         return fetch(address, {
