@@ -47,6 +47,11 @@ export class Form extends Block {
         return formdata;
     }
     
+    /**
+     * Задает callback на обработку данных формы при вводе в поле
+     *
+     * @param {Function}callback - callback на input для обработки данных формы
+     */
     onInput(callback) {
         const elements = this._element.elements;
 
