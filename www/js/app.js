@@ -148,16 +148,40 @@ signinForm.onSubmit(formdata => {
             UserService.currentUser = user;
             menuToggle();
         })
-        //TODO: show error in form
-        .catch(err => console.log(err));
+        .catch(err => {
+            err.incorrectRequestDataErrors.forEach(err => {
+                let inputName = '';
+
+                switch (err.fieldName) {
+                    case 'email':
+                        inputName = 'email-field';
+                        break;
+                    case 'password':
+                        inputName = 'password-field';
+                        break;
+                }
+
+                signinForm._element[inputName].setCustomValidity(err.description);
+                signinForm._element[inputName].reportValidity();
+            });
+        });
+});
+
+signinForm.onInput(input => {
+    if (input.value) {
+        input.setCustomValidity('');
+    } else {
+        input.setCustomValidity('Field is empty');
+    }
 });
 
 profile.onUpdate(formdata => {
     UserService
         .updateCurrentUser(formdata)
         .then(profile.setContent(UserService.currentUser))
-        //TODO: show error in form
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+        });
 });
 
 signupForm.onSubmit(formdata => {
@@ -167,6 +191,52 @@ signupForm.onSubmit(formdata => {
             UserService.currentUser = user;
             menuToggle();
         })
-        //TODO: show error in form
-        .catch(err => console.log(err));
+        .catch(err => {
+            err.incorrectRequestDataErrors.forEach(err => {
+                let inputName = '';
+
+                switch (err.fieldName) {
+                    case 'email':
+                        inputName = 'email-field';
+                        break;
+                    case 'password':
+                        inputName = 'password-field';
+                        break;
+                    case 'login':
+                        inputName = 'login-field';
+                        break;
+                }
+
+                signupForm._element[inputName].setCustomValidity(err.description);
+                signupForm._element[inputName].reportValidity();
+            });
+        });
+});
+
+signupForm.onInput((input, form) => {
+    if (input.value) {
+        input.setCustomValidity('');
+
+        switch (input.name) {
+            case SignupFields.get('PasswordField').name:
+                const passwordLength = input.value.length;
+                if (passwordLength > 25) {
+                    input.setCustomValidity('Password too long');
+                } else if (passwordLength < 5) {
+                    input.setCustomValidity('Password too short');
+                }
+
+            case SignupFields.get('RepeatPasswordField').name:
+                const password = form.elements[SignupFields.get('PasswordField').name];
+                const repeatPassword = form.elements[SignupFields.get('RepeatPasswordField').name];
+
+                if (password.value !== repeatPassword.value) {
+                    repeatPassword.setCustomValidity('Passwords are not equal');
+                }
+                break;
+        }
+
+    } else {
+        input.setCustomValidity('Field is empty');
+    }
 });
