@@ -15,13 +15,14 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            {pattern: 'test-context.js', watched: false}
+            {pattern: 'test-context.js', watched: false},
+            {pattern: 'www/js/**/*.pug.js', watched: true}
         ],
 
 
         // list of files to exclude
         exclude: [
-            '**/*.pug.js'
+
         ],
 
 
@@ -69,7 +70,7 @@ module.exports = function (config) {
                         test: /\.js/,
                         exclude: /node_modules/,
                         loader: 'babel-loader',
-                    }
+                    },
                 ]
             },
             watch: true
