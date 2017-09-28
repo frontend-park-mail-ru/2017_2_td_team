@@ -20,9 +20,9 @@ export class Form extends Block {
         super(form);
         inputs.forEach(field => this.append(field));
 
-        for (let key in this._element.elements) {
-            if (this._element.elements[key].tagName === 'INPUT') {
-                this._element.elements[key].setCustomValidity('Field is empty');
+        for (let element of this._element.elements) {
+            if (element.tagName.toLowerCase() === 'input') {
+                element.setCustomValidity('Field is empty');
             }
         }
 
@@ -55,10 +55,8 @@ export class Form extends Block {
     onInput(callback) {
         const elements = this._element.elements;
 
-        for (let key in elements) {
-            const element = elements[key];
-
-            if (element.tagName.toLowerCase() === 'input'){
+        for (let element of elements) {
+            if (element.tagName.toLowerCase() === 'input') {
                 element.addEventListener('input', event => {
                     callback(event.target, this._element);
                 });
@@ -79,4 +77,7 @@ export class Form extends Block {
         });
     }
 
+    reset(){
+        this._element.reset();
+    }
 }

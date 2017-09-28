@@ -145,6 +145,8 @@ signinForm.onSubmit(formdata => {
         .requestSignIn(formdata)
         .then(user => {
             UserService.currentUser = user;
+
+            signinForm.reset();
             menuToggle();
         })
         .catch(err => {
@@ -188,6 +190,7 @@ signupForm.onSubmit(formdata => {
         .requestSignUp(formdata)
         .then(user => {
             UserService.currentUser = user;
+            signupForm.reset();
             menuToggle();
         })
         .catch(err => {
@@ -226,14 +229,18 @@ signupForm.onInput((input, form) => {
                 } else if (passwordLength < 5) {
                     input.setCustomValidity('Password too short');
                 }
+                const repeatPassword = form.elements[repeatePasswordField];
+                if (password.value !== repeatPassword.value) {
+                    input.setCustomValidity('Passwords are not equal');
+                }
                 break;
             }
             case repeatePasswordField: {
-                const password = form.elements[SignupFields.get('PasswordField').name];
-                const repeatPassword = form.elements[SignupFields.get('RepeatPasswordField').name];
+                const password = form.elements[passwordField];
+                const repeatPassword = form.elements[repeatePasswordField];
 
                 if (password.value !== repeatPassword.value) {
-                    repeatPassword.setCustomValidity('Passwords are not equal');
+                    input.setCustomValidity('Passwords are not equal');
                 }
                 break;
             }
