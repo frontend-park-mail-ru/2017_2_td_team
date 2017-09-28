@@ -229,6 +229,7 @@ signupForm.onInput((input, form) => {
                 } else if (passwordLength < 5) {
                     input.setCustomValidity('Password too short');
                 }
+                const password = form.elements[passwordField];
                 const repeatPassword = form.elements[repeatePasswordField];
                 if (password.value !== repeatPassword.value) {
                     input.setCustomValidity('Passwords are not equal');
