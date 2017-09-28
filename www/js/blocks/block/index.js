@@ -25,6 +25,15 @@ export class Block {
     }
 
     /**
+     * getter для textContent
+     *
+     * @returns {string}
+     */
+    get text(){
+        return this._element.textContent;
+    }
+
+    /**
      * setter для innerHTML
      *
      * @param {string}inner - текст для помещения в innerHTML
