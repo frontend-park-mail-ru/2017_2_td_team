@@ -1,0 +1,25 @@
+.input-block {
+    font-size: x-large;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    flex: 1 1 auto;
+}
+
+.input-block input {
+    font-size: medium;
+
+    margin: 0.25rem;
+    padding: 0.25rem;
+
+    border: solid #999 0.1rem;
+    font-family: 'Press Start 2P', monospace;
+}
+
+.input-block label {
+    padding: 0.25rem;
+    margin-bottom: 0.25rem;
+}
