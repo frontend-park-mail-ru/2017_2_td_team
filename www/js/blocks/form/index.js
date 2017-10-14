@@ -42,8 +42,9 @@ export class Form extends Block {
         const formdata = {};
         const elements = rawForm.elements;
         for (let key in elements) {
-            formdata[key] = elements[key].value;
+            formdata[elements[key].name] = elements[key].value;
         }
+
         return formdata;
     }
 

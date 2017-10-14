@@ -209,7 +209,7 @@ signupForm.onSubmit(formdata => {
                         inputName = 'password-field';
                         break;
                     case 'login':
-                        inputName = 'login-field';
+                        inputName = 'username-field';
                         break;
                 }
 
