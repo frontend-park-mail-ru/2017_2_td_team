@@ -1,10 +1,10 @@
-import {Block} from '../block/index.js';
+import Block from '../block/index.js';
 
 /**
  * Компоненты секции about
  * @module AboutPage
  */
-export class AboutPage extends Block {
+export default class AboutPage extends Block {
     /**
      * Создает компонент по шаблону window.aboutTemplate
      *

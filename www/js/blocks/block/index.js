@@ -4,7 +4,7 @@
  * @module Block
  */
 
-export class Block {
+export default class Block {
 
     /**
      * Конструирует компонент из DOM Node

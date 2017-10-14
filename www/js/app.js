@@ -1,18 +1,26 @@
-import {Form} from './blocks/form/index.js';
-import {Block} from './blocks/block/index.js';
-import {SignupButton, SignupFields} from './configs/signup-fields.js';
-import {SigninButton, SigninFields} from './configs/signin-fields.js';
+import Form from './blocks/form/index.js';
+import Block from './blocks/block/index.js';
+import Button from './blocks/buttons/index.js';
+import Menu from './blocks/menu/index.js';
+import InputBlock from './blocks/inputBlock/index.js';
+import AboutPage from './blocks/about/index.js';
+import Logo from './blocks/logo/index.js';
+import LogoSpinner from './blocks/logo-spinner/index.js';
+import Profile from './blocks/profile/index.js';
+import UserService from './services/user-service.js';
+import Auth from './modules/auth.js';
+
+import {
+    SignupButton,
+    SignupFields
+} from './configs/signup-fields.js';
+import {
+    SigninButton,
+    SigninFields
+} from './configs/signin-fields.js';
 import {SectionsData} from './configs/sections.js';
 import {MenuButtons} from './configs/menu-buttons.js';
-import {Button} from './blocks/buttons/index.js';
-import {Menu} from './blocks/menu/index.js';
-import {InputBlock} from './blocks/inputBlock/index.js';
-import {AboutPage} from './blocks/about/index.js';
-import {Logo} from './blocks/logo/index.js';
-import {LogoSpinner} from './blocks/logo-spinner/index.js';
-import {Profile} from './blocks/profile/index.js';
-import {UserService} from './services/user-service.js';
-import {Auth} from './modules/auth.js';
+
 
 const application = new Block(document.getElementById('application'));
 

@@ -1,11 +1,11 @@
-import {Block} from '../block/index.js';
+import Block from '../block/index.js';
 
 /**
  * Компонент кнопки
  *
  * @module Button
  */
-export class Button extends Block {
+export default class Button extends Block {
     /**
      * Конструирует кнопку по ее описанию
      *

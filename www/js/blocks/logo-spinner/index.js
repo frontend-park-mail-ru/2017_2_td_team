@@ -1,6 +1,6 @@
-import {Block} from '../block/index.js';
+import Block from '../block/index.js';
 
-export class LogoSpinner extends Block {
+export default class LogoSpinner extends Block {
 
     constructor(text, attrs = {}, classes = []) {
         super(document.createElement('div'));

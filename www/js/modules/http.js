@@ -2,7 +2,7 @@
  * Модуль, предоставляющий api для выполнения http-запросов
  * @module Http
  */
-export class Http {
+export default class Http {
     /**
      * Совершает GET запрос по address, с передачей cookies, рассчитан на CORS
      *

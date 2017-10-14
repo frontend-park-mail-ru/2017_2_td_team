@@ -1,11 +1,11 @@
-import {Block} from '../block/index.js';
+import Block from '../block/index.js';
 
 /**
  * Компонент формы
  *
  * @module Form
  */
-export class Form extends Block {
+export default class Form extends Block {
 
     /**
      * Конструирует компонент формы из переданных параметров

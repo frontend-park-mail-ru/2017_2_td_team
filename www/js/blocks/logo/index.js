@@ -1,11 +1,11 @@
-import {Block} from '../block/index.js';
+import Block from '../block/index.js';
 
 /**
  * Компонент логотипа игры
  *
  * @module Logo
  */
-export class Logo extends Block {
+export default class Logo extends Block {
     /**
      * Конструирует логотип с заданными параметрами
      *

@@ -1,4 +1,4 @@
-import {Http} from '../modules/http.js';
+import Http from '../modules/http.js';
 import {buildBackendUrl} from '../configs/backend.js';
 
 /**
@@ -6,7 +6,7 @@ import {buildBackendUrl} from '../configs/backend.js';
  *
  * @module UserService
  */
-export class UserService {
+export default class UserService {
 
 
     /**

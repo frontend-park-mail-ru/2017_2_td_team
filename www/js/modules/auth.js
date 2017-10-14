@@ -1,4 +1,4 @@
-import {Http} from './http.js';
+import Http from './http.js';
 import {SignupFields} from '../configs/signup-fields.js';
 import {buildBackendUrl} from '../configs/backend.js';
 import {SigninFields} from '../configs/signin-fields.js';
@@ -8,7 +8,7 @@ import {SigninFields} from '../configs/signin-fields.js';
  *
  * @module Auth
  */
-export class Auth {
+export default class Auth {
 
     /**
      * Запрашивает авторизацию пользователя по переданным данным

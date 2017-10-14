@@ -1,11 +1,11 @@
-import {Block} from '../block/index.js';
-import {Form} from '../form/index.js';
+import Block from '../block/index.js';
+import Form from '../form/index.js';
 
 /**
  * Компонент профиля пользователя
  * @module Profile
  */
-export class Profile extends Block {
+export default class Profile extends Block {
     /**
      * Констуирует Profile и устанавливает шаблон для генерации соответствующего html.
      *

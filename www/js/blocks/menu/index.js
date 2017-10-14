@@ -1,4 +1,4 @@
-import {Block} from '../block/index.js';
+import Block from '../block/index.js';
 
 /**
  * Компонент главного меню
@@ -6,7 +6,7 @@ import {Block} from '../block/index.js';
  *
  * @module Menu
  */
-export class Menu extends Block {
+export default class Menu extends Block {
 
     /**
      * Конструирует меню с заданными параметрами

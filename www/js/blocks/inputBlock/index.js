@@ -1,11 +1,11 @@
-import {Block} from '../block/index.js';
+import Block from '../block/index.js';
 
 /**
  * Компонент блока ввода
  *
  * @module InputBlock
  */
-export class InputBlock extends Block {
+export default class InputBlock extends Block {
     /**
      * Конструирет компонент ввода по переданному описанию
      *
