@@ -1,11 +1,12 @@
-import {globalEventBus} from './globalEventBus';
+import Route from './route.js';
+import {globalEventBus} from './globalEventBus.js';
 
-class Router {
+export default class Router {
 
-    constructor(root, views) {
+    constructor(root, viewsParent) {
 
         this.currentView = null;
-        this.viewsParent = views;
+        this.viewsParent = viewsParent;
         this.routes = new Map();
         this.currentView = null;
         this.bus = globalEventBus;
@@ -13,7 +14,7 @@ class Router {
 
     register(route, viewConstructor) {
 
-        this.routes.set(route, new Route(viewConstructor(this.viewsParent)));
+        this.routes.set(route, new Route(new viewConstructor(this.viewsParent)));
 
     }
 
@@ -29,7 +30,7 @@ class Router {
                 return;
             }
             event.preventDefault();
-            const pathname = window.location.pathname;
+            const pathname = event.target.pathname;
             this.go(pathname);
         });
 
@@ -41,15 +42,17 @@ class Router {
     }
 
     go(path) {
-        route = this.routes.get(path);
+        const route = this.routes.get(path);
         if (!route) {
             return;
         }
-        this.currentView.hide();
+        if (this.currentView) {
+            this.currentView.pause();
+        }
         window.history.pushState({}, '', path);
         route.prepare();
-        route.view.show();
-        this.currentView = rote.view;
+        route.view.resume();
+        this.currentView = route.view;
     }
 
 }

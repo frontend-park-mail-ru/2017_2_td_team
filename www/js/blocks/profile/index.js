@@ -7,14 +7,16 @@ import Form from '../form/index.js';
  */
 export default class Profile extends Block {
     /**
-     * Констуирует Profile и устанавливает шаблон для генерации соответствующего html.
+     * Конструирует Profile и устанавливает шаблон для генерации соответствующего html.
      *
-     *
-     * @param {Function}template функция-шаблонизатор
+     * @param {*}attrs - объект с полями, содержищими аттрибуты компонента
+     * @param {Array<string>}classes - список классов компонента
      */
-    constructor(template) {
+    constructor(attrs = {}, classes = []) {
         super(document.createElement('div'));
-        this._template = template;
+        this._template = window.profileTemplate;
+        this.setClasses(classes);
+        this.setAttributes(attrs);
     }
 
     /**

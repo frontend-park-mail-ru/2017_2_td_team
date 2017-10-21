@@ -2,7 +2,7 @@ import Block from '../block/index.js';
 
 /**
  * Компонент главного меню
- * [Конфигурация кнопок] {@link '../configs/menu-buttons.js'}
+ * [Конфигурация кнопок] {@link '../configs/menu-button.js'}
  *
  * @module Menu
  */

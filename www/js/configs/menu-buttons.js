@@ -1,32 +1,32 @@
 export const MenuButtons = [
     {
         attrs: {
-            type: 'button',
             'data-section': 'start',
+            href: '/start',
         },
         text: 'Start',
         classes: ['button', 'menu-button'],
     },
     {
         attrs: {
-            type: 'button',
-            'data-section': 'about'
+            'data-section': 'about',
+            href: '/about',
         },
         text: 'About',
         classes: ['button', 'menu-button'],
     },
     {
         attrs: {
-            type: 'button',
             'data-section': 'settings',
+            href: '/settings',
         },
         text: 'Settings',
         classes: ['button', 'menu-button'],
     },
     {
         attrs: {
-            type: 'button',
             'data-section': 'logout',
+            href: '/logout',
         },
         text: 'Logout',
         classes: ['button', 'menu-button'],

@@ -1,8 +1,8 @@
 import {describe, expect, it} from '../helpers/jasmineES6.js';
-import {AboutPage} from '../../www/js/blocks/about/index.js';
+import {About} from '../../www/js/blocks/about/index.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
 
-describe('AboutPage', () => {
+describe('About', () => {
     it('Полностью рендерится из шаблона', () => {
         const about = new AboutPage();
         const node = injectBlockNodeAccessor(about).node;

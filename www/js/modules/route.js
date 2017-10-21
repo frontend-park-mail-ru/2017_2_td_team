@@ -1,4 +1,4 @@
-class Route {
+export default class Route {
 
     constructor(view) {
         this.view = view;
@@ -6,8 +6,9 @@ class Route {
     }
 
     prepare() {
-        if (this.rendered) {
+        if (!this.rendered) {
             this.view.render();
+            this.rendered = true;
         }
     }
 

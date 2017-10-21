@@ -11,30 +11,18 @@ html, body {
     height: 100%;
 }
 
-section {
-    margin: auto
-}
-
 body {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
 }
 
-.flex-wrapper {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
-
 #application {
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-
 }
 
 .box {

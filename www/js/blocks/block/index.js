@@ -134,6 +134,16 @@ export default class Block {
     }
 
     /**
+     * Инвертирует аттрибут hidden компонента
+     *
+     * @returns {Block}
+     */
+    toggle() {
+        this._element.hidden = !this._element.hidden;
+        return this;
+    }
+
+    /**
      * Добавляет к компоненту дочерний компонент и возвращает компонент-родитель
      *
      * @param {Block}element - компонент для добаления
@@ -159,4 +169,7 @@ export default class Block {
         }.bind(this);
     }
 
+    injectTo(destination) {
+        destination.appendChild(this._element);
+    }
 }
