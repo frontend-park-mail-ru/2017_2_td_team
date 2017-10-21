@@ -1,4 +1,4 @@
-export class EventBus {
+export default class EventBus {
 
     constructor() {
         this._listeners = {};
@@ -19,7 +19,7 @@ export class EventBus {
     unregister(event, listener) {
 
         if (this._listeners[event]) {
-            this._listeners[event] = this._listeners[event].filter(elem => elem !== listener)
+            this._listeners[event] = this._listeners[event].filter(elem => elem !== listener);
         }
 
     }

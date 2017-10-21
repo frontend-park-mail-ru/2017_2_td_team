@@ -1,1 +1,3 @@
-export const GlobalEventBus = new EventBus();
+import EventBus from './eventBus.js';
+
+export const globalEventBus = new EventBus();
