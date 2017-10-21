@@ -1,7 +1,14 @@
-class RouteFactory {
+class Route {
 
-    CreateRoute(path, view) {
-        return {path, view, rendered};
+    constructor(view) {
+        this.view = view;
+        this.rendered = false;
+    }
+
+    prepare() {
+        if (this.rendered) {
+            this.view.render();
+        }
     }
 
 }

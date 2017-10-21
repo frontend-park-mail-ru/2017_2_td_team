@@ -4,7 +4,7 @@ class Router {
 
     constructor(root, views) {
 
-        this.current = null;
+        this.currentView = null;
         this.viewsParent = views;
         this.routes = new Map();
         this.currentView = null;
@@ -13,7 +13,7 @@ class Router {
 
     register(route, viewConstructor) {
 
-        this.routes.set(route, RouteFactory.Create(viewConstructor(this.viewsParent)));
+        this.routes.set(route, new Route(viewConstructor(this.viewsParent)));
 
     }
 
@@ -42,7 +42,14 @@ class Router {
 
     go(path) {
         route = this.routes.get(path);
+        if (!route) {
+            return;
+        }
+        this.currentView.hide();
+        window.history.pushState({}, '', path);
+        route.prepare();
+        route.view.show();
+        this.currentView = rote.view;
     }
-
 
 }
