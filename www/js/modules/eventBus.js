@@ -1,5 +1,6 @@
 export default class EventBus {
 
+
     constructor() {
         this._listeners = {};
     }
@@ -20,6 +21,7 @@ export default class EventBus {
 
         if (this._listeners[event]) {
             this._listeners[event] = this._listeners[event].filter(elem => elem !== listener);
+
         }
 
     }
