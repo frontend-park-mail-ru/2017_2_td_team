@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "prestart": "webpack --config webpack.config.js",
     "lint": "eslint www/js spec/",
     "test": "karma start",
     "build": "webpack --config webpack.config.js"
