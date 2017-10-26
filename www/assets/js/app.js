@@ -9,6 +9,7 @@ import AboutView from './views/aboutView/index.js';
 import LogoutView from './views/logoutView/index.js';
 import UserService from './services/user-service.js';
 import {globalEventBus} from './modules/globalEventBus.js';
+import GameView from './views/gameView/index.js';
 
 const application = document.getElementById('application');
 const applicationBlock = new Block(application);
@@ -22,7 +23,7 @@ router.register('/signup', 'TD | Signup', SignupView);
 router.register('/settings', 'TD | Profile', SettingsView);
 router.register('/about', 'TD | About', AboutView);
 router.register('/logout', 'TD | Logout', LogoutView);
-
+router.register('/game', 'TD| Game', GameView);
 router.start();
 console.log(window.location.pathname);
 

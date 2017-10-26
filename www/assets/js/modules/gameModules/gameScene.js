@@ -31,9 +31,9 @@ export default class GameScene {
         this.titleWidth = this.scalex * this.titlesz;
         this.titleHeight = this.scaley * this.titlesz;
         this.pixi = window.PIXI;
-
-        window.addEventListener('resize', () => this.resize());
-
+        const elemResizer = this.resize.bind(this);
+        window.addEventListener('resize', elemResizer);
+        this._registered = [() => window.removeEventListener('resize', elemResizer)];
         this.setState(gamectx);
 
 
@@ -47,7 +47,6 @@ export default class GameScene {
 
         this.stage = new this.pixi.Container();
         parent.appendChild(this.renderer.view);
-
     }
 
     scaleElements(...elems) {
@@ -76,12 +75,13 @@ export default class GameScene {
         this.width = this.scalex * availwidth;
         this.height = this.scaley * availheight;
 
-        this.renderer.resize(this.width, this.height);
 
         this.titleWidth = this.scalex * this.titlesz;
         this.titleHeight = this.scaley * this.titlesz;
 
         this.resizers.forEach(resizer => resizer());
+
+        this.renderer.resize(this.width, this.height);
     }
 
     prepare() {
@@ -128,7 +128,8 @@ export default class GameScene {
 
         this.sprites.titles = titles;
         const resizer = () => {
-            this.scaleElements(this.sprites.titles);
+            this.sprites.titles.width = this.width - this.titleWidth;
+            this.sprites.titles.height = this.height - this.titleHeight;
         };
         this.resizers.push(resizer);
         this.sprites.titleSprites = [];
@@ -140,11 +141,8 @@ export default class GameScene {
                 const titleType = this.map[j][i];
                 const title = this.getSpriteByTexture(this.titletypes.get(titleType));
 
-                const resizer = () => {
-                    title.position.set(i * this.titleWidth, j * this.titleHeight);
-                };
+                title.position.set(i * this.titleWidth, j * this.titleHeight);
 
-                resizer();
                 title.interactive = true;
 
                 title.on('pointerover', () => {
@@ -240,16 +238,14 @@ export default class GameScene {
         for (let player of this.state.players) {
             player.towers.reduce((towerNumber, tower) => {
                 const sprite = this.getSpriteByTexture(tower.texture);
-                const resizer = () => {
-                    sprite.position.set(0, towerNumber * this.titleHeight);
 
-                };
-                resizer();
-                this.resizers.push(resizer);
+                sprite.position.set(0, towerNumber * this.titleHeight);
+
                 this.sprites.towers.set(tower.id, sprite);
                 towers.addChild(sprite);
                 return ++towerNumber;
             }, 0);
+
         }
 
         return towers;
@@ -271,6 +267,7 @@ export default class GameScene {
 
         };
         resizer();
+        this.resizers.push(resizer);
         return selected;
     }
 
@@ -283,36 +280,88 @@ export default class GameScene {
         }
         // this.updateWaveTimer();
         this.updateMonstersSprites();
-
+        this.updateHudIndicators();
         this.renderer.render(this.stage);
     }
 
     updateMonstersSprites() {
         if (!this.sprites.monsters) {
             this.sprites.monsters = new Map();
+            this.sprites.monstersContrainer = new this.pixi.Container();
+            this.resizers.push(() => {
+                this.scaleElements(this.sprites.monstersContrainer);
+            });
+            this.scaleElements(this.sprites.monstersContrainer);
+            this.stage.addChild(this.sprites.monstersContrainer);
         }
         const ticker = this.pixi.ticker.shared;
-        this.state.monsters.forEach(monster => {
+        for (let monster of this.state.monsters.values()) {
             if (!this.sprites.monsters.has(monster.id)) {
                 const monsterSprite = this.getScaledSprite(monster.type + '.png');
                 monsterSprite.position.set(this.titleWidth * monster.coord.x, this.titleHeight * monster.coord.y);
-                const posUpdater = delta => {
+                this.resizers.push(() => {
+                    const next = monster.getNextPoint();
+                    if (next) {
+                        monsterSprite.position.set(next.coord.x * this.titleWidth, next.coord.y * this.titleHeight);
+                    } else {
+                        monsterSprite.position.set(monster.coord.x * this.titleWidth, monster.coord.y * this.titleHeight);
+                    }
+                });
+                const updater = delta => {
                     monsterSprite.position.x += monster.vx * this.titleWidth * delta;
+                    monsterSprite.position.y += monster.vy * this.titleHeight * delta;
+                    const next = monster.getNextPoint();
+                    if (next) {
+                        const nextx = next.coord.x * this.titleWidth;
+                        const nexty = next.coord.y * this.titleHeight;
+                        if (nexty < monsterSprite.position.y) {
+                            monsterSprite.position.y = nexty;
+                        }
+                        if (monster.vx > 0 && monsterSprite.position.x > nextx) {
+                            monsterSprite.position.x = nextx;
+                        } else if (monster.vx < 0 && monsterSprite.position.x < nextx) {
+                            monsterSprite.position.x = nextx;
+                        }
+                    }
+
                     if (monsterSprite.position.x > 30 * this.titleWidth) {
                         monsterSprite.position.x = 30 * this.titleWidth;
                     }
-                    monsterSprite.position.y += monster.vy * this.titleHeight * delta;
+
                     if (monsterSprite.position.y > 22 * this.titleHeight) {
                         monsterSprite.position.y = 22 * this.titleHeight;
                     }
                 };
-                ticker.add(posUpdater);
-                this.stage.addChild(monsterSprite);
+
+                ticker.add(updater);
+                this.sprites.monstersContrainer.addChild(monsterSprite);
                 this.sprites.monsters.set(monster.id, {
                     sprite: monsterSprite,
-                    clean: () => ticker.remove(posUpdater)
+                    clean: () => {
+                        ticker.remove(updater);
+                        this.sprites.monstersContrainer.removeChild(monsterSprite);
+                    }
                 });
             }
-        });
+        }
+
+        for (let passsed of this.state.passed) {
+            this.sprites.monsters.get(passsed.id).clean();
+            this.sprites.monsters.delete(passsed.id);
+        }
+    }
+
+    destroy() {
+        this._registered.forEach(off => off());
+        for (let monsterCtx of this.sprites.monsters.values()) {
+            monsterCtx.clean();
+        }
+        this.stage.destroy();
+        
+    }
+
+    updateHudIndicators() {
+        this.sprites.hp.text = this.state.hp;
+        this.sprites.money.text = this.state.players[0].money;
     }
 }
