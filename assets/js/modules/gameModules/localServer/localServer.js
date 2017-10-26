@@ -12,7 +12,7 @@ import * as PIXI from '../../../../../node_modules/pixi.js/dist/pixi.min';
 export default class LocalGameServer extends Strategy {
     constructor() {
         super();
-        this.pixi = window.PIXI;
+        this.pixi = PIXI;
         this.idSource = (function* () {
             let i = 0;
             while (true) {
