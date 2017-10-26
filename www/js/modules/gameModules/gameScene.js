@@ -2,11 +2,11 @@ import {globalEventBus} from '../globalEventBus.js';
 
 export default class GameScene {
 
-    constructor(parent, titlesz, titlemap, gamectx) {
-
+    constructor(parent, titlesz, gamectx) {
+        console.log(gamectx);
         this.bus = globalEventBus;
-        this.map = gamectx.map;
-        this.titlemap = titlemap;
+        this.map = gamectx.map.titles;
+        this.titletypes = gamectx.map.titletypes;
 
         this.titlesz = titlesz;
 
@@ -106,6 +106,7 @@ export default class GameScene {
         let hud = this.createGameHudLayout();
         hud.addChild(this.createGameHudElements());
         hud.addChild(this.createAvailableTowers());
+        hud.addChild(this.createSelectedTowerBar());
         this.stage.addChild(hud);
     }
 
@@ -130,17 +131,35 @@ export default class GameScene {
             this.scaleElements(this.sprites.titles);
         };
         this.resizers.push(resizer);
+        this.sprites.titleSprites = [];
 
         for (let j = 0; j < this.map.length; ++j) {
+            this.sprites.titleSprites.push([]);
             for (let i = 0; i < this.map[j].length; ++i) {
 
-                const titleNumber = this.map[j][i];
-                const title = this.getSpriteByTexture(this.titlemap.get(titleNumber));
+                const titleType = this.map[j][i];
+                const title = this.getSpriteByTexture(this.titletypes.get(titleType));
+
                 const resizer = () => {
                     title.position.set(i * this.titleWidth, j * this.titleHeight);
                 };
+
                 resizer();
+                title.interactive = true;
+
+                title.on('pointerover', () => {
+
+                    title.alpha = 0.7;
+                });
+
+                title.on('pointerout', () => {
+
+                    title.alpha = 1;
+
+                });
+
                 this.resizers.push(resizer);
+                this.sprites.titleSprites[j].push(title);
                 titles.addChild(title);
             }
         }
@@ -175,32 +194,33 @@ export default class GameScene {
     createGameHudElements() {
         const elements = new this.pixi.Container();
 
-
         const hpIcon = this.getScaledSprite('heart.png');
-
 
         let moneyIcon = this.getScaledSprite('coin.png');
 
-
-        const hp = new PIXI.Text(this.state.hearts);
-        let money = new PIXI.Text(this.state.player.money);
-
+        const hp = new PIXI.Text(this.state.hp);
+        const money = new PIXI.Text(this.state.players[0].money);
+        const waveTimer = new PIXI.Text(this.state.wave.timer);
 
         this.sprites.hp = hp;
         this.sprites.money = money;
-        elements.addChild(hpIcon, moneyIcon, hp, money);
-
+        elements.addChild(hpIcon, moneyIcon, hp, money, waveTimer);
         const placeElements = () => {
             const offset = this.titleWidth * 4;
             this.scaleElements(moneyIcon, hpIcon, money, hp);
+            waveTimer.visible = false;
+            waveTimer.position.set(0, 0);
             hpIcon.position.set(offset, 0);
             moneyIcon.position.set(offset + 4 * this.titleWidth, 0);
             hp.position.set(hpIcon.x + hpIcon.width, 0);
             money.position.set(moneyIcon.x + moneyIcon.width, 0);
             elements.position.set(0, this.height - this.titlesz * this.scaley);
         };
-        placeElements();
 
+        placeElements();
+        this.sprites.hp = hp;
+        this.sprites.waveTimer = waveTimer;
+        this.sprites.money = money;
         this.resizers.push(placeElements);
 
         return elements;
@@ -208,7 +228,7 @@ export default class GameScene {
 
     createAvailableTowers() {
         const towers = new this.pixi.Container();
-        const resizer = ()=> {
+        const resizer = () => {
             this.scaleElements(towers);
             towers.position.set(this.width - this.titleWidth, 0);
 
@@ -216,8 +236,9 @@ export default class GameScene {
         this.resizers.push(resizer);
         resizer();
         this.sprites.towers = new Map();
-        if (this.state.player) {
-            this.state.player.towers.reduce((towerNumber, tower) => {
+
+        for (let player of this.state.players) {
+            player.towers.reduce((towerNumber, tower) => {
                 const sprite = this.getSpriteByTexture(tower.texture);
                 const resizer = () => {
                     sprite.position.set(0, towerNumber * this.titleHeight);
@@ -234,7 +255,64 @@ export default class GameScene {
         return towers;
     }
 
+    createSelectedTowerBar() {
+        const selected = new this.pixi.Container();
+        const ap = this.getScaledSprite('attack.png');
+        const as = this.getScaledSprite('aspeed.png');
+        selected.addChild(ap, as);
+
+        const resizer = () => {
+            const offsetx = this.sprites.money.width + this.titleWidth + this.sprites.money.getGlobalPosition().x;
+
+            ap.position.set(0, 0);
+            as.position.set(ap.width * 2, 0);
+            this.scaleElements(ap, as);
+            selected.position.set(offsetx, this.height - this.titleHeight);
+
+        };
+        resizer();
+        return selected;
+    }
+
     render() {
+        if (this.state.wave.timer !== 0) {
+            this.sprites.waveTimer.text = 'Starts in ' + Math.round(this.state.wave.timer);
+            this.sprites.waveTimer.visible = true;
+        } else {
+            this.sprites.waveTimer.visible = false;
+        }
+        // this.updateWaveTimer();
+        this.updateMonstersSprites();
+
         this.renderer.render(this.stage);
+    }
+
+    updateMonstersSprites() {
+        if (!this.sprites.monsters) {
+            this.sprites.monsters = new Map();
+        }
+        const ticker = this.pixi.ticker.shared;
+        this.state.monsters.forEach(monster => {
+            if (!this.sprites.monsters.has(monster.id)) {
+                const monsterSprite = this.getScaledSprite(monster.type + '.png');
+                monsterSprite.position.set(this.titleWidth * monster.coord.x, this.titleHeight * monster.coord.y);
+                const posUpdater = delta => {
+                    monsterSprite.position.x += monster.vx * this.titleWidth * delta;
+                    if (monsterSprite.position.x > 30 * this.titleWidth) {
+                        monsterSprite.position.x = 30 * this.titleWidth;
+                    }
+                    monsterSprite.position.y += monster.vy * this.titleHeight * delta;
+                    if (monsterSprite.position.y > 22 * this.titleHeight) {
+                        monsterSprite.position.y = 22 * this.titleHeight;
+                    }
+                };
+                ticker.add(posUpdater);
+                this.stage.addChild(monsterSprite);
+                this.sprites.monsters.set(monster.id, {
+                    sprite: monsterSprite,
+                    clean: () => ticker.remove(posUpdater)
+                });
+            }
+        });
     }
 }

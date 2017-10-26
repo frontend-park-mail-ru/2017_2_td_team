@@ -1,6 +1,6 @@
 {"frames": {
 
-"bluetower.png":
+"aspeed.png":
 {
 	"frame": {"x":0,"y":0,"w":32,"h":32},
 	"rotated": false,
@@ -9,7 +9,7 @@
 	"sourceSize": {"w":32,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"coin.png":
+"attack.png":
 {
 	"frame": {"x":32,"y":0,"w":32,"h":32},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":32,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"grass.png":
+"blueMonster.png":
 {
 	"frame": {"x":64,"y":0,"w":32,"h":32},
 	"rotated": false,
@@ -27,7 +27,7 @@
 	"sourceSize": {"w":32,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"heart.png":
+"bluetower.png":
 {
 	"frame": {"x":96,"y":0,"w":32,"h":32},
 	"rotated": false,
@@ -36,7 +36,7 @@
 	"sourceSize": {"w":32,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"otower.png":
+"coin.png":
 {
 	"frame": {"x":128,"y":0,"w":32,"h":32},
 	"rotated": false,
@@ -45,7 +45,7 @@
 	"sourceSize": {"w":32,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"redtower.png":
+"grass.png":
 {
 	"frame": {"x":160,"y":0,"w":32,"h":32},
 	"rotated": false,
@@ -54,7 +54,7 @@
 	"sourceSize": {"w":32,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"spawn.png":
+"heart.png":
 {
 	"frame": {"x":192,"y":0,"w":32,"h":32},
 	"rotated": false,
@@ -63,9 +63,54 @@
 	"sourceSize": {"w":32,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"stone.png":
+"orangeMonster.png":
 {
 	"frame": {"x":224,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"otower.png":
+{
+	"frame": {"x":256,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"redMonster.png":
+{
+	"frame": {"x":288,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"redtower.png":
+{
+	"frame": {"x":320,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"spawn.png":
+{
+	"frame": {"x":352,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"stone.png":
+{
+	"frame": {"x":384,"y":0,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -77,8 +122,8 @@
 	"version": "1.0",
 	"image": "titleset.png",
 	"format": "RGBA8888",
-	"size": {"w":256,"h":32},
+	"size": {"w":416,"h":32},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:0ec6c6ef435868e4f483be31a70c4a82:b1805e8572f1873f763aac55b0f1ae09:6a3016365fd1277cf568ed4cbc4ac16e$"
+	"smartupdate": "$TexturePacker:SmartUpdate:f15d3cec774eca3df71f72cd1bdfb9bb:ad1c7e90ade0f602d630b996d29f7be2:6a3016365fd1277cf568ed4cbc4ac16e$"
 }
 }
