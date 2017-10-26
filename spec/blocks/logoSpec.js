@@ -1,5 +1,5 @@
 import {describe, it, expect} from '../helpers/jasmineES6.js';
-import {Logo} from '../../www/js/blocks/logo/index.js';
+import {Logo} from '../../www/js/blocks/logo/logo.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
 
 describe('Logo', () => {
