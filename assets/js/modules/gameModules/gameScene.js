@@ -40,7 +40,7 @@ export default class GameScene {
         this.prepared = false;
         this.renderer = new this.pixi.autoDetectRenderer(this.width, this.height);
         this.renderer.autoResize = true;
-        this.tink = new Tink(this.pixi, this.renderer.view);
+        this.tink = new window.Tink(this.pixi, this.renderer.view);
 
         this.sprites = {};
         this.resizers = [];
@@ -88,7 +88,7 @@ export default class GameScene {
         if (this.prepared) {
             return Promise.resolve(true);
         }
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             console.log('load');
             this.pixi.loader
                 .add('img/titleset.json')
@@ -168,8 +168,8 @@ export default class GameScene {
 
     createGameHudLayout() {
         const layout = new this.pixi.Container();
-        let lowbar = new PIXI.Graphics();
-        let rightbar = new PIXI.Graphics();
+        let lowbar = new this.pixi.Graphics();
+        let rightbar = new this.pixi.Graphics();
         const resizer = () => {
             lowbar.clear();
             rightbar.clear();
@@ -196,9 +196,9 @@ export default class GameScene {
 
         let moneyIcon = this.getScaledSprite('coin.png');
 
-        const hp = new PIXI.Text(this.state.hp);
-        const money = new PIXI.Text(this.state.players[0].money);
-        const waveTimer = new PIXI.Text(this.state.wave.timer);
+        const hp = new this.pixi.Text(this.state.hp);
+        const money = new this.pixi.Text(this.state.players[0].money);
+        const waveTimer = new this.pixi.Text(this.state.wave.timer);
 
         this.sprites.hp = hp;
         this.sprites.money = money;
@@ -240,9 +240,7 @@ export default class GameScene {
                 const sprite = this.getSpriteByTexture(tower.texture);
 
                 sprite.position.set(0, towerNumber * this.titleHeight);
-                towers.on('click', () => {
-                   this.bus.emit(Event.TOWER_CLICKED, tower);
-                });
+                towers.on('click', () => this.bus.emit(Event.TOWER_CLICKED, tower));
                 this.sprites.towers.set(tower.id, sprite);
                 towers.addChild(sprite);
                 return ++towerNumber;

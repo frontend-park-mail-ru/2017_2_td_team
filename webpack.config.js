@@ -32,7 +32,7 @@ module.exports = {
                 ]
             },
         ],
-        noParse: [/.*(pixi\.min\.js).*/],
+        noParse: [/.*(pixi\.min\.js).*/, /.*(tink.js).*/],
     },
     plugins: [
         new ExtractTextPlugin('styles.css')

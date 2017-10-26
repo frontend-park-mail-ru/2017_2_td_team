@@ -24,9 +24,11 @@ export default class Strategy {
     }
 
     onNewGame(payload) {
+        throw Error('Not implemented, called with ', payload);
     }
 
     onNewTower(payload) {
+        throw Error('Not implemented, called with ', payload);
     }
 
     subscribe(event, method) {

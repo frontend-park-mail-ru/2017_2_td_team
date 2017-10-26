@@ -10,7 +10,7 @@ import Strategy from '../strategies/strategy.js';
 export default class LocalGameServer extends Strategy {
     constructor() {
         super();
-
+        this.pixi = window.PIXI;
         this.idSource = (function* () {
             let i = 0;
             while (true) {
@@ -60,7 +60,7 @@ export default class LocalGameServer extends Strategy {
         });
 
         return new Wave(next, monsters);
-    };
+    }
 
     generateGameMap() {
         const map = {
@@ -167,7 +167,7 @@ export default class LocalGameServer extends Strategy {
 
     createTickers() {
         const localGameCtx = this.localGameCtx;
-        localGameCtx.waveTicker = new PIXI.ticker.Ticker();
+        localGameCtx.waveTicker = new this.pixi.ticker.Ticker();
         localGameCtx.waveTicker.stop();
         localGameCtx.waveTicker.add(delta => {
             this.gamectx.wave.timer -= delta;
@@ -180,7 +180,7 @@ export default class LocalGameServer extends Strategy {
             }
         });
 
-        localGameCtx.queueTicker = new PIXI.ticker.Ticker();
+        localGameCtx.queueTicker = new this.pixi.ticker.Ticker();
         localGameCtx.queueTicker.stop();
         localGameCtx.queueTicker.speed = 0.5;
         localGameCtx.queueTicker.add(() => {
@@ -193,7 +193,7 @@ export default class LocalGameServer extends Strategy {
             }
 
         });
-        localGameCtx.gameLoopTicker = new PIXI.ticker.Ticker();
+        localGameCtx.gameLoopTicker = new this.pixi.ticker.Ticker();
         localGameCtx.gameLoopTicker.stop();
         localGameCtx.gameLoopTicker.add((delta) => {
             this.gameLoop(delta);

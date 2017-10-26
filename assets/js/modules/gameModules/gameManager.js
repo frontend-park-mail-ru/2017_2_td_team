@@ -8,7 +8,8 @@ export default class GameManager {
         this.strategy = new strategy();
         this._registered = [];
         this.state = {};
-        this.ticker = PIXI.ticker.shared;
+        this.pixi = window.PIXI;
+        this.ticker = this.pixi.ticker.shared;
 
         const unreg1 = this.bus.register(Events.NEW_GAME_STATE, (event, ctx) => {
             Object.assign(this.state, ctx);
