@@ -31,14 +31,14 @@ router.register('/game', 'TD| Game', GameView);
 router.start();
 console.log(window.location.pathname);
 
-// UserService
-//     .requestCurrentUser()
-//     .then(user => {
-//         UserService.currentUser = user;
-//         console.log('User is authorized');
-//     })
-//     //TODO: redirect to error page
-//     .catch(errJson => {
-//         console.log('User is not authorized', errJson);
-//         globalEventBus.emit('router:redirect', {path: '/signin'});
-//     });
+UserService
+    .requestCurrentUser()
+    .then(user => {
+        UserService.currentUser = user;
+        console.log('User is authorized');
+    })
+    //TODO: redirect to error page
+    .catch(errJson => {
+        console.log('User is not authorized', errJson);
+        globalEventBus.emit('router:redirect', {path: '/signin'});
+    });

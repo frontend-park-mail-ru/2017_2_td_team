@@ -8,10 +8,10 @@ class TowerManager {
         this.bus.register(Events.TOWER_CLICKED, (event, payload) => this.onTowerClicked(tower));
         this.clicked = null;
         PIXI.InteractionManager.on('click', () => {
-            if(this.clicked){
+            if (this.clicked) {
                 this.tryToAddTower();
             }
-        })
+        });
     }
 
     onTowerClicked(tower) {
@@ -21,12 +21,10 @@ class TowerManager {
             return;
         }
         tower.tint = 0xAAAAAA;
-        this.clicked.add(tower.type);
+        this.clicked = tower;
     }
 
 
     tryToAddTower() {
-        const pos = PIXI.InteractionManager
-        PIXI.InteractionManager.hitTest(this.root, )
     }
 }

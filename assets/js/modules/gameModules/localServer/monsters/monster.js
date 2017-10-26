@@ -3,12 +3,12 @@ export default class Monster {
     constructor(type, weight, speed, hp, coord) {
         this.type = type;
         this.weight = weight;
-        this.speed = speed * 100;
+        this.speed = speed;
         this.hp = hp;
         this.coord = coord;
         this.fuzzyCoord = {x: 0, y: 0};
-        this.vx = this.speed * (1 / 5);
-        this.vy = this.speed * (1 / 5);
+        this.vx = this.speed * (1 / 15);
+        this.vy = this.speed * (1 / 15);
 
     }
 

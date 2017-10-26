@@ -63,3 +63,5 @@ typings/
 # WebPack
 bundle.js
 styles.css
+pixi.min.js
+tink.js

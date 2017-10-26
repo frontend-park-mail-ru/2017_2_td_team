@@ -186,7 +186,7 @@ export default class LocalGameServer extends Strategy {
         localGameCtx.queueTicker.add(() => {
 
             if (localGameCtx.queue.length > 0) {
-                console.log('qt');
+
                 this.updateMonstersQueue();
             } else {
                 localGameCtx.queueTicker.stop();
