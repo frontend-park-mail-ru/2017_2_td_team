@@ -16,11 +16,11 @@ module.exports = {
                     use: 'css-loader'
                 }),
             },
-            {
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel-loader'
-            },
+            // {
+            //     test: /\.js$/,
+            //     exclude: /(node_modules|bower_components)/,
+            //     loader: 'babel-loader'
+            // },
             {
                 test: /\.pug$/,
                 use: ['pug-loader']
@@ -33,6 +33,8 @@ module.exports = {
             },
         ],
         noParse: [/.*(pixi\.min\.js).*/, /.*(tink.js).*/],
+
+        // noParse: [/.*(pixi\.min\.js).*/],
     },
     plugins: [
         new ExtractTextPlugin('styles.css')
