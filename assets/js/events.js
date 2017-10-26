@@ -5,4 +5,6 @@ export const Events = {
     GAME_FINISHED: 'signal:game_finished',
     NEW_GAME_STATE: 'transport:new_game_state',
     TOWER_CLICKED: 'signal:tower_clicked',
+    LOGO_ON: 'signal:logo_on',
+    LOGO_OFF: 'signal:logo_off',
 };

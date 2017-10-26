@@ -3,7 +3,7 @@ import {globalEventBus} from '../globalEventBus.js';
 
 export default class Game {
     constructor(element, strategy, users) {
-        this.manager = new GameManager(element, strategy, users);
+        this.manager = new GameManager(element, strategy, [{nickname: 'nick'}]);
         this.bus = globalEventBus;
     }
 

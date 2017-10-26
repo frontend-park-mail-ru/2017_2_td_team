@@ -1,8 +1,8 @@
 export const MenuButtons = [
     {
         attrs: {
-            'data-section': 'start',
-            href: '/start',
+            'data-section': 'game',
+            href: '/game',
         },
         text: 'Start',
         classes: ['button', 'menu-button'],

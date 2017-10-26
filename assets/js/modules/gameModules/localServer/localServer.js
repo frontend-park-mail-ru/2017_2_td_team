@@ -51,7 +51,6 @@ export default class LocalGameServer extends Strategy {
     }
 
     generateWave() {
-        console.log('gw');
         const next = ++this.gamectx.wave.number;
         const monsters = this.monsterCreators.map(creator => creator.createMonster());
 

@@ -1,5 +1,9 @@
 export const SectionsData = [
     {
+        'id': 'game-section',
+        'hidden': true,
+    },
+    {
         'id': 'menu-section',
         'hidden': true,
     },

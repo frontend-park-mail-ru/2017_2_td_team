@@ -26,7 +26,7 @@ export default class GameManager {
         const unreg2 = this.bus.register(Events.GAME_STATE_UPDATE, (event, ctx) => Object.assign(this.state, ctx));
         const unreg3 = this.bus.register(Events.GAME_FINISHED, (event, ctx) => this.onGameFinish(ctx));
 
-        this.bus.emit(Events.NEW_GAME, users);
+        this.bus.emit(Events.NEW_GAME, {players: users});
 
         this._registered.push(unreg1, unreg2, unreg3);
     }

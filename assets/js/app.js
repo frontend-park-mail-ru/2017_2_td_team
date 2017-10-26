@@ -11,14 +11,16 @@ import SignupView from './views/signupView/index.js';
 import SettingsView from './views/settingsView/index.js';
 import AboutView from './views/aboutView/index.js';
 import LogoutView from './views/logoutView/index.js';
-import UserService from './services/user-service.js';
 import {globalEventBus} from './modules/globalEventBus.js';
 import GameView from './views/gameView/index.js';
+import {Events} from './events.js';
 
 const application = document.getElementById('application');
 const applicationBlock = new Block(application);
 const logo = new Logo('TD', {}, ['logo']);
 applicationBlock.append(logo);
+globalEventBus.register(Events.LOGO_OFF, () => logo.hide());
+globalEventBus.register(Events.LOGO_ON, () => logo.show());
 
 const router = new Router(application, application);
 router.register('/', 'TD', MainMenuView);
@@ -31,14 +33,14 @@ router.register('/game', 'TD| Game', GameView);
 router.start();
 console.log(window.location.pathname);
 
-UserService
-    .requestCurrentUser()
-    .then(user => {
-        UserService.currentUser = user;
-        console.log('User is authorized');
-    })
-    //TODO: redirect to error page
-    .catch(errJson => {
-        console.log('User is not authorized', errJson);
-        globalEventBus.emit('router:redirect', {path: '/signin'});
-    });
+// UserService
+//     .requestCurrentUser()
+//     .then(user => {
+//         UserService.currentUser = user;
+//         console.log('User is authorized');
+//     })
+//     //TODO: redirect to error page
+//     .catch(errJson => {
+//         console.log('User is not authorized', errJson);
+//         globalEventBus.emit('router:redirect', {path: '/signin'});
+//     });

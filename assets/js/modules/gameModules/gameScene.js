@@ -3,7 +3,7 @@ import {globalEventBus} from '../globalEventBus.js';
 export default class GameScene {
 
     constructor(parent, titlesz, gamectx) {
-        console.log(gamectx);
+
         this.bus = globalEventBus;
         this.map = gamectx.map.titles;
         this.titletypes = gamectx.map.titletypes;
@@ -40,7 +40,6 @@ export default class GameScene {
         this.prepared = false;
         this.renderer = new this.pixi.autoDetectRenderer(this.width, this.height);
         this.renderer.autoResize = true;
-        this.tink = new window.Tink(this.pixi, this.renderer.view);
 
         this.sprites = {};
         this.resizers = [];
