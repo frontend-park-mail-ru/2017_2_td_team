@@ -1,8 +1,8 @@
 import {describe, expect, it} from '../helpers/jasmineES6.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
-import {Button} from '../../www/js/blocks/button/index.js';
-import {InputBlock} from '../../www/js/blocks/inputBlock/index.js';
-import {Form} from '../../www/js/blocks/form/index.js';
+import {Button} from '../../www/js/blocks/button/button.js';
+import {InputBlock} from '../../www/js/blocks/__input-block/about.js';
+import {Form} from '../../www/js/blocks/form/form.js';
 
 describe('Form', () => {
     it('По-умолчанию создается пустая форма', () => {

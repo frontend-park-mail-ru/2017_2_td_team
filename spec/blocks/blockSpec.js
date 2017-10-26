@@ -1,4 +1,4 @@
-import {Block} from '../../www/js/blocks/block/index.js';
+import {Block} from '../../www/js/blocks/block/block.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
 import {describe, it, expect} from '../helpers/jasmineES6.js';
 
