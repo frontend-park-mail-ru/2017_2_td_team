@@ -57,5 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
-#JetBrains ide condig
+# JetBrains ide condig
 .idea
+
+# WebPack
+bundle.js
+styles.css

@@ -1,0 +1,15 @@
+form.form(action="", method="post", class='profile-form')
+
+    div.form__input-block
+        label Login
+        input(name="login" type="text" value=context.login)
+
+    div.form__input-block
+        label Email
+        input(name="email" type="email" value=context.email)
+
+    div.form__input-block
+        label Password
+        input(name="password" type="password")
+
+    button(class=['button', 'form__submit-button'] type="submit") Save
