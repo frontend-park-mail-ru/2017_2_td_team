@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 app.use(express.static('assets'));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './www', 'game.html'));
+    res.sendFile(path.join(__dirname, './www', 'index.html'));
 });
 
 app.use((req, res) => {
