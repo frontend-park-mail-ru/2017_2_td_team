@@ -11,7 +11,7 @@ const app = express();
 app.use(body.json());
 app.use(morgan('dev'));
 
-app.use(express.static('assets'));
+app.use(express.static('www'));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './www', 'index.html'));
