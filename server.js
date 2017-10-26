@@ -11,10 +11,10 @@ const app = express();
 app.use(body.json());
 app.use(morgan('dev'));
 
-app.use(express.static('www'));
+app.use(express.static('assets'));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './www', 'index.html'));
+    res.sendFile(path.join(__dirname, './www', 'game.html'));
 });
 
 app.use((req, res) => {

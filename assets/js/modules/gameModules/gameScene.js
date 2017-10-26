@@ -240,7 +240,9 @@ export default class GameScene {
                 const sprite = this.getSpriteByTexture(tower.texture);
 
                 sprite.position.set(0, towerNumber * this.titleHeight);
-
+                towers.on('click', () => {
+                   this.bus.emit(Event.TOWER_CLICKED, tower);
+                });
                 this.sprites.towers.set(tower.id, sprite);
                 towers.addChild(sprite);
                 return ++towerNumber;
@@ -297,6 +299,7 @@ export default class GameScene {
         const ticker = this.pixi.ticker.shared;
         for (let monster of this.state.monsters.values()) {
             if (!this.sprites.monsters.has(monster.id)) {
+
                 const monsterSprite = this.getScaledSprite(monster.type + '.png');
                 monsterSprite.position.set(this.titleWidth * monster.coord.x, this.titleHeight * monster.coord.y);
                 this.resizers.push(() => {
@@ -332,7 +335,6 @@ export default class GameScene {
                         monsterSprite.position.y = 22 * this.titleHeight;
                     }
                 };
-
                 ticker.add(updater);
                 this.sprites.monstersContrainer.addChild(monsterSprite);
                 this.sprites.monsters.set(monster.id, {
@@ -346,8 +348,11 @@ export default class GameScene {
         }
 
         for (let passsed of this.state.passed) {
-            this.sprites.monsters.get(passsed.id).clean();
-            this.sprites.monsters.delete(passsed.id);
+            const monsterCtx = this.sprites.monsters.get(passsed.id);
+            if (monsterCtx) {
+                this.sprites.monsters.delete(monsterCtx.id);
+                monsterCtx.clean();
+            }
         }
     }
 
@@ -357,7 +362,7 @@ export default class GameScene {
             monsterCtx.clean();
         }
         this.stage.destroy();
-        
+
     }
 
     updateHudIndicators() {

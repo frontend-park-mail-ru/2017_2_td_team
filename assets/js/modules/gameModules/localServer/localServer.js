@@ -10,13 +10,20 @@ import Strategy from '../strategies/strategy.js';
 export default class LocalGameServer extends Strategy {
     constructor() {
         super();
+
+        this.idSource = (function* () {
+            let i = 0;
+            while (true) {
+                ++i;
+                yield i;
+            }
+        }());
         this.monsterCreators = [
-            new MonsterCreator(BlueMonster),
-            new MonsterCreator(RedMonster),
-            new MonsterCreator(OrangeMonster)
+            new MonsterCreator(BlueMonster, this.idSource),
+            new MonsterCreator(RedMonster, this.idSource),
+            new MonsterCreator(OrangeMonster, this.idSource)
         ];
         this.createTickers();
-        console.log('lgs');
     }
 
 
@@ -39,11 +46,11 @@ export default class LocalGameServer extends Strategy {
         this.startNewWave();
         this.transport.emit(Events.NEW_GAME_STATE, this.gamectx);
         this.localGameCtx.gameLoopTicker.start();
-
     }
 
     generateWave() {
-        const next = this.gamectx.wave.number + 1;
+        console.log('gw');
+        const next = ++this.gamectx.wave.number;
         const monsters = this.monsterCreators.map(creator => creator.createMonster());
 
         this.localGameCtx.queue = Array.from(new Array(next)).map(() => {
@@ -130,12 +137,14 @@ export default class LocalGameServer extends Strategy {
 
     gameLoop(delta) {
 
-        this.updateWaveState();
+        if (this.updateWaveState()) {
+            this.moveMonsters(delta);
+            this.checkFinishConditions();
+        }
 
         //this.checkHitAreas();
         // this.emitShotEvents();
-        this.moveMonsters(delta);
-        this.checkFinishConditions();
+
         this.transport.emit(Events.GAME_STATE_UPDATE, {
             monsters: this.gamectx.monsters,
             players: this.gamectx.players,
@@ -147,16 +156,13 @@ export default class LocalGameServer extends Strategy {
 
     updateWaveState() {
         if (this.localGameCtx.wavePending) {
-            return;
+            return false;
         }
         if (this.localGameCtx.newWave) {
             this.startNewWave();
-            return;
+            return false;
         }
-
-        if (this.localGameCtx.monsterReady) {
-            this.updateMonstersQueue();
-        }
+        return true;
     }
 
     createTickers() {
@@ -178,8 +184,9 @@ export default class LocalGameServer extends Strategy {
         localGameCtx.queueTicker.stop();
         localGameCtx.queueTicker.speed = 0.5;
         localGameCtx.queueTicker.add(() => {
-            localGameCtx.queueTimer = 0;
+
             if (localGameCtx.queue.length > 0) {
+                console.log('qt');
                 this.updateMonstersQueue();
             } else {
                 localGameCtx.queueTicker.stop();
@@ -199,6 +206,7 @@ export default class LocalGameServer extends Strategy {
     }
 
     startNewWave() {
+        this.localGameCtx.newWave = false;
         this.gamectx.wave = this.generateWave();
         this.localGameCtx.wavePending = true;
         this.localGameCtx.waveTicker.start();
@@ -209,6 +217,7 @@ export default class LocalGameServer extends Strategy {
         const creator = this.localGameCtx.queue.pop();
         const monster = creator.createMonster();
         monster.setPath(this.gamectx.map.paths[0]);
+        ++this.localGameCtx.remaining;
         this.gamectx.monsters.set(monster.id, monster);
     }
 
@@ -219,7 +228,7 @@ export default class LocalGameServer extends Strategy {
             const end = monster.getEndPoint();
             if (monster.coord.x === end.coord.x && monster.coord.y === end.coord.y) {
                 this.gamectx.hp -= monster.weight;
-                console.log(this.gamectx.hp);
+                --this.localGameCtx.remaining;
                 this.gamectx.monsters.delete(monster.id);
                 passed.push(monster);
             }
@@ -230,6 +239,10 @@ export default class LocalGameServer extends Strategy {
     checkFinishConditions() {
         if (this.gamectx.hp === 0) {
             this.finishGame();
+            return;
+        }
+        if (this.localGameCtx.queue.length === 0 && this.localGameCtx.remaining === 0) {
+            this.localGameCtx.newWave = true;
         }
     }
 

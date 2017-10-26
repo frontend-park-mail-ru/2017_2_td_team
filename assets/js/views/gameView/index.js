@@ -15,8 +15,9 @@ export default class GameView extends View {
         super.resume();
     }
 
-    pause(){
+    pause() {
         this._game.destroy();
+        this._canvas.remove();
         super.pause();
     }
 

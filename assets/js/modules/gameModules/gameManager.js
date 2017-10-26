@@ -31,7 +31,6 @@ export default class GameManager {
     }
 
     gameLoop() {
-
         this.scene.setState(this.state);
         this.scene.render();
     }

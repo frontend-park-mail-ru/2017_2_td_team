@@ -2,8 +2,8 @@ export default class Monster {
 
     constructor(type, weight, speed, hp, coord) {
         this.type = type;
-        this.weight = weight*100;
-        this.speed = speed*100;
+        this.weight = weight;
+        this.speed = speed * 100;
         this.hp = hp;
         this.coord = coord;
         this.fuzzyCoord = {x: 0, y: 0};
@@ -34,11 +34,11 @@ export default class Monster {
         return this._path[this._path.length - 1];
     }
 
-    setId(id) {
+    set id(id) {
         this._id = id;
     }
 
-    getId() {
+    get id() {
         return this._id;
     }
 
