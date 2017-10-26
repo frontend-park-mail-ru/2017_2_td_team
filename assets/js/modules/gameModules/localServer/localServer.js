@@ -7,10 +7,12 @@ import Tower from './towers/tower.js';
 import Wave from './waves/wave.js';
 import Strategy from '../strategies/strategy.js';
 
+import * as PIXI from '../../../lib/pixi.min.js';
+
 export default class LocalGameServer extends Strategy {
     constructor() {
         super();
-        this.pixi = window.PIXI;
+        this.pixi = PIXI;
         this.idSource = (function* () {
             let i = 0;
             while (true) {
