@@ -3,27 +3,37 @@ import MonsterCreator from './monsters/monsterCreator.js';
 import BlueMonster from './monsters/blueMonster.js';
 import RedMonster from './monsters/redMonster.js';
 import OrangeMonster from './monsters/orangeMonster.js';
-import Tower from './towers/tower.js';
 import Wave from './waves/wave.js';
 import Strategy from '../strategies/strategy.js';
 
 import * as PIXI from '../../../../../node_modules/pixi.js/dist/pixi.min';
+import TowerCreator from './towers/towerCreator.js';
+import RedTower from './towers/redTower.js';
+import OrangeTower from './towers/orangeTower.js';
+import BlueTower from './towers/blueTower.js';
 
 export default class LocalGameServer extends Strategy {
     constructor() {
         super();
         this.pixi = PIXI;
-        this.idSource = (function* () {
+        this.genIdSource = function* () {
             let i = 0;
             while (true) {
                 ++i;
                 yield i;
             }
-        }());
+        };
+        const monsterIdSource = this.genIdSource();
         this.monsterCreators = [
-            new MonsterCreator(BlueMonster, this.idSource),
-            new MonsterCreator(RedMonster, this.idSource),
-            new MonsterCreator(OrangeMonster, this.idSource)
+            new MonsterCreator(BlueMonster, monsterIdSource),
+            new MonsterCreator(RedMonster, monsterIdSource),
+            new MonsterCreator(OrangeMonster, monsterIdSource)
+        ];
+        const towersIdSource = this.genIdSource();
+        this.towerCreators = [
+            new TowerCreator(BlueTower, towersIdSource),
+            new TowerCreator(RedTower, towersIdSource),
+            new TowerCreator(OrangeTower, towersIdSource),
         ];
         this.createTickers();
     }
@@ -34,17 +44,11 @@ export default class LocalGameServer extends Strategy {
         this.gamectx.map = this.generateGameMap();
 
         this.gamectx.players[0] = payload.players[0];
-        this.gamectx.players[0].towers = [
-            new Tower('BlueTower', 2, 10, 2, 25, {x: 0, y: 0}, 'bluetower.png'),
+        this.gamectx.players[0].towers = this.towerCreators.map(creator => creator.createTower());
 
-            new Tower('RedTower', 2, 10, 2, 25, {x: 0, y: 0}, 'redtower.png'),
-
-            new Tower('OrangeTower', 2, 10, 2, 25, {x: 0, y: 0}, 'otower.png'),
-        ];
         this.gamectx.players[0].score = 0;
         this.gamectx.players[0].money = 100;
         this.gamectx.hp = 100;
-
         this.startNewWave();
         this.transport.emit(Events.NEW_GAME_STATE, this.gamectx);
         this.localGameCtx.gameLoopTicker.start();
@@ -132,8 +136,20 @@ export default class LocalGameServer extends Strategy {
         return [...genTitles(30, 22)];
     }
 
-    onNewTower() {
+    onNewTower(payload) {
 
+        const player = this.gamectx.players[0];
+        const tower = player.towers[payload.number];
+
+        if (player.money >= tower.price) {
+            player.money -= tower.price;
+            const newTower = this.towerCreators[payload.number].createTower();
+
+            newTower.coord.x = payload.coord.x;
+            newTower.coord.y = payload.coord.y;
+
+            this.gamectx.towers.push(newTower);
+        }
     }
 
     gameLoop(delta) {
@@ -143,7 +159,7 @@ export default class LocalGameServer extends Strategy {
             this.checkFinishConditions();
         }
 
-        //this.checkHitAreas();
+        // this.checkHitAreas();
         // this.emitShotEvents();
 
         this.transport.emit(Events.GAME_STATE_UPDATE, {
@@ -151,6 +167,7 @@ export default class LocalGameServer extends Strategy {
             players: this.gamectx.players,
             hp: this.gamectx.hp,
             passed: this.gamectx.passed,
+            towers: this.gamectx.towers,
         });
     }
 
@@ -250,5 +267,18 @@ export default class LocalGameServer extends Strategy {
 
     finishGame() {
         this.transport.emit(Events.GAME_FINISHED, this.gamectx.players[0]);
+    }
+
+    checkHitAreas() {
+        this.localGameCtx.hitAreas.forEach(area =>
+            area.monsters =
+                Array
+                    .from(this.localGameCtx.monsters.values())
+                    .filter(monster => area.checkCollision(monster)));
+
+    }
+
+    emitShotEvents() {
+
     }
 }

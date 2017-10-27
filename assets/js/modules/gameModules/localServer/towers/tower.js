@@ -8,4 +8,16 @@ export default class Tower {
         this.texture = texture;
         this.coord = coord;
     }
+
+    get id() {
+        return this._id;
+    }
+
+    set id(id) {
+        this._id = id;
+    }
+
+    static Create(type, range, attack, aspeed, price, coord, texture) {
+        return new Tower(type, range, attack, aspeed, price, coord, texture);
+    }
 }

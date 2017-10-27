@@ -9,6 +9,4 @@ export default class MonsterCreator {
         monster.id = this.idSource.next().value;
         return monster;
     }
-
-
 }

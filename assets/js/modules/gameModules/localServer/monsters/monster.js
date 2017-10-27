@@ -7,8 +7,8 @@ export default class Monster {
         this.hp = hp;
         this.coord = coord;
         this.fuzzyCoord = {x: 0, y: 0};
-        this.vx = this.speed * (1 / 15);
-        this.vy = this.speed * (1 / 15);
+        this.vx = this.speed * (1 / 5);
+        this.vy = this.speed * (1 / 5);
 
     }
 
@@ -50,10 +50,9 @@ export default class Monster {
         this.fuzzyCoord = {x: 0, y: 0};
         const nextPoint = this._path[this.current];
 
-        this.vx = this.speed * nextPoint.dir.x * (1 / 15);
-        this.vy = this.speed * nextPoint.dir.y * (1 / 15);
+        this.vx = this.speed * nextPoint.dir.x * (1 / 5);
+        this.vy = this.speed * nextPoint.dir.y * (1 / 5);
         this.coord = nextPoint.coord;
-
 
     }
 

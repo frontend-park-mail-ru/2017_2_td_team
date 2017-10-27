@@ -1,6 +1,7 @@
 import {globalEventBus} from '../globalEventBus.js';
 import GameScene from './gameScene.js';
 import {Events} from '../../events.js';
+import InteractionController from './controllers/InteractionController.js';
 
 export default class GameManager {
     constructor(parent, strategy, users) {
@@ -10,7 +11,7 @@ export default class GameManager {
         this.state = {};
         this.pixi = window.PIXI;
         this.ticker = this.pixi.ticker.shared;
-
+        this.controller = new InteractionController();
         const unreg1 = this.bus.register(Events.NEW_GAME_STATE, (event, ctx) => {
             Object.assign(this.state, ctx);
             const loopRunner = () => this.gameLoop();

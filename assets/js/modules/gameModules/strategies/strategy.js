@@ -13,6 +13,7 @@ export default class Strategy {
             },
             monsters: new Map(),
             passed: [],
+            towers: [],
         };
         this.localGameCtx = {
             monsterReady: false,

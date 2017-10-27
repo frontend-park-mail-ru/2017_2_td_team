@@ -1,4 +1,5 @@
 import {globalEventBus} from '../globalEventBus.js';
+import {Events} from '../../events.js';
 
 export default class GameScene {
 
@@ -88,7 +89,7 @@ export default class GameScene {
             return Promise.resolve(true);
         }
         return new Promise((resolve) => {
-            console.log('load');
+            this.pixi.loader.reset();
             this.pixi.loader
                 .add('img/titleset.json')
                 .load(() => {
@@ -141,7 +142,6 @@ export default class GameScene {
                 const title = this.getSpriteByTexture(this.titletypes.get(titleType));
 
                 title.position.set(i * this.titleWidth, j * this.titleHeight);
-
                 title.interactive = true;
 
                 title.on('pointerover', () => {
@@ -154,8 +154,9 @@ export default class GameScene {
                     title.alpha = 1;
 
                 });
-
-                this.resizers.push(resizer);
+                title.on('click', () => {
+                    this.bus.emit(Events.TITLE_CLICKED, {title, titleType});
+                });
                 this.sprites.titleSprites[j].push(title);
                 titles.addChild(title);
             }
@@ -203,7 +204,7 @@ export default class GameScene {
         this.sprites.money = money;
         elements.addChild(hpIcon, moneyIcon, hp, money, waveTimer);
         const placeElements = () => {
-            const offset = this.titleWidth * 4;
+            const offset = this.titleWidth * 5;
             this.scaleElements(moneyIcon, hpIcon, money, hp);
             waveTimer.visible = false;
             waveTimer.position.set(0, 0);
@@ -236,12 +237,18 @@ export default class GameScene {
 
         for (let player of this.state.players) {
             player.towers.reduce((towerNumber, tower) => {
-                const sprite = this.getSpriteByTexture(tower.texture);
+                const towerSprite = this.getScaledSprite(tower.texture);
 
-                sprite.position.set(0, towerNumber * this.titleHeight);
-                towers.on('click', () => this.bus.emit(Event.TOWER_CLICKED, tower));
-                this.sprites.towers.set(tower.id, sprite);
-                towers.addChild(sprite);
+                towerSprite.position.set(0, towerNumber * this.titleHeight);
+                towerSprite.interactive = true;
+                towerSprite.on('click', () => this.bus.emit(Events.TOWER_CLICKED, {
+                    sprite: towerSprite,
+                    number: towerNumber - 1,
+                }));
+
+
+                this.sprites.towers.set(towerSprite.id, towerSprite);
+                towers.addChild(towerSprite);
                 return ++towerNumber;
             }, 0);
 
@@ -277,8 +284,8 @@ export default class GameScene {
         } else {
             this.sprites.waveTimer.visible = false;
         }
-        // this.updateWaveTimer();
         this.updateMonstersSprites();
+        this.updateTowersSprites();
         this.updateHudIndicators();
         this.renderer.render(this.stage);
     }
@@ -308,19 +315,22 @@ export default class GameScene {
                     }
                 });
                 const updater = delta => {
-                    monsterSprite.position.x += monster.vx * this.titleWidth * delta;
-                    monsterSprite.position.y += monster.vy * this.titleHeight * delta;
                     const next = monster.getNextPoint();
                     if (next) {
                         const nextx = next.coord.x * this.titleWidth;
                         const nexty = next.coord.y * this.titleHeight;
-                        if (nexty < monsterSprite.position.y) {
-                            monsterSprite.position.y = nexty;
+                        if (nexty < monsterSprite.y) {
+                            monsterSprite.y = nexty;
+                        } else {
+                            monsterSprite.y += monster.vy * this.titleHeight * delta;
                         }
-                        if (monster.vx > 0 && monsterSprite.position.x > nextx) {
-                            monsterSprite.position.x = nextx;
-                        } else if (monster.vx < 0 && monsterSprite.position.x < nextx) {
-                            monsterSprite.position.x = nextx;
+                        if (monster.vx > 0 && monsterSprite.x > nextx) {
+                            monsterSprite.x = nextx;
+                        } else if (monster.vx < 0 && monsterSprite.x < nextx) {
+                            monsterSprite.x = nextx;
+                        } else {
+                            monsterSprite.x += monster.vx * this.titleWidth * delta;
+
                         }
                     }
 
@@ -347,6 +357,7 @@ export default class GameScene {
         for (let passsed of this.state.passed) {
             const monsterCtx = this.sprites.monsters.get(passsed.id);
             if (monsterCtx) {
+
                 this.sprites.monsters.delete(monsterCtx.id);
                 monsterCtx.clean();
             }
@@ -365,5 +376,28 @@ export default class GameScene {
     updateHudIndicators() {
         this.sprites.hp.text = this.state.hp;
         this.sprites.money.text = this.state.players[0].money;
+    }
+
+    updateTowersSprites() {
+        if (!this.sprites.placedTowers) {
+            const placedTowers = new this.pixi.Container();
+            this.sprites.placedTowers = placedTowers;
+            this.sprites.titles.addChild(placedTowers);
+        }
+        for (let tower of this.state.towers) {
+            if (!this.sprites.towers.has(tower.id)) {
+                const towerSprite = this.getScaledSprite(tower.texture);
+
+                const resizer = () => {
+                    towerSprite.position.set(tower.coord.x, tower.coord.y);
+                };
+                resizer();
+                this.resizers.push(resizer);
+
+                this.sprites.titles.addChild(towerSprite);
+                this.sprites.towers.set(tower.id, towerSprite);
+
+            }
+        }
     }
 }
