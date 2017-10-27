@@ -145,17 +145,15 @@ export default class GameScene {
                 title.interactive = true;
 
                 title.on('pointerover', () => {
-
                     title.alpha = 0.7;
                 });
 
                 title.on('pointerout', () => {
-
                     title.alpha = 1;
-
                 });
+
                 title.on('click', () => {
-                    this.bus.emit(Events.TITLE_CLICKED, {title, titleType});
+                    this.bus.emit(Events.TITLE_CLICKED, {coord: {x: i, y: j}, titleType});
                 });
                 this.sprites.titleSprites[j].push(title);
                 titles.addChild(title);
@@ -314,7 +312,7 @@ export default class GameScene {
                         monsterSprite.position.set(monster.coord.x * this.titleWidth, monster.coord.y * this.titleHeight);
                     }
                 });
-                const updater = delta => {
+                const updater = () => {
                     const next = monster.getNextPoint();
                     if (next) {
                         const nextx = next.coord.x * this.titleWidth;
@@ -322,14 +320,14 @@ export default class GameScene {
                         if (nexty < monsterSprite.y) {
                             monsterSprite.y = nexty;
                         } else {
-                            monsterSprite.y += monster.vy * this.titleHeight * delta;
+                            monsterSprite.y += monster.vy * this.titleHeight * this.pixi.ticker.shared.elapsedMS * 0.001;
                         }
                         if (monster.vx > 0 && monsterSprite.x > nextx) {
                             monsterSprite.x = nextx;
                         } else if (monster.vx < 0 && monsterSprite.x < nextx) {
                             monsterSprite.x = nextx;
                         } else {
-                            monsterSprite.x += monster.vx * this.titleWidth * delta;
+                            monsterSprite.x += monster.vx * this.titleWidth * this.pixi.ticker.shared.elapsedMS * 0.001;
 
                         }
                     }
@@ -357,7 +355,6 @@ export default class GameScene {
         for (let passsed of this.state.passed) {
             const monsterCtx = this.sprites.monsters.get(passsed.id);
             if (monsterCtx) {
-
                 this.sprites.monsters.delete(monsterCtx.id);
                 monsterCtx.clean();
             }
@@ -389,7 +386,7 @@ export default class GameScene {
                 const towerSprite = this.getScaledSprite(tower.texture);
 
                 const resizer = () => {
-                    towerSprite.position.set(tower.coord.x, tower.coord.y);
+                    towerSprite.position.set(tower.coord.x * this.titleWidth, tower.coord.y * this.titleHeight);
                 };
                 resizer();
                 this.resizers.push(resizer);
