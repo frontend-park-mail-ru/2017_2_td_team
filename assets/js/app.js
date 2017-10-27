@@ -14,6 +14,7 @@ import LogoutView from './views/logoutView/index.js';
 import {globalEventBus} from './modules/globalEventBus.js';
 import GameView from './views/gameView/index.js';
 import {Events} from './events.js';
+import UserService from './services/user-service.js';
 
 const application = document.getElementById('application');
 const applicationBlock = new Block(application);
@@ -33,14 +34,14 @@ router.register('/game', 'TD| Game', GameView);
 router.start();
 console.log(window.location.pathname);
 
-// UserService
-//     .requestCurrentUser()
-//     .then(user => {
-//         UserService.currentUser = user;
-//         console.log('User is authorized');
-//     })
-//     //TODO: redirect to error page
-//     .catch(errJson => {
-//         console.log('User is not authorized', errJson);
-//         globalEventBus.emit('router:redirect', {path: '/signin'});
-//     });
+UserService
+    .requestCurrentUser()
+    .then(user => {
+        UserService.currentUser = user;
+        console.log('User is authorized');
+    })
+    //TODO: redirect to error page
+    .catch(errJson => {
+        console.log('User is not authorized', errJson);
+        globalEventBus.emit('router:redirect', {path: '/signin'});
+    });
