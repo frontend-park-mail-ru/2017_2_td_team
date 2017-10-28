@@ -14,11 +14,7 @@ export default class Strategy {
             monsters: new Map(),
             passed: [],
             towers: [],
-        };
-        this.localGameCtx = {
-            monsterReady: false,
-            queueTimer: 0.5,
-            remaining: 0,
+            events: [],
         };
         this.subscribe(Events.NEW_GAME, (event, payload) => this.onNewGame(payload));
         this.subscribe(Events.NEW_TOWER, (event, payload) => this.onNewTower(payload));

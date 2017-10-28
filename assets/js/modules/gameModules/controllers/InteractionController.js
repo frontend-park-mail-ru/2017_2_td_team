@@ -41,7 +41,7 @@ export default class InteractionController {
         }
         if (clicked) {
             this.bus.emit(Events.NEW_TOWER, {
-                coord: {x: payload.title.x, y: payload.title.y},
+                coord: payload.coord,
                 number: clicked.number,
             });
             this.clicked = 0;

@@ -11,6 +11,7 @@ import TowerCreator from './towers/towerCreator.js';
 import RedTower from './towers/redTower.js';
 import OrangeTower from './towers/orangeTower.js';
 import BlueTower from './towers/blueTower.js';
+import HitArea from './collisions/hitArea.js';
 
 export default class LocalGameServer extends Strategy {
     constructor() {
@@ -23,6 +24,12 @@ export default class LocalGameServer extends Strategy {
                 yield i;
             }
         };
+
+        this.localGameCtx = {
+            hitAreas: [],
+            remaining: 0,
+        };
+
         const monsterIdSource = this.genIdSource();
         this.monsterCreators = [
             new MonsterCreator(BlueMonster, monsterIdSource),
@@ -40,12 +47,9 @@ export default class LocalGameServer extends Strategy {
 
 
     onNewGame(payload) {
-
         this.gamectx.map = this.generateGameMap();
-
         this.gamectx.players[0] = payload.players[0];
         this.gamectx.players[0].towers = this.towerCreators.map(creator => creator.createTower());
-
         this.gamectx.players[0].score = 0;
         this.gamectx.players[0].money = 100;
         this.gamectx.hp = 100;
@@ -144,30 +148,27 @@ export default class LocalGameServer extends Strategy {
         if (player.money >= tower.price) {
             player.money -= tower.price;
             const newTower = this.towerCreators[payload.number].createTower();
-
-            newTower.coord.x = payload.coord.x;
-            newTower.coord.y = payload.coord.y;
-
+            newTower.coord = payload.coord;
+            this.localGameCtx.hitAreas.push(new HitArea(newTower));
             this.gamectx.towers.push(newTower);
         }
     }
 
-    gameLoop(delta) {
+    gameLoop(ms, delta) {
 
         if (this.updateWaveState()) {
-            this.moveMonsters(delta);
+            this.moveMonsters(ms);
+            this.checkHitAreas();
+            this.emitShotEvents(ms);
             this.checkFinishConditions();
         }
-
-        // this.checkHitAreas();
-        // this.emitShotEvents();
-
         this.transport.emit(Events.GAME_STATE_UPDATE, {
             monsters: this.gamectx.monsters,
             players: this.gamectx.players,
             hp: this.gamectx.hp,
             passed: this.gamectx.passed,
             towers: this.gamectx.towers,
+            events: this.gamectx.events,
         });
     }
 
@@ -200,11 +201,8 @@ export default class LocalGameServer extends Strategy {
 
         localGameCtx.queueTicker = new this.pixi.ticker.Ticker();
         localGameCtx.queueTicker.stop();
-        localGameCtx.queueTicker.speed = 0.5;
         localGameCtx.queueTicker.add(() => {
-
             if (localGameCtx.queue.length > 0) {
-
                 this.updateMonstersQueue();
             } else {
                 localGameCtx.queueTicker.stop();
@@ -214,7 +212,7 @@ export default class LocalGameServer extends Strategy {
         localGameCtx.gameLoopTicker = new this.pixi.ticker.Ticker();
         localGameCtx.gameLoopTicker.stop();
         localGameCtx.gameLoopTicker.add((delta) => {
-            this.gameLoop(delta);
+            this.gameLoop(localGameCtx.gameLoopTicker.elapsedMS, delta);
         });
         this._registered.push(() => {
             localGameCtx.gameLoopTicker.destroy();
@@ -270,15 +268,28 @@ export default class LocalGameServer extends Strategy {
     }
 
     checkHitAreas() {
-        this.localGameCtx.hitAreas.forEach(area =>
+        this.localGameCtx.hitAreas.forEach(area => {
             area.monsters =
                 Array
-                    .from(this.localGameCtx.monsters.values())
-                    .filter(monster => area.checkCollision(monster)));
+                    .from(this.gamectx.monsters.values())
+                    .filter(monster => area.checkCollision(monster));
+        });
 
     }
 
-    emitShotEvents() {
-
+    emitShotEvents(ms) {
+        this.gamectx.events = [];
+        this.localGameCtx.hitAreas.forEach(area => {
+            const {fire, passed} = area.tower.fireOn(ms, area.monsters);
+            if (fire || passed) {
+                this.gamectx.events.push(...fire);
+                passed.forEach(passed => this.gamectx.monsters.delete(passed.id));
+                this.gamectx.players[0].money += passed.reduce((reward, monster) => monster.weight * 10, 0);
+                this.localGameCtx.remaining -= passed.length;
+                this.gamectx.passed.push(...passed);
+            }
+        });
     }
+
+
 }
