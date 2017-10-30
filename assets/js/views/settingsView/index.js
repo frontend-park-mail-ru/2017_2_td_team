@@ -30,28 +30,24 @@ export default class SettingsView extends View {
 
                 this.profile.setContent(user);
                 this.profile.append(this.button);
+
+                this.profile.onUpdate(formdata => {
+                    UserService
+                        .updateCurrentUser(formdata)
+                        .then(() => {
+                            this.profile.setContent(UserService.currentUser);
+                            this.profile.append(this.button);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                });
             })
-            //TODO: redirect to error page
             .catch(errJson => {
                 console.log(errJson);
                 globalEventBus.emit('router:redirect', {path: '/signin'});
             });
 
-
-        this.profile.onUpdate(formdata => {
-            UserService
-                .updateCurrentUser(formdata)
-                .then(() => {
-                    this.profile.setContent(UserService.currentUser);
-                    this.profile.append(this.button);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        });
-    }
-
-    start() {
 
     }
 

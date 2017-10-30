@@ -19,14 +19,12 @@ export default class SignupView extends View {
                 .requestSignUp(formdata)
                 .then(user => {
                     UserService.currentUser = user;
-
                     this.signupForm.reset();
                     globalEventBus.emit('router:redirect', {path: '/'});
                 })
                 .catch(err => {
                     err.incorrectRequestDataErrors.forEach(err => {
                         let inputName = '';
-
                         switch (err.fieldName) {
                             case 'email':
                                 inputName = 'email-field';
@@ -92,7 +90,5 @@ export default class SignupView extends View {
         });
     }
 
-    start() {
 
-    }
 }

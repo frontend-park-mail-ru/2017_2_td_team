@@ -29,7 +29,7 @@ export default class Tower {
         if (bulletsCount >= 1) {
             this.reload -= Math.floor(bulletsCount) * 1000;
         }
-        const events = monsters.reduce((events, monster) => {
+        return monsters.reduce((events, monster) => {
             while (bulletsCount >= 1) {
 
                 monster.hp -= this.attack;
@@ -42,7 +42,6 @@ export default class Tower {
             }
             return events;
         }, {fire: [], passed: []});
-        return events;
 
     }
 

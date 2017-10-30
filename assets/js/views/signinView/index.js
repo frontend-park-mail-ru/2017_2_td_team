@@ -25,6 +25,7 @@ export default class SigninView extends View {
         this.signinForm.append(toSignupButton);
 
         this.signinForm.injectTo(this._element);
+
         this.signinForm.onSubmit(formdata => {
             Auth
                 .requestSignIn(formdata)
@@ -62,7 +63,5 @@ export default class SigninView extends View {
         });
     }
 
-    start() {
 
-    }
 }

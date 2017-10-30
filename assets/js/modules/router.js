@@ -44,15 +44,16 @@ export default class Router {
         if (!route) {
             return;
         }
-
+        console.log(this.currentView);
         if (this.currentView) {
             this.currentView.pause();
         }
         console.log('pushing', {path: path}, route.title, path);
         window.history.pushState({path: path}, route.title, path);
+        this.currentView = route.view;
+
         route.prepare();
         route.view.resume();
-        this.currentView = route.view;
     }
 
 }
