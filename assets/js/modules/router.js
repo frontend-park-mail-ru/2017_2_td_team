@@ -18,8 +18,8 @@ export default class Router {
 
     start() {
         window.onpopstate = event => {
-            console.log(event);
-            this.go(window.location.pathname);
+
+            this.go(window.location.pathname, event.state);
         };
 
         this.viewsParent.addEventListener('click', event => {
@@ -39,7 +39,7 @@ export default class Router {
         this.go(window.location.pathname);
     }
 
-    go(path) {
+    go(path, state) {
         const route = this.routes.get(path);
         if (!route) {
             return;
@@ -49,9 +49,12 @@ export default class Router {
             this.currentView.pause();
         }
         console.log('pushing', {path: path}, route.title, path);
-        window.history.pushState({path: path}, route.title, path);
+        if (state) {
+            window.history.replaceState({path: state.path}, state.title, state.path);
+        } else {
+            window.history.pushState({path: path}, route.title, path);
+        }
         this.currentView = route.view;
-
         route.prepare();
         route.view.resume();
     }
