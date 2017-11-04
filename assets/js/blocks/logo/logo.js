@@ -15,7 +15,9 @@ export default class Logo extends Block {
      * @param {Array<string>}classes - список классов компонента
      */
     constructor(text, attrs = {}, classes = []) {
-        super(document.createElement('div'));
+        super(document.createElement('a'));
+
+        this._element.href = '/';
 
         this.setClasses(classes);
         this.setAttributes(attrs);

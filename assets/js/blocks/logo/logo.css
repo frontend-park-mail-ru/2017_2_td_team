@@ -1,4 +1,8 @@
 .logo {
     font-size: 10rem;
     flex: 0 0 auto;
+    -webkit-user-select: none;
+    user-select: none;
+    text-decoration: none;
+    color: black;
 }
