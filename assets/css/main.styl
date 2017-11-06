@@ -18,7 +18,7 @@ body
   flex-direction: column
   flex: 1 1 auto
 
-  animation: colorChange 20s linear 0s infinite
+  animation: backgroundColorChange 20s linear 0s infinite
 
 #application
   display: flex
@@ -45,14 +45,14 @@ body
     background-color: white
     border: solid #999 0.1rem
 
-  @media (min-width: 992px)
-    min-width: 50%
+  //@media (min-width: 992px)
+  //  min-width: 50%
+  //
+  //@media (min-width: 1200px)
+  //  min-width: 25%
 
-  @media (min-width: 1200px)
-    min-width: 25%
 
-
-@keyframes colorChange
+@keyframes backgroundColorChange
   for i in 0...stops
     old-color = hue(bg-color, (360/stops)*i)
     new-color = hue(bg-color, (360/stops)*i + hue-range)
