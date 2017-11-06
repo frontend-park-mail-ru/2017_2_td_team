@@ -13,27 +13,15 @@ export default class GameScene {
 
         this.totalTitlesW = 32;
         this.totalTitlesH = 24;
+        this.aspect = this.totalTitlesW / this.totalTitlesH;
 
-        let availwidth = window.innerWidth - window.innerWidth % this.titlesz;
-        let availheight = window.innerHeight - window.innerHeight % this.titlesz;
+        this.calcDimensions();
 
-        this.scalex = availwidth / (this.totalTitlesW * this.titlesz);
-        if (this.scalex > 1) {
-            availwidth = this.totalTitlesW * this.titlesz;
-            this.scalex = 1;
-        }
-        this.scaley = availheight / ( this.totalTitlesH * this.titlesz);
-        if (this.scaley > 1) {
-            availheight = this.totalTitlesH * this.titlesz;
-            this.scaley = 1;
-        }
-        this.width = this.scalex * availwidth;
-        this.height = this.scaley * availheight;
-        this.titleWidth = this.scalex * this.titlesz;
-        this.titleHeight = this.scaley * this.titlesz;
         this.pixi = window.PIXI;
+
         const elemResizer = this.resize.bind(this);
         window.addEventListener('resize', elemResizer);
+
         this._registered = [() => window.removeEventListener('resize', elemResizer)];
         this.setState(gamectx);
 
@@ -57,31 +45,23 @@ export default class GameScene {
     }
 
     resize() {
-        let availwidth = window.innerWidth - window.innerWidth % this.titlesz;
+        this.calcDimensions();
+        this.resizers.forEach(resizer => resizer());
+        this.renderer.resize(this.width, this.height);
+
+    }
+
+    calcDimensions() {
         let availheight = window.innerHeight - window.innerHeight % this.titlesz;
 
-        this.scalex = availwidth / (this.totalTitlesW * this.titlesz);
-        if (this.scalex > 1) {
-            availwidth = this.totalTitlesW * this.titlesz;
-            this.scalex = 1;
-        }
-        this.scaley = availheight / ( this.totalTitlesH * this.titlesz);
-        if (this.scaley > 1) {
-            availheight = this.totalTitlesH * this.titlesz;
-            this.scaley = 1;
-        }
+        this.height = availheight;
+        this.width = availheight * this.aspect;
 
-
-        this.width = this.scalex * availwidth;
-        this.height = this.scaley * availheight;
-
+        this.scaley = this.height / (this.totalTitlesH * this.titlesz);
+        this.scalex = this.width / (this.totalTitlesW * this.titlesz);
 
         this.titleWidth = this.scalex * this.titlesz;
         this.titleHeight = this.scaley * this.titlesz;
-
-        this.resizers.forEach(resizer => resizer());
-
-        this.renderer.resize(this.width, this.height);
     }
 
     prepare() {
@@ -125,13 +105,7 @@ export default class GameScene {
 
     createGameMap() {
         const titles = new this.pixi.Container();
-
         this.sprites.titles = titles;
-        const resizer = () => {
-            this.sprites.titles.width = this.width - this.titleWidth;
-            this.sprites.titles.height = this.height - this.titleHeight;
-        };
-        this.resizers.push(resizer);
         this.sprites.titleSprites = [];
 
         for (let j = 0; j < this.map.length; ++j) {
@@ -140,8 +114,14 @@ export default class GameScene {
 
                 const titleType = this.map[j][i];
                 const title = this.getSpriteByTexture(this.titletypes.get(titleType));
+                const titlePlacer = () => {
+                    title.width = this.titleWidth;
+                    title.height = this.titleHeight;
+                    title.position.set(i * this.titleWidth, j * this.titleHeight);
+                };
+                titlePlacer();
+                this.resizers.push(titlePlacer);
 
-                title.position.set(i * this.titleWidth, j * this.titleHeight);
                 title.interactive = true;
 
                 title.on('pointerover', () => {
@@ -160,7 +140,6 @@ export default class GameScene {
             }
         }
 
-        resizer();
         return this.sprites.titles;
     }
 
@@ -201,6 +180,7 @@ export default class GameScene {
         this.sprites.hp = hp;
         this.sprites.money = money;
         elements.addChild(hpIcon, moneyIcon, hp, money, waveTimer);
+
         const placeElements = () => {
             const offset = this.titleWidth * 5;
             this.scaleElements(moneyIcon, hpIcon, money, hp);
@@ -227,7 +207,6 @@ export default class GameScene {
         const resizer = () => {
             this.scaleElements(towers);
             towers.position.set(this.width - this.titleWidth, 0);
-
         };
         this.resizers.push(resizer);
         resizer();
@@ -292,54 +271,24 @@ export default class GameScene {
         if (!this.sprites.monsters) {
             this.sprites.monsters = new Map();
             this.sprites.monstersContrainer = new this.pixi.Container();
-            this.resizers.push(() => {
-                this.scaleElements(this.sprites.monstersContrainer);
-            });
-            this.scaleElements(this.sprites.monstersContrainer);
             this.stage.addChild(this.sprites.monstersContrainer);
+
         }
         const ticker = this.pixi.ticker.shared;
         for (let monster of this.state.monsters.values()) {
             if (!this.sprites.monsters.has(monster.id)) {
-
                 const monsterSprite = this.getScaledSprite(monster.type + '.png');
-                monsterSprite.position.set(this.titleWidth * monster.coord.x, this.titleHeight * monster.coord.y);
+
                 this.resizers.push(() => {
-                    const next = monster.getNextPoint();
-                    if (next) {
-                        monsterSprite.position.set(next.coord.x * this.titleWidth, next.coord.y * this.titleHeight);
-                    } else {
-                        monsterSprite.position.set(monster.coord.x * this.titleWidth, monster.coord.y * this.titleHeight);
-                    }
+                    monsterSprite.width = this.titleWidth;
+                    monsterSprite.height = this.titleHeight;
                 });
+                monsterSprite.position.set(this.titleWidth * monster.coord.x, this.titleHeight * monster.coord.y);
                 const updater = () => {
-                    const next = monster.getNextPoint();
-                    if (next) {
-                        const nextx = next.coord.x * this.titleWidth;
-                        const nexty = next.coord.y * this.titleHeight;
-                        if (nexty < monsterSprite.y) {
-                            monsterSprite.y = nexty;
-                        } else {
-                            monsterSprite.y += monster.vy * this.titleHeight * this.pixi.ticker.shared.elapsedMS * 0.001;
-                        }
-                        if (monster.vx > 0 && monsterSprite.x > nextx) {
-                            monsterSprite.x = nextx;
-                        } else if (monster.vx < 0 && monsterSprite.x < nextx) {
-                            monsterSprite.x = nextx;
-                        } else {
-                            monsterSprite.x += monster.vx * this.titleWidth * this.pixi.ticker.shared.elapsedMS * 0.001;
-
-                        }
-                    }
-
-                    if (monsterSprite.position.x > 30 * this.titleWidth) {
-                        monsterSprite.position.x = 30 * this.titleWidth;
-                    }
-
-                    if (monsterSprite.position.y > 22 * this.titleHeight) {
-                        monsterSprite.position.y = 22 * this.titleHeight;
-                    }
+                    monsterSprite.x = (monster.coord.x + monster.fuzzyCoord.x) * this.titleWidth;
+                    monsterSprite.y = (monster.coord.y + monster.fuzzyCoord.y) * this.titleHeight;
                 };
+
                 ticker.add(updater);
                 this.sprites.monstersContrainer.addChild(monsterSprite);
                 this.sprites.monsters.set(monster.id, {
