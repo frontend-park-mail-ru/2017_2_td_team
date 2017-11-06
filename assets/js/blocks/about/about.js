@@ -1,6 +1,7 @@
-import './about.css';
+import './about.styl';
 
 import Block from '../block/block.js';
+import template from './about.pug';
 
 /**
  * Компоненты секции about
@@ -15,7 +16,7 @@ export default class About extends Block {
      */
     constructor(attrs = {}, classes = []) {
         super(document.createElement('div'));
-        this.html = require('./about.pug')();
+        this.html = template();
         this.setClasses(classes);
         this.setAttributes(attrs);
     }

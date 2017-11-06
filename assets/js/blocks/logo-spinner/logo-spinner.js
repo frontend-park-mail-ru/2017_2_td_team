@@ -1,4 +1,4 @@
-import './logo-spinner.css';
+import './logo-spinner.styl';
 
 import Block from '../block/block.js';
 

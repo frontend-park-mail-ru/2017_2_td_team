@@ -1,6 +1,6 @@
 // Webpack
-import '../css/main.css';
-import '../css/font.css';
+import '../css/main.styl';
+import '../css/font.styl';
 
 import Block from './blocks/block/block.js';
 import Logo from './blocks/logo/logo.js';

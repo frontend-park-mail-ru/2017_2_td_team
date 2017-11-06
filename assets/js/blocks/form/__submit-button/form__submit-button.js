@@ -1,4 +1,4 @@
-import './form__submit-button.css';
+import './form__submit-button.styl';
 
 import Block from '../../block/block.js';
 

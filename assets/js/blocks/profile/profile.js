@@ -1,5 +1,6 @@
 import Block from '../block/block.js';
 import Form from '../form/form.js';
+import template from './profile.pug';
 
 /**
  * Компонент профиля пользователя
@@ -14,7 +15,6 @@ export default class Profile extends Block {
      */
     constructor(attrs = {}, classes = []) {
         super(document.createElement('div'));
-        this._template = require('./profile.pug');
         this.setClasses(classes);
         this.setAttributes(attrs);
     }
@@ -25,7 +25,7 @@ export default class Profile extends Block {
      * @param {*}renderContext - контекст функции-шаблонизатора
      */
     setContent(renderContext) {
-        this._element.innerHTML = this._template({context: renderContext});
+        this._element.innerHTML = template({context: renderContext});
     }
 
     /**

@@ -1,4 +1,4 @@
-import './form.css';
+import './form.styl';
 
 import Block from '../block/block.js';
 

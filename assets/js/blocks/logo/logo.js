@@ -1,4 +1,4 @@
-import './logo.css';
+import './logo.styl';
 import Block from '../block/block.js';
 
 /**

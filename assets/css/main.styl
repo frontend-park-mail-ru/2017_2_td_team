@@ -1,0 +1,60 @@
+bg-color = #ff8888;
+stops = 100 //smoothness
+time = 20s; //duration of animation
+hue-range = 20 //of 360deg
+
+*
+  margin: 0
+  padding: 0
+  font-family: 'Press Start 2P', monospace
+
+html, body
+  width: 100%
+  height: 100%
+
+body
+  background-color: bg-color
+  display: flex
+  flex-direction: column
+  flex: 1 1 auto
+
+  animation: colorChange 20s linear 0s infinite
+
+#application
+  display: flex
+  flex: 1 1 auto
+  flex-direction: column
+  justify-content: center
+  align-items: center
+
+.box
+  min-width: 100%
+  display: flex
+  background-color: transparent
+  flex-direction: column
+  justify-content: space-between
+  box-sizing: border-box
+  flex: 1 0 auto
+  text-align: center
+  margin-bottom: auto
+  padding: 0.5rem
+
+
+  @media (min-width: 768px)
+    min-width: 50%
+    background-color: white
+    border: solid #999 0.1rem
+
+  @media (min-width: 992px)
+    min-width: 50%
+
+  @media (min-width: 1200px)
+    min-width: 25%
+
+
+@keyframes colorChange
+  for i in 0...stops
+    old-color = hue(bg-color, (360/stops)*i)
+    new-color = hue(bg-color, (360/stops)*i + hue-range)
+    {i+'%'}
+      background linear-gradient(to right, old-color, new-color)

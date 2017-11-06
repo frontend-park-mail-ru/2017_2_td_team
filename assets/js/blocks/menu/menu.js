@@ -1,4 +1,4 @@
-import './menu.css';
+import './menu.styl';
 
 import Block from '../block/block.js';
 

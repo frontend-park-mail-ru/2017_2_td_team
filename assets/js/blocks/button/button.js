@@ -1,4 +1,4 @@
-import './button.css';
+import './button.styl';
 
 import Block from '../block/block.js';
 

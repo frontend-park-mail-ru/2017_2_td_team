@@ -10,11 +10,8 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: 'css-loader'
-                }),
+                test: /\.(css|styl)$/,
+                use: ExtractTextPlugin.extract(['css-loader', 'stylus-loader'])
             },
             // {
             //     test: /\.js$/,
@@ -27,9 +24,7 @@ module.exports = {
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
-                use: [
-                    'file-loader'
-                ]
+                use: ['file-loader']
             },
         ],
     },
