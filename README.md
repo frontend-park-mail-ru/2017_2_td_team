@@ -1,5 +1,7 @@
 # Tower Defence by TD Team
-[Play!](https://tdteam.herokuapp.com)
+
+Play: [Production](https://top-tdteam.herokuapp.com) / [Development](https://tdteam.herokuapp.com)
+
 ## Team
 - [@Dnnd](https://github.com/Dnnd)
 - [@oleggator](https://github.com/oleggator)
