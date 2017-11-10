@@ -2,7 +2,7 @@ import View from '../view/index.js';
 import Profile from '../../blocks/profile/profile.js';
 import Button from '../../blocks/button/button.js';
 import UserService from '../../services/user-service.js';
-import {globalEventBus} from '../../modules/globalEventBus.js';
+import globalEventBus from '../../modules/globalEventBus.js';
 
 export default class SettingsView extends View {
 

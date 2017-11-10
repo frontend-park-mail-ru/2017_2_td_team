@@ -1,4 +1,4 @@
-export const Events = {
+export default {
     NEW_TOWER: 'transport:new_tower',
     NEW_GAME: 'transport:new_game',
     GAME_STATE_UPDATE: 'transport:game_state_update',
@@ -8,5 +8,4 @@ export const Events = {
     TITLE_CLICKED: 'signal:title_clicked',
     LOGO_ON: 'signal:logo_on',
     LOGO_OFF: 'signal:logo_off',
-
 };

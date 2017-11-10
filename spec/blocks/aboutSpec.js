@@ -1,10 +1,10 @@
 import {describe, expect, it} from '../helpers/jasmineES6.js';
-import {About} from '../../www/js/blocks/about/about.js';
+import About from '../assets/js/blocks/about/about.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
 
 describe('About', () => {
     it('Полностью рендерится из шаблона', () => {
-        const about = new AboutPage();
+        const about = new About();
         const node = injectBlockNodeAccessor(about).node;
         expect(node.childNodes.length === 3);
         const childs = Array

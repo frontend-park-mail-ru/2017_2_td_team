@@ -1,5 +1,5 @@
-import {globalEventBus} from '../../globalEventBus';
-import {Events} from '../../../events';
+import globalEventBus from '../../globalEventBus';
+import Events from '../../../events';
 
 export default class InteractionController {
     constructor(gamectx) {

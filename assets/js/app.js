@@ -12,9 +12,9 @@ import SignupView from './views/signupView/index.js';
 import SettingsView from './views/settingsView/index.js';
 import AboutView from './views/aboutView/index.js';
 import LogoutView from './views/logoutView/index.js';
-import {globalEventBus} from './modules/globalEventBus.js';
+import globalEventBus from './modules/globalEventBus.js';
 import GameView from './views/gameView/index.js';
-import {Events} from './events.js';
+import Events from './events.js';
 import UserService from './services/user-service.js';
 
 const application = document.getElementById('application');

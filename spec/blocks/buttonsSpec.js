@@ -1,5 +1,5 @@
 import {describe, expect, it} from '../helpers/jasmineES6.js';
-import {Button} from '../../www/js/blocks/button/button.js';
+import Button from '../assets/js/blocks/button/button.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
 
 describe('Button', () => {

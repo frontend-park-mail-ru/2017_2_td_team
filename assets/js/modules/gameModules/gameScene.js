@@ -1,5 +1,5 @@
-import {globalEventBus} from '../globalEventBus.js';
-import {Events} from '../../events.js';
+import globalEventBus from '../globalEventBus.js';
+import Events from '../../events.js';
 
 export default class GameScene {
 

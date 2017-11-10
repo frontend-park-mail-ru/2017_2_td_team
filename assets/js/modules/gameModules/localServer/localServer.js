@@ -1,4 +1,4 @@
-import {Events} from '../../../events.js';
+import Events from '../../../events.js';
 import MonsterCreator from './monsters/monsterCreator.js';
 import BlueMonster from './monsters/blueMonster.js';
 import RedMonster from './monsters/redMonster.js';
@@ -6,7 +6,7 @@ import OrangeMonster from './monsters/orangeMonster.js';
 import Wave from './waves/wave.js';
 import Strategy from '../strategies/strategy.js';
 
-import * as PIXI from '../../../../../node_modules/pixi.js/dist/pixi.min';
+import * as PIXI from 'pixi.js';
 import TowerCreator from './towers/towerCreator.js';
 import RedTower from './towers/redTower.js';
 import OrangeTower from './towers/orangeTower.js';

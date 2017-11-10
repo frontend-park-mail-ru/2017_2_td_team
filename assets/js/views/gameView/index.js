@@ -1,7 +1,7 @@
 import View from '../view/index.js';
 import Game from '../../modules/gameModules/game.js';
 import LocalGameServer from '../../modules/gameModules/localServer/localServer.js';
-import {Events} from '../../events.js';
+import Events from '../../events.js';
 
 export default class GameView extends View {
     constructor(parent) {
