@@ -1,4 +1,5 @@
 // Webpack
+import 'babel-polyfill';
 import '../css/main.styl';
 import '../css/font.styl';
 
