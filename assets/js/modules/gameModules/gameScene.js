@@ -85,7 +85,7 @@ export default class GameScene {
 
     setup() {
         this.stage.addChild(this.createGameMap());
-        hud = this.createGameHudLayout();
+        const hud = this.createGameHudLayout();
         hud.addChild(this.createGameHudElements());
         hud.addChild(this.createAvailableTowers());
         hud.addChild(this.createSelectedTowerBar());
