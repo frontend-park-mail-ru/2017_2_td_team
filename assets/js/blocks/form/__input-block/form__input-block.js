@@ -1,4 +1,4 @@
-import './form__input-block.css';
+import './form__input-block.styl';
 
 import Block from '../../block/block.js';
 import template from './input-block.pug';
