@@ -11,8 +11,8 @@ export default class GameScene {
 
         this.titlesz = titlesz;
 
-        this.totalTitlesW = 32;
-        this.totalTitlesH = 24;
+        this.totalTitlesW = 21;
+        this.totalTitlesH = 14;
         this.aspect = this.totalTitlesW / this.totalTitlesH;
 
         this.calcDimensions();
@@ -35,6 +35,8 @@ export default class GameScene {
 
         this.stage = new this.pixi.Container();
         parent.appendChild(this.renderer.view);
+
+        this.parent = parent;
     }
 
     scaleElements(...elems) {
@@ -83,7 +85,7 @@ export default class GameScene {
 
     setup() {
         this.stage.addChild(this.createGameMap());
-        let hud = this.createGameHudLayout();
+        const hud = this.createGameHudLayout();
         hud.addChild(this.createGameHudElements());
         hud.addChild(this.createAvailableTowers());
         hud.addChild(this.createSelectedTowerBar());

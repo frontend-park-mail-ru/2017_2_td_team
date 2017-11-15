@@ -63,7 +63,7 @@ export default class Monster {
         const fuzzyCoord = this.fuzzyCoord;
         fuzzyCoord.x += this.vx * delta * 0.001;
         fuzzyCoord.y += this.vy * delta * 0.001;
-        if (Math.abs(fuzzyCoord.x) >= 1 || fuzzyCoord.y >= 1) {
+        if (Math.abs(fuzzyCoord.x) >= 1 || Math.abs(fuzzyCoord.y) >= 1) {
             this.makeStep();
         }
     }
