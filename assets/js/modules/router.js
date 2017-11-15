@@ -17,18 +17,21 @@ export default class Router {
     }
 
     start() {
-        window.onpopstate = event => {
-
-            this.go(window.location.pathname, event.state);
-        };
+        window.onpopstate = event => this.go(window.location.pathname, event.state);
 
         this.viewsParent.addEventListener('click', event => {
             if (event.target.tagName.toLowerCase() !== 'a') {
                 return;
             }
+
+            if (event.target.origin !== window.location.origin) {
+                return;
+            }
+
             if (event.target.getAttribute('target') === '_blank') {
                 return;
             }
+
             event.preventDefault();
             const pathname = event.target.pathname;
             this.go(pathname);
