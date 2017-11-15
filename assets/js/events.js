@@ -8,4 +8,5 @@ export default {
     TITLE_CLICKED: 'signal:title_clicked',
     LOGO_ON: 'signal:logo_on',
     LOGO_OFF: 'signal:logo_off',
+    NOTIFY: 'signal:notify',
 };
