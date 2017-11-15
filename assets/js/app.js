@@ -57,6 +57,6 @@ UserService
                 duration: 5,
             });
         }
-        
+
         globalEventBus.emit('router:redirect', {path: '/signin'});
     });
