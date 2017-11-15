@@ -1,12 +1,13 @@
 .button
   font-family: 'Press Start 2P', cursive
   font-size: x-large
+  color: black
   background-color transparent
   cursor: pointer
   display inline-block
 
-  //@media (min-width: 768px)
-  //  background-color: #c0c0c0
+  @media (min-width: 768px)
+    background-color: #c0c0c0
 
   padding: 0.75rem
   margin: 0.25rem
@@ -14,9 +15,20 @@
   text-align: center
   text-decoration: none
 
+  display: inline-block
+
   border: none
   border-radius: 0
 
   &:hover
-    color: #FF4136
-    //animation colorChange 0.2s linear 0s infinite
+    animation colorChange 0.2s linear 0s infinite
+
+
+stops = 100
+font-color = #ff8888
+
+@keyframes colorChange
+  for i in 0...stops
+    color = hue(font-color, (360/stops)*i)
+    {i+'%'}
+      color: color

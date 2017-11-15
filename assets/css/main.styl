@@ -1,24 +1,24 @@
-@import './animations.styl'
+bg-color = #ff8888;
+stops = 100 //smoothness
+time = 20s; //duration of animation
+hue-range = 20 //of 360deg
 
 *
-  color: #DB328A
   margin: 0
   padding: 0
   font-family: 'Press Start 2P', monospace
-
-  &:focus
-    outline: none
 
 html, body
   width: 100%
   height: 100%
 
 body
-  background-color: #082B57
-
+  background-color: bg-color
   display: flex
   flex-direction: column
   flex: 1 1 auto
+
+  animation: backgroundColorChange 20s linear 0s infinite
 
 #application
   display: flex
@@ -40,13 +40,21 @@ body
   padding: 0.5rem
 
 
-  //@media (min-width: 768px)
-  //  min-width: 50%
-  //  background-color: white
-  //  border: solid #999 0.1rem
+  @media (min-width: 768px)
+    min-width: 50%
+    background-color: white
+    border: solid #999 0.1rem
 
   //@media (min-width: 992px)
   //  min-width: 50%
   //
   //@media (min-width: 1200px)
   //  min-width: 25%
+
+
+@keyframes backgroundColorChange
+  for i in 0...stops
+    old-color = hue(bg-color, (360/stops)*i)
+    new-color = hue(bg-color, (360/stops)*i + hue-range)
+    {i+'%'}
+      background linear-gradient(to right, old-color, new-color)
