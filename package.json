@@ -7,7 +7,7 @@
     "start": "node server.js",
     "prestart": "node ./node_modules/webpack/bin/webpack.js --config webpack.config.js",
     "lint": "eslint assets/js",
-    "test": "karma start --browsers Firefox --single-run",
+    "test": "node ./node_modules/webpack/bin/webpack.js --config webpack.config.js && eslint assets/js",
     "build": "node ./node_modules/webpack/bin/webpack.js --config webpack.config.js"
   },
   "repository": {
