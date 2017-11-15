@@ -1,4 +1,4 @@
-export const MenuButtons = [
+const MenuButtons = [
     {
         attrs: {
             'data-section': 'game',
@@ -33,3 +33,4 @@ export const MenuButtons = [
     },
 ];
 
+export default MenuButtons;
