@@ -154,7 +154,7 @@ export default class LocalGameServer extends Strategy {
         }
     }
 
-    gameLoop(ms, delta) {
+    gameLoop(ms) {
 
         if (this.updateWaveState()) {
             this.moveMonsters(ms);
