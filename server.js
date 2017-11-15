@@ -14,9 +14,16 @@ app.use(morgan('dev'));
 app.use(compression());
 app.use(express.static('www'));
 
-app.get('*', (req, res) => {
+const handler = ((req, res) => {
     res.sendFile(path.join(__dirname, './www', 'index.html'));
 });
+
+app.get('/', handler);
+app.get('/about', handler);
+app.get('/game', handler);
+app.get('/signin', handler);
+app.get('/signup', handler);
+app.get('/logout', handler);
 
 app.use((req, res) => {
     res.status(httpStatus.NOT_FOUND)
