@@ -44,7 +44,7 @@ export default class Router {
         if (!route) {
             return;
         }
-        console.log(this.currentView);
+        console.log('Current view:', this.currentView);
         if (this.currentView) {
             this.currentView.pause();
         }
