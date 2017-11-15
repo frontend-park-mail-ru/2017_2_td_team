@@ -1,7 +1,7 @@
 import View from '../view/index.js';
 import About from '../../blocks/about/about.js';
 import Button from '../../blocks/button/button.js';
-import {globalEventBus} from '../../modules/globalEventBus.js';
+import globalEventBus from '../../modules/globalEventBus.js';
 
 export default class AboutView extends View {
 

@@ -1,4 +1,4 @@
-import {globalEventBus} from '../../modules/globalEventBus.js';
+import globalEventBus from '../../modules/globalEventBus.js';
 
 export default class View {
 

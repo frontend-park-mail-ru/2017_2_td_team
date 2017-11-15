@@ -4,7 +4,7 @@ import Form from '../../blocks/form/form.js';
 import InputBlock from '../../blocks/form/__input-block/form__input-block.js';
 import UserService from '../../services/user-service.js';
 import Auth from '../../modules/auth.js';
-import {globalEventBus} from '../../modules/globalEventBus.js';
+import globalEventBus from '../../modules/globalEventBus.js';
 import {SignupButton, SignupFields} from '../../configs/signup-fields.js';
 
 export default class SignupView extends View {

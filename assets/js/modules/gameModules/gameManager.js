@@ -1,6 +1,6 @@
-import {globalEventBus} from '../globalEventBus.js';
+import globalEventBus from '../globalEventBus.js';
 import GameScene from './gameScene.js';
-import {Events} from '../../events.js';
+import Events from '../../events.js';
 import InteractionController from './controllers/InteractionController.js';
 
 export default class GameManager {

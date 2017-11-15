@@ -1,5 +1,5 @@
 import Route from './route.js';
-import {globalEventBus} from './globalEventBus.js';
+import globalEventBus from './globalEventBus.js';
 
 export default class Router {
 

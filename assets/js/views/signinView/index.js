@@ -5,7 +5,7 @@ import SubmitButton from '../../blocks/form/__submit-button/form__submit-button.
 import InputBlock from '../../blocks/form/__input-block/form__input-block.js';
 import UserService from '../../services/user-service.js';
 import Auth from '../../modules/auth.js';
-import {globalEventBus} from '../../modules/globalEventBus.js';
+import globalEventBus from '../../modules/globalEventBus.js';
 import {SigninButton, SigninFields} from '../../configs/signin-fields.js';
 
 export default class SigninView extends View {

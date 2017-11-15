@@ -1,6 +1,6 @@
-import {globalEventBus} from '../../globalEventBus.js';
+import globalEventBus from '../../globalEventBus.js';
 
-import {Events} from '../../../events.js';
+import Events from '../../../events.js';
 
 export default class Strategy {
     constructor() {
