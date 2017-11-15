@@ -2,7 +2,7 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-    entry: './assets/js/app.js',
+    entry: ['babel-polyfill', './assets/js/app.js'],
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'www')
@@ -13,11 +13,11 @@ module.exports = {
                 test: /\.(css|styl)$/,
                 use: ExtractTextPlugin.extract(['css-loader', 'stylus-loader'])
             },
-            // {
-            //     test: /\.js$/,
-            //     exclude: /(node_modules|bower_components)/,
-            //     loader: 'babel-loader'
-            // },
+            {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel-loader'
+            },
             {
                 test: /\.pug$/,
                 use: ['pug-loader']

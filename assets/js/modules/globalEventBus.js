@@ -1,4 +1,5 @@
 import EventBus from './eventBus.js';
 
-export const globalEventBus = new EventBus();
+const globalEventBus = new EventBus();
+export default globalEventBus;
 

@@ -1,6 +1,6 @@
 
 import {describe, expect} from '../helpers/jasmineES6';
-import {EventBus} from '../../www/js/modules/eventBus.js';
+import EventBus from '../assets/js/modules/eventBus.js';
 
 describe('Event bus', () => {
     it('Регистрирует обработчики', () => {

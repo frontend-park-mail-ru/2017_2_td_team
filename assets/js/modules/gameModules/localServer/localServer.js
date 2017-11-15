@@ -1,4 +1,4 @@
-import {Events} from '../../../events.js';
+import Events from '../../../events.js';
 import MonsterCreator from './monsters/monsterCreator.js';
 import BlueMonster from './monsters/blueMonster.js';
 import RedMonster from './monsters/redMonster.js';
@@ -6,7 +6,7 @@ import OrangeMonster from './monsters/orangeMonster.js';
 import Wave from './waves/wave.js';
 import Strategy from '../strategies/strategy.js';
 
-import * as PIXI from '../../../../../node_modules/pixi.js/dist/pixi.min';
+import * as PIXI from 'pixi.js';
 import TowerCreator from './towers/towerCreator.js';
 import RedTower from './towers/redTower.js';
 import OrangeTower from './towers/orangeTower.js';
@@ -77,13 +77,14 @@ export default class LocalGameServer extends Strategy {
             titletypes: {},
             paths: [],
         };
-
-        for (let j = 0; j < 23; ++j) {
+        map.titles = [];
+        for (let i = 0; i < 14; ++i) {
             map.titles.push([]);
-            for (let i = 0; i < 31; ++i) {
-                map.titles[j].push(1);
+            for (let j = 0; j < 21; ++j) {
+                map.titles[i].push(1);
             }
         }
+        console.log(map.titles);
         const pathGenerator = this.generateGamePaths(1);
 
         map.paths.push([...pathGenerator()]);
@@ -107,37 +108,71 @@ export default class LocalGameServer extends Strategy {
     }
 
     generatePath() {
-        const genTitles = function* (xmax, ymax) {
-            let x = 0;
-            let y = 0;
-            while (y < ymax) {
-                const rem = y % 6;
-                if (rem === 0) {
-                    if (x === 30) {
-                        yield {coord: {x, y}, dir: {x: 0, y: 1}};
-                        ++y;
-                    } else {
-                        yield {coord: {x, y}, dir: {x: 1, y: 0}};
-                        ++x;
-                    }
-                } else if (rem === 3) {
-                    if (x === 0) {
-                        yield {coord: {x, y}, dir: {x: 0, y: 1}};
-                        ++y;
-                    } else {
-                        yield {coord: {x, y}, dir: {x: -1, y: 0}};
-                        --x;
-                    }
-                } else if ((rem === 1 || rem === 2) && x === 30) {
-                    yield {coord: {x, y}, dir: {x: 0, y: 1}};
-                    ++y;
-                } else if ((rem === 4 || rem === 5) && x === 0) {
-                    yield {coord: {x, y}, dir: {x: 0, y: 1}};
-                    ++y;
-                }
-            }
-        };
-        return [...genTitles(30, 22)];
+        return [
+            {coord: {x: 0, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 1, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 2, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 3, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 4, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 5, y: 1}, dir: {x: 1, y: 0}},
+
+            {coord: {x: 6, y: 1}, dir: {x: 0, y: 1}},
+            {coord: {x: 6, y: 2}, dir: {x: 0, y: 1}},
+            {coord: {x: 6, y: 3}, dir: {x: 0, y: 1}},
+            {coord: {x: 6, y: 4}, dir: {x: 0, y: 1}},
+
+            {coord: {x: 6, y: 5}, dir: {x: -1, y: 0}},
+            {coord: {x: 5, y: 5}, dir: {x: -1, y: 0}},
+            {coord: {x: 4, y: 5}, dir: {x: -1, y: 0}},
+            {coord: {x: 3, y: 5}, dir: {x: -1, y: 0}},
+
+            {coord: {x: 2, y: 5}, dir: {x: 0, y: 1}},
+            {coord: {x: 2, y: 6}, dir: {x: 0, y: 1}},
+            {coord: {x: 2, y: 7}, dir: {x: 0, y: 1}},
+
+            {coord: {x: 2, y: 8}, dir: {x: 1, y: 0}},
+            {coord: {x: 3, y: 8}, dir: {x: 1, y: 0}},
+            {coord: {x: 4, y: 8}, dir: {x: 1, y: 0}},
+            {coord: {x: 5, y: 8}, dir: {x: 1, y: 0}},
+            {coord: {x: 6, y: 8}, dir: {x: 1, y: 0}},
+            {coord: {x: 7, y: 8}, dir: {x: 1, y: 0}},
+            {coord: {x: 8, y: 8}, dir: {x: 1, y: 0}},
+
+            {coord: {x: 9, y: 8}, dir: {x: 0, y: -1}},
+            {coord: {x: 9, y: 7}, dir: {x: 0, y: -1}},
+            {coord: {x: 9, y: 6}, dir: {x: 0, y: -1}},
+            {coord: {x: 9, y: 5}, dir: {x: 0, y: -1}},
+            {coord: {x: 9, y: 4}, dir: {x: 0, y: -1}},
+            {coord: {x: 9, y: 3}, dir: {x: 0, y: -1}},
+            {coord: {x: 9, y: 2}, dir: {x: 0, y: -1}},
+
+            {coord: {x: 9, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 10, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 11, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 12, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 13, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 14, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 15, y: 1}, dir: {x: 1, y: 0}},
+            {coord: {x: 16, y: 1}, dir: {x: 1, y: 0}},
+
+            {coord: {x: 17, y: 1}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 2}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 3}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 4}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 5}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 6}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 7}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 8}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 9}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 10}, dir: {x: 0, y: 1}},
+            {coord: {x: 17, y: 11}, dir: {x: 0, y: 1}},
+
+            {coord: {x: 17, y: 12}, dir: {x: 1, y: 0}},
+            {coord: {x: 18, y: 12}, dir: {x: 1, y: 0}},
+            {coord: {x: 19, y: 12}, dir: {x: 1, y: 0}},
+
+        ];
+
     }
 
     onNewTower(payload) {
@@ -154,7 +189,7 @@ export default class LocalGameServer extends Strategy {
         }
     }
 
-    gameLoop(ms, delta) {
+    gameLoop(ms) {
 
         if (this.updateWaveState()) {
             this.moveMonsters(ms);

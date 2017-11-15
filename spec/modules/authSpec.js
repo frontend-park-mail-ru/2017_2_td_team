@@ -1,4 +1,4 @@
-import {Auth} from '../../www/js/modules/auth.js';
+import Auth from '../assets/js/modules/auth.js';
 import {beforeEach, describe, expect, fail, it} from '../helpers/jasmineES6.js';
 
 describe('Auth', () => {

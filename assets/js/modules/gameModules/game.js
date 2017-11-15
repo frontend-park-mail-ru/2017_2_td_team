@@ -1,5 +1,5 @@
 import GameManager from './gameManager.js';
-import {globalEventBus} from '../globalEventBus.js';
+import globalEventBus from '../globalEventBus.js';
 
 export default class Game {
     constructor(element, strategy, users) {

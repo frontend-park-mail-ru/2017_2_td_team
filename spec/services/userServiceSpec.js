@@ -1,5 +1,5 @@
-import {UserService} from '../../www/js/services/user-service.js';
-import {Auth} from '../../www/js/modules/auth.js';
+import UserService from '../assets/js/services/user-service.js';
+import Auth from '../assets/js/modules/auth.js';
 import {beforeAll, fail,describe,it, expect, afterAll } from '../helpers/jasmineES6.js';
 
 describe('User-Service', () => {
