@@ -1,5 +1,6 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
     entry: ['babel-polyfill', './assets/js/app.js'],
@@ -15,8 +16,18 @@ module.exports = {
             },
             {
                 test: /\.js$/,
+                include: path.resolve(__dirname, 'assets/js'),
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel-loader'
+                use: [
+                    {
+                        loader: 'thread-loader',
+                        options: {
+                            workers: 4,
+                            workerParallelJobs: 50,
+                        }
+                    },
+                    'babel-loader',
+                ]
             },
             {
                 test: /\.pug$/,
@@ -29,8 +40,12 @@ module.exports = {
         ],
     },
     plugins: [
-        new ExtractTextPlugin('styles.css')
-    ]
+        new ExtractTextPlugin('styles.css'),
+        new UglifyJsPlugin({
+            parallel: true,
+            cache: true,
+        }),
+    ],
 };
 
 
