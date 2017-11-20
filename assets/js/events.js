@@ -1,4 +1,5 @@
 export default {
+    NEW_SERVER_MESSAGE: 'transport:new_server_message',
     NEW_TOWER: 'transport:new_tower',
     NEW_GAME: 'transport:new_game',
     GAME_STATE_UPDATE: 'transport:game_state_update',

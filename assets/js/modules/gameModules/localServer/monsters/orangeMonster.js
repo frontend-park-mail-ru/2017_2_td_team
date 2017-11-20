@@ -9,4 +9,8 @@ export default class OrangeMonster extends Monster {
     static Create() {
         return new OrangeMonster();
     }
+
+    static get typeid() {
+        return 1003;
+    }
 }

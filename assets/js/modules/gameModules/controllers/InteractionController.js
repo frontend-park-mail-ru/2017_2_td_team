@@ -6,7 +6,7 @@ export default class InteractionController {
         this.gamectx = gamectx;
         this.towerInteraction = {
             clicked: null,
-            type: '',
+            type: 0,
         };
         this.bus = globalEventBus;
         this.bus.register(Events.TOWER_CLICKED, (event, tower) => this.onTowerClicked(tower));
@@ -24,6 +24,7 @@ export default class InteractionController {
             tower.sprite.tint = 0x006400;
             return;
         }
+
         if (clicked === null) {
             this.towerInteraction.clicked = tower;
             tower.sprite.tint = 0x006400;
@@ -36,15 +37,16 @@ export default class InteractionController {
 
     onTitleClicked(payload) {
         const clicked = this.towerInteraction.clicked;
-        if (payload.titleType === 0) {
+        if (payload.titleType === 1) {
             return;
         }
         if (clicked) {
             this.bus.emit(Events.NEW_TOWER, {
-                coord: payload.coord,
-                number: clicked.number,
+                x: payload.coord.x,
+                y: payload.coord.y,
+                type: clicked.type,
             });
-            this.clicked = 0;
+            this.clicked = null;
         }
     }
 }

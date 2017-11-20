@@ -7,7 +7,7 @@ export default class GameScene {
 
         this.bus = globalEventBus;
         this.map = gamectx.map.titles;
-        this.titletypes = gamectx.map.titletypes;
+
 
         this.titlesz = titlesz;
 
@@ -22,7 +22,7 @@ export default class GameScene {
         const elemResizer = this.resize.bind(this);
         window.addEventListener('resize', elemResizer);
 
-        this._registered = [() => window.removeEventListener('resize', elemResizer)];
+        this.clenupScripts = [() => window.removeEventListener('resize', elemResizer)];
         this.setState(gamectx);
 
 
@@ -96,26 +96,29 @@ export default class GameScene {
         this.state = state;
     }
 
-    getSpriteByTexture(id) {
-        return new this.pixi.Sprite(this.textures[id]);
+    getTextureForType(typeid) {
+        return this.textures[this.state.textureAtlas.atlas[typeid].texture];
     }
 
-    getScaledSprite(textureid) {
-        return this.scaleElements(this.getSpriteByTexture(textureid));
+    getSpriteByTexture(typeid) {
+        return new this.pixi.Sprite(this.getTextureForType(typeid));
+    }
+
+    getScaledSprite(typeid) {
+        return this.scaleElements(this.getSpriteByTexture(typeid));
     }
 
 
     createGameMap() {
-        const titles = new this.pixi.Container();
-        this.sprites.titles = titles;
-        this.sprites.titleSprites = [];
+        this.titlesContainer = new this.pixi.Container();
+        this.titlesSprites = [];
 
         for (let j = 0; j < this.map.length; ++j) {
-            this.sprites.titleSprites.push([]);
+            this.titlesSprites.push([]);
             for (let i = 0; i < this.map[j].length; ++i) {
 
                 const titleType = this.map[j][i];
-                const title = this.getSpriteByTexture(this.titletypes.get(titleType));
+                const title = this.getSpriteByTexture(titleType);
                 const titlePlacer = () => {
                     title.width = this.titleWidth;
                     title.height = this.titleHeight;
@@ -137,12 +140,13 @@ export default class GameScene {
                 title.on('click', () => {
                     this.bus.emit(Events.TITLE_CLICKED, {coord: {x: i, y: j}, titleType});
                 });
-                this.sprites.titleSprites[j].push(title);
-                titles.addChild(title);
+
+                this.titlesSprites[j].push(title);
+                this.titlesContainer.addChild(title);
             }
         }
 
-        return this.sprites.titles;
+        return this.titlesContainer;
     }
 
     createGameHudLayout() {
@@ -171,75 +175,67 @@ export default class GameScene {
     createGameHudElements() {
         const elements = new this.pixi.Container();
 
-        const hpIcon = this.getScaledSprite('heart.png');
+        const hpIcon = this.scaleElements(new this.pixi.Sprite(this.textures['heart.png']));
 
-        let moneyIcon = this.getScaledSprite('coin.png');
+        let moneyIcon = this.scaleElements(new this.pixi.Sprite(this.textures['coin.png']));
 
         const hp = new this.pixi.Text(this.state.hp);
-        const money = new this.pixi.Text(this.state.players[0].money);
-        const waveTimer = new this.pixi.Text(this.state.wave.timer);
 
+        this.sprites.money = new this.pixi.Text(this.state.player.money);
+
+        const waveTimer = new this.pixi.Text(this.state.wave.timer);
         this.sprites.hp = hp;
-        this.sprites.money = money;
-        elements.addChild(hpIcon, moneyIcon, hp, money, waveTimer);
+        elements.addChild(hpIcon, moneyIcon, hp, this.sprites.money, waveTimer);
 
         const placeElements = () => {
             const offset = this.titleWidth * 5;
-            this.scaleElements(moneyIcon, hpIcon, money, hp);
+
+            this.scaleElements(moneyIcon, hpIcon, this.sprites.money, hp);
             waveTimer.visible = false;
             waveTimer.position.set(0, 0);
             hpIcon.position.set(offset, 0);
             moneyIcon.position.set(offset + 4 * this.titleWidth, 0);
             hp.position.set(hpIcon.x + hpIcon.width, 0);
-            money.position.set(moneyIcon.x + moneyIcon.width, 0);
+            this.sprites.money.position.set(moneyIcon.x + moneyIcon.width, 0);
             elements.position.set(0, this.height - this.titlesz * this.scaley);
         };
 
         placeElements();
         this.sprites.hp = hp;
         this.sprites.waveTimer = waveTimer;
-        this.sprites.money = money;
         this.resizers.push(placeElements);
 
         return elements;
     }
 
     createAvailableTowers() {
-        const towers = new this.pixi.Container();
+        const availableTowers = new this.pixi.Container();
         const resizer = () => {
-            this.scaleElements(towers);
-            towers.position.set(this.width - this.titleWidth, 0);
+            this.scaleElements(availableTowers);
+            availableTowers.position.set(this.width - this.titleWidth, 0);
         };
         this.resizers.push(resizer);
         resizer();
-        this.sprites.towers = new Map();
-
-        for (let player of this.state.players) {
-            player.towers.reduce((towerNumber, tower) => {
-                const towerSprite = this.getScaledSprite(tower.texture);
-
-                towerSprite.position.set(0, towerNumber * this.titleHeight);
-                towerSprite.interactive = true;
-                towerSprite.on('click', () => this.bus.emit(Events.TOWER_CLICKED, {
-                    sprite: towerSprite,
-                    number: towerNumber - 1,
-                }));
-
-
-                this.sprites.towers.set(towerSprite.id, towerSprite);
-                towers.addChild(towerSprite);
-                return ++towerNumber;
-            }, 0);
-
-        }
-
-        return towers;
+        console.log(this.state);
+        this.state.availableTowers.reduce((towerNumber, tower) => {
+            const towerSprite = this.getScaledSprite(tower);
+            towerSprite.position.set(0, towerNumber * this.titleHeight);
+            towerSprite.interactive = true;
+            towerSprite.on('click', () => this.bus.emit(Events.TOWER_CLICKED, {
+                sprite: towerSprite,
+                type: tower,
+            }));
+            availableTowers.addChild(towerSprite);
+            return ++towerNumber;
+        }, 0);
+        return availableTowers;
     }
 
     createSelectedTowerBar() {
         const selected = new this.pixi.Container();
-        const ap = this.getScaledSprite('attack.png');
-        const as = this.getScaledSprite('aspeed.png');
+        const ap = this.scaleElements(new this.pixi.Sprite(this.textures['damage.png']));
+
+        const as = this.scaleElements(new this.pixi.Sprite(this.textures['aspeed.png']));
         selected.addChild(ap, as);
 
         const resizer = () => {
@@ -257,8 +253,8 @@ export default class GameScene {
     }
 
     render() {
-        if (this.state.wave.timer !== 0) {
-            this.sprites.waveTimer.text = 'Starts in ' + Math.round(this.state.wave.timer);
+        if (this.state.wave.msToStart !== 0) {
+            this.sprites.waveTimer.text = 'Starts in ' + Math.round(this.state.wave.msToStart);
             this.sprites.waveTimer.visible = true;
         } else {
             this.sprites.waveTimer.visible = false;
@@ -270,82 +266,144 @@ export default class GameScene {
     }
 
     updateMonstersSprites() {
-        if (!this.sprites.monsters) {
-            this.sprites.monsters = new Map();
-            this.sprites.monstersContrainer = new this.pixi.Container();
-            this.stage.addChild(this.sprites.monstersContrainer);
-
+        if (!this.monstersSprites) {
+            this.monstersSprites = new Map();
+            this.monstersContainer = new this.pixi.Container();
+            this.stage.addChild(this.monstersContainer);
         }
-        const ticker = this.pixi.ticker.shared;
-        for (let monster of this.state.monsters.values()) {
-            if (!this.sprites.monsters.has(monster.id)) {
-                const monsterSprite = this.getScaledSprite(monster.type + '.png');
+        const monsters = this.state.wave.running;
+        for (let monster of monsters) {
+            if (!this.monstersSprites.has(monster.id)) {
+                const monsterSprite = this.getScaledSprite(monster.typeid);
 
                 this.resizers.push(() => {
                     monsterSprite.width = this.titleWidth;
                     monsterSprite.height = this.titleHeight;
                 });
-                monsterSprite.position.set(this.titleWidth * monster.coord.x, this.titleHeight * monster.coord.y);
-                const updater = () => {
-                    monsterSprite.x = (monster.coord.x + monster.fuzzyCoord.x) * this.titleWidth;
-                    monsterSprite.y = (monster.coord.y + monster.fuzzyCoord.y) * this.titleHeight;
-                };
 
-                ticker.add(updater);
-                this.sprites.monstersContrainer.addChild(monsterSprite);
-                this.sprites.monsters.set(monster.id, {
-                    sprite: monsterSprite,
-                    clean: () => {
-                        ticker.remove(updater);
-                        this.sprites.monstersContrainer.removeChild(monsterSprite);
-                    }
-                });
+                monsterSprite
+                    .position
+                    .set(this.titleWidth * monster.titleCoord.x,
+                        this.titleHeight * monster.titleCoord.y);
+
+                this.monstersContainer.addChild(monsterSprite);
+                this.monstersSprites.set(monster.id, monsterSprite);
+
+            } else {
+                const monsterSprite = this.monstersSprites.get(monster.id);
+                monsterSprite.x = (monster.titleCoord.x + monster.relativeCoord.x) * this.titleWidth;
+                monsterSprite.y = (monster.titleCoord.y + monster.relativeCoord.y) * this.titleHeight;
             }
         }
+        this.monstersContainer.children.sort(function (a, b) {
+            if (a.position.y > b.position.y) {
+                return 1;
+            }
+            if (a.position.y < b.position.y) {
+                return -1;
+            }
+            if (a.position.x > b.position.x) {
+                return 1;
+            }
+            if (a.position.x < b.position.x) {
+                return -1;
+            }
+            return 0;
+        });
 
-        for (let passsed of this.state.passed) {
-            const monsterCtx = this.sprites.monsters.get(passsed.id);
-            if (monsterCtx) {
-                this.sprites.monsters.delete(monsterCtx.id);
-                monsterCtx.clean();
+        for (let passedMonster of this.state.wave.passed) {
+            const monsterSprite = this.monstersSprites.get(passedMonster.id);
+            if (monsterSprite) {
+                this.monstersSprites.delete(passedMonster.id);
+                this.monstersContainer.removeChild(monsterSprite);
             }
         }
     }
 
     destroy() {
-        this._registered.forEach(off => off());
-        for (let monsterCtx of this.sprites.monsters.values()) {
-            monsterCtx.clean();
-        }
+        this.clenupScripts.forEach(off => off());
         this.stage.destroy();
 
     }
 
     updateHudIndicators() {
         this.sprites.hp.text = this.state.hp;
-        this.sprites.money.text = this.state.players[0].money;
+        this.sprites.money.text = this.state.player.money;
     }
 
     updateTowersSprites() {
-        if (!this.sprites.placedTowers) {
-            const placedTowers = new this.pixi.Container();
-            this.sprites.placedTowers = placedTowers;
-            this.sprites.titles.addChild(placedTowers);
+        if (!this.towersContainer) {
+            this.towersContainer = new this.pixi.Container();
+            this.towersSprites = new Map();
+            this.titlesContainer.addChild(this.towersContainer);
         }
+
         for (let tower of this.state.towers) {
-            if (!this.sprites.towers.has(tower.id)) {
-                const towerSprite = this.getScaledSprite(tower.texture);
+            if (!this.towersSprites.has(tower.id)) {
+                console.log(tower);
+                const towerSprite = this.getScaledSprite(tower.typeid);
 
                 const resizer = () => {
-                    towerSprite.position.set(tower.coord.x * this.titleWidth, tower.coord.y * this.titleHeight);
+                    towerSprite.position.set(tower.titlePosition.x * this.titleWidth, tower.titlePosition.y * this.titleHeight);
                 };
                 resizer();
                 this.resizers.push(resizer);
 
-                this.sprites.titles.addChild(towerSprite);
-                this.sprites.towers.set(tower.id, towerSprite);
+                this.titlesContainer.addChild(towerSprite);
+                this.towersSprites.set(tower.id, towerSprite);
 
             }
         }
     }
+
+
+    get monstersSprites() {
+        return this.sprites.monsters;
+    }
+
+    get towersSprites() {
+        return this.sprites.towers;
+    }
+
+    set towersSprites(towers) {
+        this.sprites.towers = towers;
+    }
+
+    get towersContainer() {
+        return this.sprites.towersContainer;
+    }
+
+    get monstersContainer() {
+        return this.sprites.monstersContrainer;
+    }
+
+    get titlesContainer() {
+        return this.sprites.titles;
+    }
+
+    set titlesContainer(cont) {
+        this.sprites.titles = cont;
+    }
+
+    get titlesSprites() {
+        return this.sprites.titleSprites;
+    }
+
+    set titlesSprites(sprites) {
+        this.sprites.titleSprites = sprites;
+    }
+
+
+    set towersContainer(towers) {
+        this.sprites.towersContainer = towers;
+    }
+
+    set monstersContainer(cont) {
+        this.sprites.monstersContrainer = cont;
+    }
+
+    set monstersSprites(sprites) {
+        this.sprites.monsters = sprites;
+    }
+
 }

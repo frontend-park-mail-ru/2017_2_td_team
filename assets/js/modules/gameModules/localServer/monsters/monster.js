@@ -6,7 +6,7 @@ export default class Monster {
         this.speed = speed;
         this.hp = hp;
         this.coord = coord;
-        this.fuzzyCoord = {x: 0, y: 0};
+        this.relativeCoord = {x: 0, y: 0};
         this.vx = this.speed;
         this.vy = this.speed;
 
@@ -47,7 +47,7 @@ export default class Monster {
         if (this._path.length <= this.current) {
             return;
         }
-        this.fuzzyCoord = {x: 0, y: 0};
+        this.relativeCoord = {x: 0, y: 0};
         const nextPoint = this._path[this.current];
 
         this.vx = this.speed * nextPoint.dir.x;
@@ -60,7 +60,7 @@ export default class Monster {
         if (this._path.length <= this.current) {
             return;
         }
-        const fuzzyCoord = this.fuzzyCoord;
+        const fuzzyCoord = this.relativeCoord;
         fuzzyCoord.x += this.vx * delta * 0.001;
         fuzzyCoord.y += this.vy * delta * 0.001;
         if (Math.abs(fuzzyCoord.x) >= 1 || Math.abs(fuzzyCoord.y) >= 1) {
@@ -69,7 +69,7 @@ export default class Monster {
     }
 
     get realPosition() {
-        return {x: this.coord.x + this.fuzzyCoord.x, y: this.coord.y + this.fuzzyCoord.y};
+        return {x: this.coord.x + this.relativeCoord.x, y: this.coord.y + this.relativeCoord.y};
     }
 
     static Create(type, weight, speed, hp, coord) {

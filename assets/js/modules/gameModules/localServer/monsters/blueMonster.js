@@ -8,4 +8,8 @@ export default class BlueMonster extends Monster {
     static Create() {
         return new BlueMonster();
     }
+
+    static get typeid() {
+        return 1002;
+    }
 }

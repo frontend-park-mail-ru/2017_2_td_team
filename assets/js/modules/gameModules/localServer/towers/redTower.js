@@ -8,4 +8,9 @@ export default class RedTower extends Tower {
     static Create() {
         return new RedTower();
     }
+
+    static get typeid() {
+        return 102;
+    }
+
 }

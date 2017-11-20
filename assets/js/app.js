@@ -44,6 +44,7 @@ UserService
     .then((user) => {
         UserService.currentUser = user;
         router.start();
+        globalEventBus.emit('router:redirect', {path: '/'});
     })
     .catch(errJson => {
         console.log('User is not authorized', errJson);
@@ -58,5 +59,5 @@ UserService
             });
         }
 
-        globalEventBus.emit('router:redirect', {path: '/signin'});
+        globalEventBus.emit('router:redirect', {path: '/'});
     });

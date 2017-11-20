@@ -1,14 +1,14 @@
 export default class Tower {
-    constructor(type, range, attack, aspeed, price, coord, texture) {
+    constructor(type, range, attack, period, price, coord, texture) {
         this.type = type;
         this.range = range;
-        this.attack = attack;
-        this.aspeed = aspeed;
+        this.damage = attack;
         this.price = price;
         this.texture = texture;
-        this.coord = coord;
-        this.reload = 1;
-        this.shots = 0;
+        this.x = coord.x;
+        this.y = coord.y;
+        this.period = period;
+        this.reload = this.period;
     }
 
     get id() {
@@ -20,20 +20,19 @@ export default class Tower {
     }
 
     fireOn(ms, monsters) {
-
         this.reload += ms;
-        if (this.reload > this.aspeed * 1000) {
-            this.reload = this.aspeed * 1000;
-        }
-        let bulletsCount = this.reload * 0.001;
-        if (bulletsCount >= 1) {
-            this.reload -= Math.floor(bulletsCount) * 1000;
-        }
-        return monsters.reduce((events, monster) => {
-            while (bulletsCount >= 1) {
 
-                monster.hp -= this.attack;
-                events.fire.push({tower: this.id, monster: monster.id});
+        let bulletsCount = Math.floor(this.reload / this.period);
+        this.reload = this.reload - bulletsCount * this.period;
+
+        return monsters.reduce((events, monster) => {
+            while (bulletsCount > 0) {
+                monster.hp -= this.damage;
+                events.fire.push({
+                    tower: this.id,
+                    monster: monster.id,
+                    offset: events.fire.length * this.period
+                });
                 if (monster.hp <= 0) {
                     events.passed.push(monster);
                     return events;
@@ -42,7 +41,6 @@ export default class Tower {
             }
             return events;
         }, {fire: [], passed: []});
-
     }
 
     static Create(type, range, attack, aspeed, price, coord, texture) {

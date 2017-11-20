@@ -41,10 +41,10 @@ module.exports = {
     },
     plugins: [
         new ExtractTextPlugin('styles.css'),
-        new UglifyJsPlugin({
-            parallel: true,
-            cache: true,
-        }),
+        // new UglifyJsPlugin({
+        //     parallel: true,
+        //     cache: true,
+        // }),
     ],
 };
 

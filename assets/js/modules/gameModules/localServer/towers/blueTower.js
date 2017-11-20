@@ -8,4 +8,8 @@ export default class BlueTower extends Tower {
     static Create() {
         return new BlueTower();
     }
+
+    static get typeid(){
+        return 101;
+    }
 }

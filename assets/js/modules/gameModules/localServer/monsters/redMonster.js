@@ -8,4 +8,8 @@ export default class RedMonster extends Monster {
     static Create() {
         return new RedMonster();
     }
+
+    static get typeid() {
+        return 1001;
+    }
 }
