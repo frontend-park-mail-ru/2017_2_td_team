@@ -17,6 +17,7 @@ export default class LocalGameServer extends Strategy {
     constructor() {
         super();
         this.pixi = PIXI;
+        this.pixi.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
         this.genIdSource = function* () {
             let i = 0;
             while (true) {
