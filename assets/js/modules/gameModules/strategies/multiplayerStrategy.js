@@ -5,7 +5,7 @@ import Transport from '../../transport';
 export default class MultiplayerStrategy extends Strategy {
     constructor() {
         super();
-        this.wsUrl = 'ws://localhost:8080/game';
+        this.wsUrl = 'wss://td-java.herokuapp.com/game';
         this.transport = new Transport();
         this.playerId = null;
     }

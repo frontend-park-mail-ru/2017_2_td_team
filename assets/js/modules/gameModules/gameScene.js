@@ -340,7 +340,7 @@ export default class GameScene {
 
         for (let tower of this.state.towers) {
             if (!this.towersSprites.has(tower.id)) {
-                console.log(tower);
+
                 const towerSprite = this.getScaledSprite(tower.typeid);
 
                 const resizer = () => {

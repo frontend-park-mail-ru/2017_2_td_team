@@ -10,4 +10,5 @@ export default {
     LOGO_ON: 'signal:logo_on',
     LOGO_OFF: 'signal:logo_off',
     NOTIFY: 'signal:notify',
+    REDIRECT: 'router:redirect',
 };
