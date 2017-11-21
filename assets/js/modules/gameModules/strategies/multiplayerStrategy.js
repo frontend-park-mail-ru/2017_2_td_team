@@ -10,10 +10,10 @@ export default class MultiplayerStrategy extends Strategy {
         this.playerId = null;
     }
 
-    onNewGame(payload) {
+    onNewGame() {
         this.subscribe(Events.NEW_SERVER_MESSAGE, (ev, ctx) => this.parseCtx(ctx));
         this.transport.connectTo(this.wsUrl, Events.NEW_SERVER_MESSAGE)
-            .then(() => this.transport.send(`{"class":"join"}`));
+            .then(() => this.transport.send('{"class":"join"}'));
     }
 
     onNewTower(payload) {
