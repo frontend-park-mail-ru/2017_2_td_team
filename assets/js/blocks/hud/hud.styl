@@ -1,0 +1,47 @@
+.hud
+  display grid
+  grid-gap 0
+  grid-template-columns repeat(3, 1fr)
+  grid-auto-rows minmax(10px, auto)
+  image-rendering pixelated
+
+.hud__canvas
+  grid-column 2
+  grid-row 1
+
+.hud__left-sidebar
+  display flex
+  flex-direction column
+  flex 1 1 auto
+  grid-column 1
+  grid-row 1
+  background-color #303030
+  border 1px solid #c38a32
+  color white
+  padding 4px
+  overflow scroll
+
+.hud__right-sidebar
+  display flex
+  flex-direction column
+  flex 1 1 auto
+  grid-column 3
+  grid-row 1
+  background-color #303030
+  border 1px solid #c38a32
+  color white
+  align-items center
+  padding 4px
+  overflow scroll
+
+.hud__bottombar
+  display flex
+  flex-direction row
+  flex 1 1 auto
+  grid-column 1 / 4
+  grid-row 2
+  background-color #303030
+  border 1px solid #c38a32
+  color white
+  align-items center
+  padding 4px
