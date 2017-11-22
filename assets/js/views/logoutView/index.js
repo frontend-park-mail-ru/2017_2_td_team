@@ -8,7 +8,6 @@ export default class LogoutView extends View {
         Auth
             .requestSignOut()
             .then(globalEventBus.emit('router:redirect', {path: '/signin'}))
-            //TODO: redirect to error page
             .catch(err => err
                 .json()
                 .then(errBody => console.log(errBody)));

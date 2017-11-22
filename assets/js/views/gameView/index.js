@@ -7,6 +7,8 @@ import Health from '../../blocks/hud/__health/hud__health.js';
 import Money from '../../blocks/hud/__money/hud__money.js';
 import Damage from '../../blocks/hud/__damage/hud__damage.js';
 import Speed from '../../blocks/hud/__speed/hud__speed.js';
+import Info from '../../blocks/hud/__info/hud__info.js';
+import globalEventBus from '../../modules/globalEventBus.js';
 
 export default class GameView extends View {
     constructor(parent) {
@@ -30,6 +32,13 @@ export default class GameView extends View {
         this._speed = new Speed(100);
         this._hud.appendBlockToBottombar(this._speed);
 
+        this._info1 = new Info('monster-health', '100');
+        this._hud.appendBlockToBottombar(this._info1);
+
+        this._info2 = new Info('monster-damage', '100');
+        this._hud.appendBlockToBottombar(this._info2);
+
+
         const tower = document.createElement('div');
         tower.style.height = '64px';
         tower.style.width = '64px';
@@ -42,6 +51,27 @@ export default class GameView extends View {
         this._hud.appendToRightSidebar(tower.cloneNode(true));
 
         this._hud.injectTo(this._element);
+
+        globalEventBus.register(Events.SHOW_MONSTER_INFO, (event, payload) => {
+            this._info1.set('monster', payload.value1);
+            this._info2.set('monster', payload.value2);
+
+            this._info1.show();
+            this._info2.show();
+        });
+
+        globalEventBus.register(Events.SHOW_TOWER_INFO, (event, payload) => {
+            this._info1.set('tower', payload.value1);
+            this._info2.set('tower', payload.value2);
+
+            this._info1.show();
+            this._info2.show();
+        });
+
+        globalEventBus.register(Events.HIDE_INFO, () => {
+            this._info1.hide();
+            this._info2.hide();
+        });
 
         this._game = new Game(this._canvas, LocalGameServer, [{nickname: 'anon'}]);
         this._bus.emit(Events.LOGO_OFF);

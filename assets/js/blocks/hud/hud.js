@@ -1,5 +1,7 @@
 import './hud.styl';
 import Block from '../block/block.js';
+import globalEventBus from '../../modules/globalEventBus.js';
+import Events from '../../events.js';
 
 export default class Hud extends Block {
     constructor(canvas) {
@@ -22,6 +24,7 @@ export default class Hud extends Block {
         this._element.appendChild(this._rightSidebar);
         this._element.appendChild(this._bottomBar);
         console.log(this._element);
+
     }
 
     appendToLeftSidebar(element) {
@@ -39,7 +42,7 @@ export default class Hud extends Block {
 
     appendBlockToRightSidebar(block) {
         this._rightSidebar.appendChild(block._element);
-        return element;
+        return block;
     }
 
     appendToBottombar(element) {
@@ -50,3 +53,6 @@ export default class Hud extends Block {
         this._bottomBar.appendChild(block._element);
     }
 }
+
+
+
