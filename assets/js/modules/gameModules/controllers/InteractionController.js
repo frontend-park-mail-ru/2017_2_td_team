@@ -18,20 +18,21 @@ export default class InteractionController {
     onTowerClicked(tower) {
 
         const clicked = this.towerInteraction.clicked;
-        if (clicked && clicked !== tower) {
-            clicked.sprite.tint = 0xFFFFFF;
+
+        if (clicked && clicked.elem !== tower.elem) {
+            clicked.elem.style.border = '0px solid green';
             this.towerInteraction.clicked = tower;
-            tower.sprite.tint = 0x006400;
+            tower.elem.style.border = '4px solid green';
             return;
         }
 
         if (clicked === null) {
             this.towerInteraction.clicked = tower;
-            tower.sprite.tint = 0x006400;
+            tower.elem.style.border = '4px solid green';
             return;
         }
+        clicked.elem.style.border = '0px solid green';
         this.towerInteraction.clicked = null;
-        tower.sprite.tint = 0xFFFFFF;
 
     }
 

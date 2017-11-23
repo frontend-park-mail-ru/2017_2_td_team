@@ -14,4 +14,8 @@ export default {
     SHOW_TOWER_INFO: 'hud:show_tower_info',
     HIDE_INFO: 'hud:hide_info',
     REDIRECT: 'router:redirect',
+    ADD_TOWER: 'hud:add_tower',
+    PLAYER_STATE_UPDATE: 'hud:p_update',
+    SCORES_UPDATE: 'hud:s_update',
+    SCORES_CREATE: 'hud: s_create',
 };

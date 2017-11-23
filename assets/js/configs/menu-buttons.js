@@ -7,6 +7,7 @@ const MenuButtons = [
         text: 'Start',
         classes: ['button', 'menu-button'],
     },
+
     {
         attrs: {
             'data-section': 'about',

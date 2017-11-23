@@ -89,13 +89,10 @@ export default class GameScene {
 
     setup() {
         this.stage.addChild(this.createGameMap());
-        const hud = this.createGameHudLayout();
-        hud.addChild(this.createGameHudElements());
-        hud.addChild(this.createAvailableTowers());
-        hud.addChild(this.createSelectedTowerBar());
-        this.stage.addChild(hud);
+        this.createAvailableTowers();
         this.animationsContainer = new this.pixi.Container();
         this.stage.addChild(this.animationsContainer);
+        this.createScores();
     }
 
     setState(state) {
@@ -143,7 +140,7 @@ export default class GameScene {
                     title.alpha = 1;
                 });
 
-                title.on('click', () => {
+                title.on('pointertap', () => {
                     this.bus.emit(Events.TITLE_CLICKED, {coord: {x: i, y: j}, titleType});
                 });
 
@@ -155,85 +152,19 @@ export default class GameScene {
         return this.titlesContainer;
     }
 
-    createGameHudLayout() {
-        const layout = new this.pixi.Container();
-        let lowbar = new this.pixi.Graphics();
-        let rightbar = new this.pixi.Graphics();
-        const resizer = () => {
-            lowbar.clear();
-            rightbar.clear();
-            rightbar.beginFill(0x303030);
-            rightbar.lineStyle(1, 0xFFA500, 1);
-            rightbar.drawRect(this.width - this.titleWidth, 0, this.titleWidth, this.height);
-            rightbar.endFill();
-
-            lowbar.beginFill(0x303030);
-            lowbar.lineStyle(1, 0xFFA500, 1);
-            lowbar.drawRect(0, this.height - this.titleHeight, this.width, this.titleHeight);
-            lowbar.endFill();
-        };
-        resizer();
-        layout.addChild(lowbar, rightbar);
-        this.resizers.push(resizer);
-        return layout;
-    }
-
-    createGameHudElements() {
-        const elements = new this.pixi.Container();
-
-        const hpIcon = this.scaleElements(new this.pixi.Sprite(this.textures['heart.png']));
-
-        let moneyIcon = this.scaleElements(new this.pixi.Sprite(this.textures['coin.png']));
-
-        const hp = new this.pixi.Text(this.state.hp);
-
-        this.sprites.money = new this.pixi.Text(this.state.player.money);
-
-        const waveTimer = new this.pixi.Text(this.state.wave.timer);
-
-        elements.addChild(hpIcon, moneyIcon, hp, this.sprites.money, waveTimer);
-
-        const placeElements = () => {
-            const offset = this.titleWidth * 5;
-
-            this.scaleElements(moneyIcon, hpIcon, this.sprites.money, hp);
-            waveTimer.visible = false;
-            waveTimer.position.set(0, 0);
-            hpIcon.position.set(offset, 0);
-            moneyIcon.position.set(offset + 4 * this.titleWidth, 0);
-            hp.position.set(hpIcon.x + hpIcon.width, 0);
-            this.sprites.money.position.set(moneyIcon.x + moneyIcon.width, 0);
-            elements.position.set(0, this.height - this.titlesz * this.scaley);
-        };
-
-        placeElements();
-        this.sprites.hp = hp;
-        this.sprites.waveTimer = waveTimer;
-        this.resizers.push(placeElements);
-
-        return elements;
-    }
-
     createAvailableTowers() {
-        const availableTowers = new this.pixi.Container();
-        const resizer = () => {
-            this.scaleElements(availableTowers);
-            availableTowers.position.set(this.width - this.titleWidth, 0);
-        };
-        this.resizers.push(resizer);
-        resizer();
-        this.state.availableTowers.reduce((towerNumber, tower) => {
-            const towerSprite = this.getScaledSprite(tower);
-            towerSprite.position.set(0, towerNumber * this.titleHeight);
-            towerSprite.interactive = true;
-            towerSprite.on('click', () => this.bus.emit(Events.TOWER_CLICKED, {
-                sprite: towerSprite,
-                type: tower,
+        this.state.availableTowers.forEach(towerid => {
+            const tower = document.createElement('div');
+            tower.style.height = `${this.titleHeight * 2}px`;
+            tower.style.width = `${this.titleWidth * 2}px`;
+            tower.style.backgroundSize = 'cover';
+            tower.style.backgroundImage = `url(img/textures/${this.state.textureAtlas.atlas[towerid].texture})`;
+            tower.addEventListener('pointerup', () => this.bus.emit(Events.TOWER_CLICKED, {
+                type: towerid,
+                elem: tower,
             }));
-            availableTowers.addChild(towerSprite);
-            return ++towerNumber;
-        }, 0);
-        return availableTowers;
+            this.bus.emit(Events.ADD_TOWER, tower);
+        });
     }
 
     createSelectedTowerBar() {
@@ -258,13 +189,13 @@ export default class GameScene {
     }
 
     render(ms) {
-        if (this.state.wave.msToStart !== 0) {
-
-            this.sprites.waveTimer.text = 'Starts in ' + Math.round(this.state.wave.msToStart);
-            this.sprites.waveTimer.visible = true;
-        } else {
-            this.sprites.waveTimer.visible = false;
-        }
+        // if (this.state.wave.msToStart !== 0) {
+        //
+        //     this.sprites.waveTimer.text = 'Starts in ' + Math.round(this.state.wave.msToStart);
+        //     this.sprites.waveTimer.visible = true;
+        // } else {
+        //     this.sprites.waveTimer.visible = false;
+        // }
         this.updateMonstersSprites();
         this.updateAnimations(ms);
         this.updateTowersSprites();
@@ -292,9 +223,14 @@ export default class GameScene {
                     .position
                     .set(this.titleWidth * monster.titleCoord.x,
                         this.titleHeight * monster.titleCoord.y);
+                monsterSprite.interactive = true;
+                monsterSprite.on('pointertap', () => {
+                    this.bus.emit(Events.SHOW_MONSTER_INFO, {hp: monster.hp, damage: monster.weight});
+                });
 
                 this.monstersContainer.addChild(monsterSprite);
                 this.monstersSprites.set(monster.id, monsterSprite);
+
 
             } else {
                 const monsterSprite = this.monstersSprites.get(monster.id);
@@ -363,9 +299,27 @@ export default class GameScene {
     }
 
     updateHudIndicators() {
+        this.bus.emit(Events.PLAYER_STATE_UPDATE, {hp: this.state.hp, money: this.state.player.money});
+        this.updateScores();
+    }
+    createScores() {
+        const scores = this.state.players.map(player => {
+            return {
+                nickname: player.nickname,
+                scores: player.scores
+            };
+        });
+        this.bus.emit(Events.SCORES_CREATE, scores);
+    }
 
-        this.sprites.hp.text = this.state.hp;
-        this.sprites.money.text = this.state.player.money;
+    updateScores() {
+        const scores = this.state.players.map(player => {
+            return {
+                nickname: player.nickname,
+                scores: player.scores
+            };
+        });
+        this.bus.emit(Events.SCORES_UPDATE, scores);
     }
 
     updateTowersSprites() {
@@ -382,10 +336,17 @@ export default class GameScene {
 
                 const resizer = () => {
                     towerSprite.position.set(tower.titlePosition.x * this.titleWidth, tower.titlePosition.y * this.titleHeight);
+                    this.scaleElements(towerSprite);
                 };
                 resizer();
                 this.resizers.push(resizer);
-
+                towerSprite.interactive = true;
+                towerSprite.on('pointertap', () => {
+                    this.bus.emit(Events.SHOW_TOWER_INFO, {
+                        damage: tower.damage,
+                        aspeed: (1000 / tower.period).toFixed(2)
+                    });
+                });
                 this.titlesContainer.addChild(towerSprite);
                 this.towersSprites.set(tower.id, {sprite: towerSprite, typeid: tower.typeid});
 
@@ -491,4 +452,6 @@ export default class GameScene {
     getTowerMeta(towerId) {
         return this.towersSprites.get(towerId);
     }
+
+
 }

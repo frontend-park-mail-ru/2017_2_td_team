@@ -30,7 +30,6 @@ export default class Missle {
         this.timeBuffer += delta;
         this._sprite.x += this.vx * delta;
         this._sprite.y += this.vy * delta;
-        console.log(this.timeBuffer);
         if (this.timeBuffer >= this.timeLimit) {
             this._sprite.stop();
             return false;
