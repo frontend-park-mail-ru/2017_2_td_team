@@ -10,6 +10,7 @@ import Info from '../../blocks/hud/__info/hud__info.js';
 import Score from '../../blocks/hud/__score/hud__score.js';
 import MultiplayerStrategy from '../../modules/gameModules/strategies/multiplayerStrategy.js';
 import LocalGameServer from '../../modules/gameModules/localServer/localServer.js';
+import UserService from '../../services/user-service.js';
 
 export default class GameView extends View {
     constructor(parent) {
@@ -27,7 +28,9 @@ export default class GameView extends View {
             if (data === 'offline') {
                 this.createGame(LocalGameServer);
             } else {
-                this.createGame(MultiplayerStrategy);
+                UserService.requestCurrentUser()
+                    .then(() => this.createGame(MultiplayerStrategy))
+                    .catch(() => this._bus.emit(Events.REDIRECT, {path: '/signin'}));
             }
         };
         this.hide();

@@ -49,13 +49,14 @@ UserService
         console.log('User is not authorized', errJson);
 
         router.start();
-        console.log(window.location);
 
-        if (window.location.pathname !== '/signin' && window.location.pathname !== '/') {
+        if (window.location.pathname !== '/signin' && window.location.pathname !== '/' && window.location.pathname !== 'game') {
             globalEventBus.emit(Events.NOTIFY, {
                 message: 'Please login',
                 duration: 5,
             });
         }
-        globalEventBus.emit('router:redirect', {path: '/signin'});
+        if (window.location.pathname !== '/' && window.location.pathname !== 'game') {
+            globalEventBus.emit('router:redirect', {path: '/signin'});
+        }
     });
