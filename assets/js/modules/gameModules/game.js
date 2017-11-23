@@ -11,5 +11,4 @@ export default class Game {
         this.manager.destroy();
         this.manager = null;
     }
-
 }

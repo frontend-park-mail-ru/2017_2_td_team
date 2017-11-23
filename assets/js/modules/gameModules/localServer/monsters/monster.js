@@ -1,6 +1,6 @@
 export default class Monster {
 
-    constructor(type, weight, speed, hp, coord) {
+    constructor(type, weight, speed, hp, coord, reward) {
         this.type = type;
         this.weight = weight;
         this.speed = speed;
@@ -9,6 +9,7 @@ export default class Monster {
         this.relativeCoord = {x: 0, y: 0};
         this.vx = this.speed;
         this.vy = this.speed;
+        this.reward = reward;
 
     }
 
@@ -72,8 +73,12 @@ export default class Monster {
         return {x: this.coord.x + this.relativeCoord.x, y: this.coord.y + this.relativeCoord.y};
     }
 
-    static Create(type, weight, speed, hp, coord) {
-        return new Monster(type, weight, speed, hp, coord);
+    get titleCoord(){
+        return this.coord;
+    }
+
+    static Create(type, weight, speed, hp, coord, reward) {
+        return new Monster(type, weight, speed, hp, coord, reward);
     }
 
 }

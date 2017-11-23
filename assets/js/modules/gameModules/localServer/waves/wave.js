@@ -31,7 +31,8 @@ export default class Wave {
         if (!this.isRunning) {
             return;
         }
-        if (this.running.length === 0) {
+        if (!this.running.size) {
+            this.isRunning = false;
             this.isFinished = true;
         }
     }

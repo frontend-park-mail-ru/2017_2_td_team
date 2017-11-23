@@ -31,7 +31,6 @@ export default class MultiplayerStrategy extends Strategy {
     }
 
     parseInit(ctx) {
-
         const map = {
             titles: []
         };
@@ -57,17 +56,22 @@ export default class MultiplayerStrategy extends Strategy {
             wave: ctx.currentWave,
             textureAtlas: ctx.textureAtlas,
             player: currentPlayer,
+            shotEvents: [],
         });
     }
 
     parseState(ctx) {
         const currentPlayer = ctx.players.find(player => player.id === this.playerId);
+        if (ctx.shotEvents.length > 0) {
+            console.log(ctx);
+        }
         this.bus.emit(Events.GAME_STATE_UPDATE, {
             hp: ctx.hp,
             players: ctx.players,
             towers: ctx.towers,
             wave: ctx.currentWave,
             player: currentPlayer,
+            shotEvents: ctx.shotEvents,
         });
     }
 

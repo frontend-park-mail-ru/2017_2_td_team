@@ -8,9 +8,7 @@ export default class Strategy {
         this.clenupScripts = [];
         this.gamectx = {
             players: [],
-            wave: {
-
-            },
+            wave: {},
             towers: [],
             shotEvents: [],
         };
@@ -32,6 +30,7 @@ export default class Strategy {
     }
 
     destroy() {
+        console.log('destroy');
         this.clenupScripts.forEach(off => off());
     }
 

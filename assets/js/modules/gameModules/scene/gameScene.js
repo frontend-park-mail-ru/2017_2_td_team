@@ -1,13 +1,13 @@
-import globalEventBus from '../globalEventBus.js';
-import Events from '../../events.js';
+import globalEventBus from '../../globalEventBus.js';
+import Events from '../../../events.js';
+import AnimationsAtlas from './animationsAtlas.js';
+import Missle from './missle.js';
 
 export default class GameScene {
 
     constructor(parent, titlesz, gamectx) {
-
         this.bus = globalEventBus;
         this.map = gamectx.map.titles;
-
 
         this.titlesz = titlesz;
 
@@ -15,6 +15,8 @@ export default class GameScene {
         this.totalTitlesH = 14;
         this.aspect = this.totalTitlesW / this.totalTitlesH;
 
+        this.animationsAtlas = AnimationsAtlas;
+        this.animations = new Map([]);
         this.calcDimensions();
 
         this.pixi = window.PIXI;
@@ -25,15 +27,16 @@ export default class GameScene {
         this.clenupScripts = [() => window.removeEventListener('resize', elemResizer)];
         this.setState(gamectx);
 
-
         this.prepared = false;
         this.renderer = new this.pixi.autoDetectRenderer(this.width, this.height);
         this.renderer.autoResize = true;
 
         this.sprites = {};
         this.resizers = [];
+        this.graveyard = new Set();
 
         this.stage = new this.pixi.Container();
+
         parent.appendChild(this.renderer.view);
 
         this.parent = parent;
@@ -50,6 +53,7 @@ export default class GameScene {
         this.calcDimensions();
         this.resizers.forEach(resizer => resizer());
         this.renderer.resize(this.width, this.height);
+
 
     }
 
@@ -90,6 +94,8 @@ export default class GameScene {
         hud.addChild(this.createAvailableTowers());
         hud.addChild(this.createSelectedTowerBar());
         this.stage.addChild(hud);
+        this.animationsContainer = new this.pixi.Container();
+        this.stage.addChild(this.animationsContainer);
     }
 
     setState(state) {
@@ -184,7 +190,7 @@ export default class GameScene {
         this.sprites.money = new this.pixi.Text(this.state.player.money);
 
         const waveTimer = new this.pixi.Text(this.state.wave.timer);
-        this.sprites.hp = hp;
+
         elements.addChild(hpIcon, moneyIcon, hp, this.sprites.money, waveTimer);
 
         const placeElements = () => {
@@ -216,7 +222,6 @@ export default class GameScene {
         };
         this.resizers.push(resizer);
         resizer();
-        console.log(this.state);
         this.state.availableTowers.reduce((towerNumber, tower) => {
             const towerSprite = this.getScaledSprite(tower);
             towerSprite.position.set(0, towerNumber * this.titleHeight);
@@ -252,14 +257,16 @@ export default class GameScene {
         return selected;
     }
 
-    render() {
+    render(ms) {
         if (this.state.wave.msToStart !== 0) {
+
             this.sprites.waveTimer.text = 'Starts in ' + Math.round(this.state.wave.msToStart);
             this.sprites.waveTimer.visible = true;
         } else {
             this.sprites.waveTimer.visible = false;
         }
         this.updateMonstersSprites();
+        this.updateAnimations(ms);
         this.updateTowersSprites();
         this.updateHudIndicators();
         this.renderer.render(this.stage);
@@ -311,22 +318,51 @@ export default class GameScene {
             return 0;
         });
 
+
+        for (let event of this.state.shotEvents) {
+
+            const monsterSprite = this.monstersSprites.get(event.monsterId);
+            const towerMeta = this.getTowerMeta(event.towerId);
+            const animation = this.createShootAnimationSprite(towerMeta.typeid);
+            this.animationsContainer.addChild(animation);
+            const missle = new Missle(animation, towerMeta.sprite, monsterSprite, event.offset, 250);
+            this.resizers.push(() => missle.sprite.scale.set(2 * this.scalex, 2 * this.scaley));
+            this.runShootAnimation(event.monsterId, missle);
+
+        }
+
         for (let passedMonster of this.state.wave.passed) {
             const monsterSprite = this.monstersSprites.get(passedMonster.id);
             if (monsterSprite) {
-                this.monstersSprites.delete(passedMonster.id);
-                this.monstersContainer.removeChild(monsterSprite);
+                const inUse = this.animations.has(passedMonster.id);
+                if (!inUse) {
+                    this.monstersSprites.delete(passedMonster.id);
+                    this.monstersContainer.removeChild(monsterSprite);
+                } else {
+                    this.graveyard.add(passedMonster.id);
+                }
             }
         }
+        this.graveyard.forEach(id => {
+            const inUse = this.animations.has(id);
+            if (!inUse) {
+                this.monstersContainer.removeChild(this.monstersSprites.get(id));
+                this.monstersSprites.delete(id);
+                this.graveyard.delete(id);
+            }
+        });
     }
 
     destroy() {
+        this.pixi.loader.reset();
+        this.pixi.utils.clearTextureCache();
         this.clenupScripts.forEach(off => off());
         this.stage.destroy();
-
+        this.renderer.view.remove();
     }
 
     updateHudIndicators() {
+
         this.sprites.hp.text = this.state.hp;
         this.sprites.money.text = this.state.player.money;
     }
@@ -350,7 +386,7 @@ export default class GameScene {
                 this.resizers.push(resizer);
 
                 this.titlesContainer.addChild(towerSprite);
-                this.towersSprites.set(tower.id, towerSprite);
+                this.towersSprites.set(tower.id, {sprite: towerSprite, typeid: tower.typeid});
 
             }
         }
@@ -393,6 +429,14 @@ export default class GameScene {
         this.sprites.titleSprites = sprites;
     }
 
+    get animationsContainer() {
+        return this.sprites.animationsContainer;
+    }
+
+    set animationsContainer(cont) {
+        this.sprites.animationsContainer = cont;
+    }
+
 
     set towersContainer(towers) {
         this.sprites.towersContainer = towers;
@@ -406,4 +450,44 @@ export default class GameScene {
         this.sprites.monsters = sprites;
     }
 
+    createShootAnimationSprite(typeid) {
+        const frames = [];
+        for (let frame of this.animationsAtlas.get(typeid)) {
+            frames.push(this.pixi.Texture.fromFrame(frame));
+        }
+        const animation = new this.pixi.extras.AnimatedSprite(frames);
+        animation.anchor.set(0.5, 0.5);
+        this.sprites.animationsContainer.addChild(animation);
+        return animation;
+    }
+
+    updateAnimations(ms) {
+        this.animations.forEach(animSet => {
+            for (let animation of animSet.values()) {
+                if (!animation.update(ms)) {
+                    animSet.delete(animation);
+                    animation.destroy();
+                }
+            }
+        });
+        this.animations.forEach((animSet, targetId, map) => {
+            if (!animSet.size) {
+                map.delete(targetId);
+            }
+        });
+    }
+
+    runShootAnimation(id, animationSprite) {
+        const animations = this.animations.get(id);
+        if (!animations) {
+            this.animations.set(id, new Set([animationSprite]));
+        } else {
+            animations.add(animationSprite);
+        }
+        animationSprite.start();
+    }
+
+    getTowerMeta(towerId) {
+        return this.towersSprites.get(towerId);
+    }
 }

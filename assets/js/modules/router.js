@@ -48,14 +48,16 @@ export default class Router {
             return;
         }
         console.log('Current view:', this.currentView);
+        console.log('Poped state:', state);
+        console.log('pushing', {path: path}, route.title, path);
+        if (state && state.path !== path) {
+            window.history.replaceState({path: state.path}, state.title, state.path);
+        } else if (!state) {
+            window.history.pushState({path: path}, route.title, path);
+        }
+
         if (this.currentView) {
             this.currentView.pause();
-        }
-        console.log('pushing', {path: path}, route.title, path);
-        if (state) {
-            window.history.replaceState({path: state.path}, state.title, state.path);
-        } else {
-            window.history.pushState({path: path}, route.title, path);
         }
         this.currentView = route.view;
         route.prepare();

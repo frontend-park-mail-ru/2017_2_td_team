@@ -5,7 +5,7 @@ import RedMonster from './monsters/redMonster.js';
 import OrangeMonster from './monsters/orangeMonster.js';
 import Wave from './waves/wave.js';
 import Strategy from '../strategies/strategy.js';
-
+import TextureAtlas from '../scene/textureAtlas.js';
 import * as PIXI from 'pixi.js';
 import TowerCreator from './towers/towerCreator.js';
 import RedTower from './towers/redTower.js';
@@ -43,61 +43,40 @@ export default class LocalGameServer extends Strategy {
             [RedTower.typeid, new TowerCreator(RedTower, towersIdSource)],
             [OrangeTower.typeid, new TowerCreator(OrangeTower, towersIdSource)],
         ]);
-        this.createTickers();
     }
 
 
     onNewGame(payload) {
+
+        this.createTickers();
         this.gamectx.map = this.generateGameMap();
         this.gamectx.towers = [];
         this.gamectx.players[0] = payload.players[0];
-        this.gamectx.players[0].score = 0;
+        this.gamectx.players[0].scores = 0;
         this.gamectx.players[0].money = 100;
         this.gamectx.hp = 100;
         this.localGameCtx.waveNumber = 0;
         this.startNewWave();
-        const textureAtlas = {
-            0: {
-                text: '',
-                texture: 'grass.png',
-            },
-            1: {
-                text: '',
-                texture: 'stone.png',
-            },
-            101: {
-                text: 'Blue Tower',
-                texture: 'bluetower.png'
-            },
-            102: {
-                text: 'Red Tower',
-                texture: 'redtower.png'
-            },
-            103: {
-                text: 'Orange tower',
-                texture: 'otower.png'
-            },
-            1001: {
-                text: 'Red monster',
-                texture: 'redMonster.png'
-            },
-            1002: {
-                text: 'Blue monster',
-                texture: 'blueMonster.png'
-            },
-            1003: {
-                text: 'Orange monster',
-                texture: 'orangeMonster.png'
-            }
+        const mapDto = {
+            titles: []
         };
+
+        for (let i = 0; i < this.gameMap.length; ++i) {
+            mapDto.titles.push([]);
+            for (let j = 0; j < this.gameMap[i].length; ++j) {
+                mapDto.titles[i].push(this.gameMap[i][j].titleType);
+            }
+        }
+
         this.bus.emit(Events.NEW_GAME_STATE, {
-            map: this.gamectx.map,
+            map: mapDto,
             hp: this.gamectx.hp,
             players: this.gamectx.players,
             availableTowers: [101, 102, 103],
             wave: this.gamectx.wave.toDto(),
-            textureAtlas: {atlas: textureAtlas},
+            textureAtlas: {atlas: TextureAtlas},
             player: this.gamectx.players[0],
+            shotEvents: [],
         });
 
         this.localGameCtx.gameLoopTicker.start();
@@ -109,7 +88,9 @@ export default class LocalGameServer extends Strategy {
             const monsterTypeIdx = Math.floor(Math.random() * 3 + 1001);
 
             const monster = this.monsterCreators.get(monsterTypeIdx).createMonster();
+
             monster.setPath(this.gamectx.map.paths[0]);
+            console.log(monster);
             return monster;
         });
 
@@ -125,16 +106,18 @@ export default class LocalGameServer extends Strategy {
         for (let i = 0; i < 14; ++i) {
             map.titles.push([]);
             for (let j = 0; j < 21; ++j) {
-                map.titles[i].push(1);
+                map.titles[i].push({titleType: 0, owner: null});
             }
         }
+
         const pathGenerator = this.generateGamePaths(1);
 
         map.paths.push([...pathGenerator()]);
 
         map.paths[0].forEach(pathPoint => {
-            map.titles[pathPoint.coord.y][pathPoint.coord.x] = 0;
+            map.titles[pathPoint.coord.y][pathPoint.coord.x].titleType = 1;
         });
+
         return map;
     }
 
@@ -217,36 +200,40 @@ export default class LocalGameServer extends Strategy {
     onNewTower(payload) {
 
         const player = this.gamectx.players[0];
-        const tower = player.towers[payload.number];
 
-        if (player.money >= tower.price) {
-            player.money -= tower.price;
-            const newTower = this.towerCreators.get(payload.type).createTower();
-            newTower.coord = payload.coord;
+        const newTower = this.towerCreators.get(payload.type).createTower();
+
+        if (!this.gameMap[payload.y][payload.x].owner && newTower.price <= player.money) {
+            player.money -= newTower.price;
+            newTower.x = payload.x;
+            newTower.y = payload.y;
+            newTower.owner = player;
+            this.gameMap[payload.y][payload.x].owner = newTower;
             this.localGameCtx.hitAreas.push(new HitArea(newTower));
             this.gamectx.towers.push(newTower);
         }
+
     }
 
     gameLoop(ms) {
         this.updateWaveState(ms);
-        this.moveMonsters(ms);
+        this.reloadTowers(ms);
         this.checkHitAreas();
-        this.emitShotEvents(ms);
+        this.emitShotEvents();
+        this.moveMonsters(ms);
         this.checkFinishConditions();
         this.bus.emit(Events.GAME_STATE_UPDATE, {
             players: this.gamectx.players,
             hp: this.gamectx.hp,
-            wave: this.gamectx.wave,
+            wave: this.gamectx.wave.toDto(),
             towers: this.gamectx.towers,
-            events: this.gamectx.events,
+            shotEvents: this.gamectx.events,
         });
     }
 
 
     updateWaveState(ms) {
         const wave = this.gamectx.wave;
-        console.log(wave, ms);
         if (wave.isPending) {
             wave.tryToStart(ms);
         } else if (wave.isStarted) {
@@ -267,9 +254,6 @@ export default class LocalGameServer extends Strategy {
             this.gameLoop(localGameCtx.gameLoopTicker.elapsedMS, delta);
         });
 
-        this.clenupScripts.push(() => {
-            localGameCtx.gameLoopTicker.destroy();
-        });
     }
 
     startNewWave() {
@@ -295,30 +279,46 @@ export default class LocalGameServer extends Strategy {
     }
 
     finishGame() {
-        this.transport.emit(Events.GAME_FINISHED, this.gamectx.players[0]);
+        this.localGameCtx.gameLoopTicker.stop();
+        this.bus.emit(Events.GAME_FINISHED, this.gamectx.players[0].scores);
+        this.localGameCtx.gameLoopTicker.destroy();
     }
 
     checkHitAreas() {
         this.localGameCtx.hitAreas.forEach(area => {
             area.monsters =
                 Array
-                    .from(this.gamectx.monsters.values())
+                    .from(this.gamectx.wave.monsters)
                     .filter(monster => area.checkCollision(monster));
         });
 
     }
 
-    emitShotEvents(ms) {
+    emitShotEvents() {
         this.gamectx.events = [];
-        this.localGameCtx.hitAreas.forEach(area => {
-            const {fire, passed} = area.tower.fireOn(ms, area.monsters);
-            if (fire || passed) {
-                this.gamectx.events.push(...fire);
-                passed.forEach(passed => this.gamectx.wave.passMonster(passed.id));
-                this.gamectx.players[0].money += passed.reduce((reward, monster) => monster.weight * monster.reward, 0);
-            }
-        });
+        this.localGameCtx
+            .hitAreas
+            .filter(area => area.monsters.length > 0)
+            .forEach(area => {
+                const {fire, passed} = area.tower.fireOn(area.monsters);
+                if (fire || passed) {
+                    this.gamectx.events.push(...fire);
+                    passed.forEach(passed => this.gamectx.wave.passMonster(passed.id));
+                    this.player.money += passed.reduce((reward, monster) => monster.weight * monster.reward, 0);
+                }
+            });
     }
 
+    reloadTowers(ms) {
+        this.gamectx.towers.forEach(tower => tower.reload(ms));
+    }
+
+    get gameMap() {
+        return this.gamectx.map.titles;
+    }
+
+    get player() {
+        return this.gamectx.players[0];
+    }
 
 }
