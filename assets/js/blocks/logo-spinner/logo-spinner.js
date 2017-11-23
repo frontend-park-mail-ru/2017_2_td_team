@@ -6,16 +6,19 @@ export default class LogoSpinner extends Block {
 
     constructor(text, attrs = {}, classes = []) {
         super(document.createElement('div'));
+        classes.push('logo-spinner__overlay');
 
-        classes.push('logo-spinner');
         this.setClasses(classes);
         this.setAttributes(attrs);
         this.text = text;
 
-        this.generateSpinner();
+        this._element.appendChild(this.generateSpinner());
     }
 
     generateSpinner() {
+        const spinner = document.createElement('div');
+        spinner.classList.add('logo-spinner');
+
         const image = [
             [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0],
             [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0],
@@ -28,19 +31,27 @@ export default class LogoSpinner extends Block {
 
         image.forEach((row, j, rows) => row.forEach((pixel, i, pixels) => {
             let pixelElement = document.createElement('div');
-            pixelElement.className = 'pixel';
+            pixelElement.className = 'logo-spinner__pixel';
 
             if (pixel) {
                 pixelElement.style.animationDelay = `${0.1 * (i + j)}s`;
-                pixelElement.style.backgroundColor = 'black';
             } else {
-                pixelElement.style.backgroundColor = 'transparent';
+                pixelElement.style.visibility = 'hidden';
             }
 
-            this._element.append(pixelElement);
-            if (i === pixels - 1 && j !== rows - 1) {
-                this._element.append(document.createElement('br'));
-            }
+            spinner.appendChild(pixelElement);
         }));
+
+        return spinner;
+    }
+
+    show() {
+        this._element.style.opacity = 1;
+        this._element.addEventListener('transitionend', () => this._element.style.display = '', true, true, 'opacity');
+    }
+
+    hide() {
+        this._element.style.opacity = 0;
+        this._element.addEventListener('transitionend', () => this._element.style.display = 'none', true, true, 'opacity');
     }
 }
