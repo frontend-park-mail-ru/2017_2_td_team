@@ -325,6 +325,7 @@ export default class LocalGameServer extends Strategy {
     destroy(){
         this.localGameCtx.gameLoopTicker.stop();
         this.localGameCtx.gameLoopTicker.destroy();
+        super.destroy();
     }
 
 }
