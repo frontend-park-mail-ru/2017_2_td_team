@@ -10,5 +10,8 @@ export default {
     LOGO_ON: 'signal:logo_on',
     LOGO_OFF: 'signal:logo_off',
     NOTIFY: 'signal:notify',
+    SHOW_MONSTER_INFO: 'hud:show_monster_info',
+    SHOW_TOWER_INFO: 'hud:show_tower_info',
+    HIDE_INFO: 'hud:hide_info',
     REDIRECT: 'router:redirect',
 };

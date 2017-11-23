@@ -43,7 +43,6 @@ export default class SignupView extends View {
                 });
         });
 
-        // TODO: fix forward button
         this.signupForm.onInput((input, form) => {
             if (input.value) {
                 input.setCustomValidity('');
