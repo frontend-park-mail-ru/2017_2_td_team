@@ -50,8 +50,8 @@ export default class Hud extends Block {
         this._bottomBar.appendChild(block._element);
     }
 
-    destroy(){
-        this._element.innerHTML = "";
+    destroy() {
+        this._element.innerHTML = '';
         this._canvas = null;
     }
 }
