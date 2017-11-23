@@ -62,7 +62,6 @@ export default class UserService {
             }
             updateDto['id'] = current['id'];
         }
-        console.log(updateDto);
         return Http
             .post(buildBackendUrl('/user/edit'), updateDto)
             .then(res => {

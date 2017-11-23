@@ -19,15 +19,13 @@ export default class GameView extends View {
 
         this._choose_game.innerHTML = ChooseGameTemplate();
 
-        this._element.appendChild(this._choose_game);
-
         this._choose_game.className = 'box';
         this._choose_game.onclick = event => {
             event.preventDefault();
             const data = event.target.getAttribute('data-section');
             if (data === 'offline') {
                 this.createGame(LocalGameServer);
-            } else {
+            } else if (data === 'online') {
                 UserService.requestCurrentUser()
                     .then(() => this.createGame(MultiplayerStrategy))
                     .catch(() => this._bus.emit(Events.REDIRECT, {path: '/signin'}));
@@ -37,6 +35,7 @@ export default class GameView extends View {
     }
 
     resume() {
+        this._element.appendChild(this._choose_game);
         this._choose_game.hidden = false;
         super.resume();
     }
@@ -105,11 +104,12 @@ export default class GameView extends View {
 
         this._bus.emit(Events.LOGO_OFF);
         this.subscribe(Events.GAME_FINISHED, (event, payload) => this.finishGame(payload));
-        super.resume();
+
     }
 
 
     pause() {
+        console.log(this);
         this.destroy();
         super.pause();
     }
@@ -134,12 +134,13 @@ export default class GameView extends View {
         if (this._game) {
             this._game.destroy();
         }
-
         if (this._canvas) {
             this._canvas.remove();
         }
+        this._hud.destroy();
         this._canvas = null;
         this._game = null;
+        this._element.innerHTML = '';
         super.destroy();
     }
 

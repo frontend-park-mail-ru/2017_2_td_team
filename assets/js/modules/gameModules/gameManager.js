@@ -32,7 +32,6 @@ export default class GameManager {
 
         this.bus.emit(Events.NEW_GAME, {players: users});
         this.clenupScripts.push(unreg1, unreg2);
-        console.log(this.clenupScripts);
     }
 
     gameLoop(msDelta) {

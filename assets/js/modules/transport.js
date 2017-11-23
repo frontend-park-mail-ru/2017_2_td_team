@@ -13,7 +13,7 @@ export default class Transport {
         });
     }
 
-    send(message){
+    send(message) {
         this.socket.send(message);
     }
 
@@ -23,6 +23,10 @@ export default class Transport {
 
     set socket(sock) {
         this._socket = sock;
+    }
+
+    destroy() {
+        this.socket.close();
     }
 
 }

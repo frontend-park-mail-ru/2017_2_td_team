@@ -1,7 +1,7 @@
 export default class HitArea {
     constructor(tower) {
         this.position = {x: tower.x - tower.range, y: tower.y - tower.range};
-        console.log(tower);
+
         this.width = tower.range * 2 + 1;
         this.height = tower.range * 2 + 1;
         this.tower = tower;

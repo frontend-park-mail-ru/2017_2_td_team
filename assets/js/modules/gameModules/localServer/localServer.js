@@ -91,7 +91,7 @@ export default class LocalGameServer extends Strategy {
             const monster = this.monsterCreators.get(monsterTypeIdx).createMonster();
 
             monster.setPath(this.gamectx.map.paths[0]);
-            console.log(monster);
+
             return monster;
         });
 
@@ -320,6 +320,11 @@ export default class LocalGameServer extends Strategy {
 
     get player() {
         return this.gamectx.players[0];
+    }
+
+    destroy(){
+        this.localGameCtx.gameLoopTicker.stop();
+        this.localGameCtx.gameLoopTicker.destroy();
     }
 
 }

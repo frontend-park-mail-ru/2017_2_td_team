@@ -58,11 +58,11 @@ export default class GameScene {
     }
 
     calcDimensions() {
-        let availheight = window.innerHeight - window.innerHeight % this.titlesz;
+
+        let availheight = (window.innerHeight - this.titlesz) - ((window.innerHeight - this.titlesz) % this.titlesz);
 
         this.height = availheight;
         this.width = availheight * this.aspect;
-
         this.scaley = this.height / (this.totalTitlesH * this.titlesz);
         this.scalex = this.width / (this.totalTitlesW * this.titlesz);
 
@@ -190,9 +190,9 @@ export default class GameScene {
 
     render(ms) {
 
+        this.updateTowersSprites();
         this.updateMonstersSprites();
         this.updateAnimations(ms);
-        this.updateTowersSprites();
         this.updateHudIndicators();
         this.renderer.render(this.stage);
     }

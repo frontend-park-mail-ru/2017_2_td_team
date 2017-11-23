@@ -50,13 +50,13 @@ UserService
 
         router.start();
 
-        if (window.location.pathname !== '/signin' && window.location.pathname !== '/' && window.location.pathname !== 'game') {
+        if (window.location.pathname !== '/signin' && window.location.pathname !== '/' && window.location.pathname !== '/game') {
             globalEventBus.emit(Events.NOTIFY, {
                 message: 'Please login',
                 duration: 5,
             });
         }
-        if (window.location.pathname !== '/' && window.location.pathname !== 'game') {
+        if (window.location.pathname !== '/' && window.location.pathname !== '/game') {
             globalEventBus.emit('router:redirect', {path: '/signin'});
         }
     });

@@ -30,7 +30,6 @@ export default class Strategy {
     }
 
     destroy() {
-        console.log('destroy');
         this.clenupScripts.forEach(off => off());
     }
 

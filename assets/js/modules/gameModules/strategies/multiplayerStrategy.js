@@ -5,7 +5,7 @@ import Transport from '../../transport';
 export default class MultiplayerStrategy extends Strategy {
     constructor() {
         super();
-        this.wsUrl = 'wss://td-java.herokuapp.com/game';
+        this.wsUrl = 'ws://localhost:8080/game';
         this.transport = new Transport();
         this.playerId = null;
     }
@@ -77,5 +77,10 @@ export default class MultiplayerStrategy extends Strategy {
 
     parseFinish(ctx) {
         this.bus.emit(Events.GAME_FINISHED, ctx.scores);
+    }
+
+    destroy(){
+        this.transport.destroy();
+        super.destroy();
     }
 }
