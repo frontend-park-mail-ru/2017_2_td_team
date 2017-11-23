@@ -189,13 +189,7 @@ export default class GameScene {
     }
 
     render(ms) {
-        // if (this.state.wave.msToStart !== 0) {
-        //
-        //     this.sprites.waveTimer.text = 'Starts in ' + Math.round(this.state.wave.msToStart);
-        //     this.sprites.waveTimer.visible = true;
-        // } else {
-        //     this.sprites.waveTimer.visible = false;
-        // }
+
         this.updateMonstersSprites();
         this.updateAnimations(ms);
         this.updateTowersSprites();

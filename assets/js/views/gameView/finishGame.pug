@@ -1,6 +1,4 @@
-div
- span GAME OVER
- br
- span SCORES:#{context.scores}
- br
- a(href="/game") TRY AGAIN
+div(class=['box'])
+    p(class=['button']) GAME OVER
+    p(class=['button']) SCORES: #{context.scores}
+    button(data-section="again" class=['button', 'menu-button']) TRY AGAIN

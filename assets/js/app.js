@@ -38,24 +38,24 @@ router.register('/settings', 'TD | Profile', SettingsView);
 router.register('/about', 'TD | About', AboutView);
 router.register('/logout', 'TD | Logout', LogoutView);
 router.register('/game', 'TD| Game', GameView);
-router.start();
-// UserService
-//     .requestCurrentUser()
-//     .then((user) => {
-//         UserService.currentUser = user;
-//         router.start();
-//     })
-//     .catch(errJson => {
-//         console.log('User is not authorized', errJson);
-//
-//         router.start();
-//         console.log(window.location);
-//
-//         if (window.location.pathname !== '/signin' && window.location.pathname !== '/') {
-//             globalEventBus.emit(Events.NOTIFY, {
-//                 message: 'Please login',
-//                 duration: 5,
-//             });
-//         }
-//         globalEventBus.emit('router:redirect', {path: '/signin'});
-//     });
+
+UserService
+    .requestCurrentUser()
+    .then((user) => {
+        UserService.currentUser = user;
+        router.start();
+    })
+    .catch(errJson => {
+        console.log('User is not authorized', errJson);
+
+        router.start();
+        console.log(window.location);
+
+        if (window.location.pathname !== '/signin' && window.location.pathname !== '/') {
+            globalEventBus.emit(Events.NOTIFY, {
+                message: 'Please login',
+                duration: 5,
+            });
+        }
+        globalEventBus.emit('router:redirect', {path: '/signin'});
+    });

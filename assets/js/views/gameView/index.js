@@ -1,20 +1,44 @@
 import View from '../view/index.js';
 import Game from '../../modules/gameModules/game.js';
 import Events from '../../events.js';
-import template from './finishGame.pug';
-import LocalGameServer from '../../modules/gameModules/localServer/localServer';
+import FinishGameTemplate from './finishGame.pug';
+import ChooseGameTemplate from './chooseGame.pug';
 import Hud from '../../blocks/hud/hud.js';
 import Health from '../../blocks/hud/__health/hud__health.js';
 import Money from '../../blocks/hud/__money/hud__money.js';
 import Info from '../../blocks/hud/__info/hud__info.js';
 import Score from '../../blocks/hud/__score/hud__score.js';
+import MultiplayerStrategy from '../../modules/gameModules/strategies/multiplayerStrategy.js';
+import LocalGameServer from '../../modules/gameModules/localServer/localServer.js';
 
 export default class GameView extends View {
     constructor(parent) {
         super(parent);
+        this._choose_game = document.createElement('div');
+
+        this._choose_game.innerHTML = ChooseGameTemplate();
+
+        this._element.appendChild(this._choose_game);
+
+        this._choose_game.className = 'box';
+        this._choose_game.onclick = event => {
+            event.preventDefault();
+            const data = event.target.getAttribute('data-section');
+            if (data === 'offline') {
+                this.createGame(LocalGameServer);
+            } else {
+                this.createGame(MultiplayerStrategy);
+            }
+        };
+        this.hide();
     }
 
     resume() {
+        this._choose_game.hidden = false;
+        super.resume();
+    }
+
+    createGame(strategy) {
         this._element.innerHTML = '';
 
         this._canvas = document.createElement('div');
@@ -74,7 +98,8 @@ export default class GameView extends View {
         });
         this.subscribe(Events.ADD_TOWER, (ev, payload) => this._hud.appendToRightSidebar(payload));
 
-        this._game = new Game(this._canvas, LocalGameServer, [{nickname: 'anon'}]);
+        this._game = new Game(this._canvas, strategy, [{nickname: 'anon'}]);
+
         this._bus.emit(Events.LOGO_OFF);
         this.subscribe(Events.GAME_FINISHED, (event, payload) => this.finishGame(payload));
         super.resume();
@@ -83,16 +108,26 @@ export default class GameView extends View {
 
     pause() {
         this.destroy();
-        this._bus.emit(Events.LOGO_ON);
         super.pause();
     }
 
     finishGame(result) {
         this.destroy();
-        this._element.innerHTML = template({context: {scores: result}});
+        this._element.innerHTML = FinishGameTemplate({context: {scores: result}});
+        this._element.addEventListener('click', event => {
+            event.preventDefault();
+            const data = event.target.getAttribute('data-section');
+            if (data === 'again') {
+                this._element.innerHTML = '';
+                this._element.appendChild(this._choose_game);
+                this.resume();
+            }
+        });
     }
 
     destroy() {
+
+        this._bus.emit(Events.LOGO_ON);
         if (this._game) {
             this._game.destroy();
         }
