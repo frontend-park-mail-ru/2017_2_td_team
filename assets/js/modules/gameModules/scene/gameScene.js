@@ -324,6 +324,7 @@ export default class GameScene {
             const monsterSprite = this.monstersSprites.get(event.monsterId);
             const towerMeta = this.getTowerMeta(event.towerId);
             const animation = this.createShootAnimationSprite(towerMeta.typeid);
+            animation.scale.set(this.scalex * 2, this.scaley * 2);
             this.animationsContainer.addChild(animation);
             const missle = new Missle(animation, towerMeta.sprite, monsterSprite, event.offset, 250);
 

@@ -8,7 +8,6 @@ export default class Missle {
         this.vx = (this._target.x - this._source.x + (target.width - source.width) / 2) / (timeLimit);
         this.vy = (this._target.y - this._source.y + (target.height - source.height) / 2) / (timeLimit);
         this._sprite.position = this._source;
-        this._sprite.scale.set(2, 2);
         this.timeBuffer = 0;
         this.offsetTimeBuffer = offset;
 
