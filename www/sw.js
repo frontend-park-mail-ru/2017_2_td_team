@@ -36,12 +36,12 @@ this.addEventListener('install', event => {
 
 this.addEventListener('fetch', event => {
 
-    if (!navigator.onLine) {
-        event.respondWith(
-            caches.match(event.request)
-        );
-    } else {
-        event.respondWith(() => fetch(event.request));
-    }
+
+    event.respondWith(
+        () => fetch(event.request)
+            .then(r => r)
+            .catch(r => cache.match(event.request))
+    );
+
 });
 
