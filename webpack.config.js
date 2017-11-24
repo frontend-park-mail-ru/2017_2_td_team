@@ -1,6 +1,6 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     entry: ['babel-polyfill', './assets/js/app.js'],
@@ -8,6 +8,7 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'www')
     },
+    // devtool: 'source-map',
     module: {
         rules: [
             {
@@ -42,7 +43,7 @@ module.exports = {
     plugins: [
         new ExtractTextPlugin('styles.css'),
         new UglifyJsPlugin({
-            parallel: true,
+            parallel: 4,
             cache: true,
         }),
     ],

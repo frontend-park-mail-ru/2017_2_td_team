@@ -9,6 +9,8 @@ export default {
     TITLE_CLICKED: 'signal:title_clicked',
     LOGO_ON: 'signal:logo_on',
     LOGO_OFF: 'signal:logo_off',
+    SPINNER_ON: 'signal:spinner_on',
+    SPINNER_OFF: 'signal:spinner_off',
     NOTIFY: 'signal:notify',
     SHOW_MONSTER_INFO: 'hud:show_monster_info',
     SHOW_TOWER_INFO: 'hud:show_tower_info',

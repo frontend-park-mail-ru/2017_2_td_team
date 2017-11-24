@@ -5,6 +5,7 @@ import '../css/font.styl';
 
 import Block from './blocks/block/block.js';
 import Logo from './blocks/logo/logo.js';
+import LogoSpinner from './blocks/logo-spinner/logo-spinner.js';
 import Notifications from './blocks/notifications/notifications.js';
 import Router from './modules/router.js';
 import MainMenuView from './views/mainMenuView/index.js';
@@ -26,6 +27,12 @@ applicationBlock.append(logo);
 globalEventBus.register(Events.LOGO_OFF, () => logo.hide());
 globalEventBus.register(Events.LOGO_ON, () => logo.show());
 
+const logoSpinner = new LogoSpinner();
+applicationBlock.append(logoSpinner);
+globalEventBus.register(Events.SPINNER_OFF, () => logoSpinner.hide());
+globalEventBus.register(Events.SPINNER_ON, () => logoSpinner.show());
+globalEventBus.emit(Events.SPINNER_ON);
+
 const notifications = new Notifications(application);
 globalEventBus.register(Events.NOTIFY, (event, payload) =>
     notifications.notify(payload.message, payload.duration));
@@ -44,11 +51,13 @@ UserService
     .then((user) => {
         UserService.currentUser = user;
         router.start();
+        globalEventBus.emit(Events.SPINNER_OFF);
     })
     .catch(errJson => {
         console.log('User is not authorized', errJson);
 
         router.start();
+        globalEventBus.emit(Events.SPINNER_OFF);
 
         if (window.location.pathname !== '/signin' && window.location.pathname !== '/' && window.location.pathname !== '/game') {
             globalEventBus.emit(Events.NOTIFY, {
