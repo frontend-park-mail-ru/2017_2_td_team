@@ -6,6 +6,7 @@ import UserService from '../../services/user-service.js';
 import Auth from '../../modules/auth.js';
 import globalEventBus from '../../modules/globalEventBus.js';
 import {SignupButton, SignupFields} from '../../configs/signup-fields.js';
+import Events from '../../events.js';
 
 export default class SignupView extends View {
     render() {
@@ -38,13 +39,13 @@ export default class SignupView extends View {
                         let inputName = '';
                         switch (err.fieldName) {
                             case 'email':
-                                inputName = 'email';
+                                inputName = SignupFields.get('EmailField').name;
                                 break;
                             case 'password':
-                                inputName = 'password';
+                                inputName = SignupFields.get('PasswordField').name;
                                 break;
                             case 'login':
-                                inputName = 'username';
+                                inputName = SignupFields.get('NameField').name;
                                 break;
                         }
                         this.signupForm._element.elements[inputName].setCustomValidity(err.description);
