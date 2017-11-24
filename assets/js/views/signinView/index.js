@@ -47,7 +47,7 @@ export default class SigninView extends View {
                                 inputName = 'password-field';
                                 break;
                         }
-
+                        console.log(err);
                         this.signinForm._element[inputName].setCustomValidity(err.description);
                         this.signinForm._element[inputName].reportValidity();
                     });

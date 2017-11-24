@@ -22,23 +22,33 @@ export default class SignupView extends View {
                     this.signupForm.reset();
                     globalEventBus.emit('router:redirect', {path: '/'});
                 })
-                .catch(err => {
-                    err.incorrectRequestDataErrors.forEach(err => {
+                .catch(errResponse => {
+                    let errors = [];
+                    if (errResponse.incorrectRequestDataErrors) {
+                        errors = errResponse.incorrectRequestDataErrors;
+                    } else if (errResponse.fieldName) {
+                        errors.push(errResponse);
+                    } else {
+                        globalEventBus.emit(Events.NOTIFY, {
+                            message: 'Internal error: try again',
+                            duration: 5,
+                        });
+                    }
+                    errors.forEach(err => {
                         let inputName = '';
                         switch (err.fieldName) {
                             case 'email':
-                                inputName = 'email-field';
+                                inputName = 'email';
                                 break;
                             case 'password':
-                                inputName = 'password-field';
+                                inputName = 'password';
                                 break;
                             case 'login':
-                                inputName = 'username-field';
+                                inputName = 'username';
                                 break;
                         }
-
-                        this.signupForm._element[inputName].setCustomValidity(err.description);
-                        this.signupForm._element[inputName].reportValidity();
+                        this.signupForm._element.elements[inputName].setCustomValidity(err.description);
+                        this.signupForm._element.elements[inputName].reportValidity();
                     });
                 });
         });

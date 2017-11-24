@@ -14,7 +14,7 @@ export const SignupFields = new Map([
     ['PasswordField', {
         type: 'password',
         label: 'Password',
-        name: 'new-password',
+        name: 'password',
         classes: ['form__input-block']
     }],
     ['RepeatPasswordField', {
