@@ -7,8 +7,8 @@ export default class Info extends Block {
         this._element.className = 'hud__info';
 
         this._icon = document.createElement('div');
-        this._text = document.createElement('div');
-        this._text.innerHTML = text;
+        this._text = document.createElement('p');
+        this._text.textContent = text;
 
         this._name = name;
         this._icon.className = `hud__info__icon hud__info__icon_${this._name}`;
@@ -22,8 +22,9 @@ export default class Info extends Block {
         this._name = name;
         this._icon.className = `hud__info__icon hud__info__icon_${this._name}`;
         this._text.className = `hud__info__text hud__info__text_${this._name}`;
-
-        this._text.innerHTML = text;
+        if (this._text.textContent !== text) {
+            this._text.textContent = text;
+        }
     }
 
     show() {

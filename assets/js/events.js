@@ -17,5 +17,6 @@ export default {
     ADD_TOWER: 'hud:add_tower',
     PLAYER_STATE_UPDATE: 'hud:p_update',
     SCORES_UPDATE: 'hud:s_update',
-    SCORES_CREATE: 'hud: s_create',
+    SCORES_CREATE: 'hud:s_create',
+    TIMER_UPDATE: 'hud:t_update',
 };

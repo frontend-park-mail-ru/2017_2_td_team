@@ -54,6 +54,9 @@ export default class GameView extends View {
 
         this._money = new Money(100);
         this._hud.appendBlockToBottombar(this._money);
+        this._wave_timer = new Info('wave-timer', 0);
+        this._wave_timer.hide();
+
 
         this._info1 = new Info('monster-health', '100');
         this._info1.hide();
@@ -63,6 +66,7 @@ export default class GameView extends View {
         this._info2.hide();
         this._hud.appendBlockToBottombar(this._info2);
 
+        this._hud.appendBlockToBottombar(this._wave_timer);
         this._hud.injectTo(this._element);
 
         this.subscribe(Events.PLAYER_STATE_UPDATE, (ev, payload) => {
@@ -76,6 +80,16 @@ export default class GameView extends View {
                 this._hud.appendBlockToLeftSidebar(scoreRow);
             });
         });
+
+        this.subscribe(Events.TIMER_UPDATE, (ev, payload) => {
+            if (payload === 0) {
+                this._wave_timer.hide();
+                return;
+            }
+            this._wave_timer.set('wave-timer', payload);
+            this._wave_timer.show();
+        });
+
         this.subscribe(Events.SCORES_UPDATE, (ev, payload) => {
             payload.forEach(score => this._scores[score.nickname].setScores(score.scores));
         });

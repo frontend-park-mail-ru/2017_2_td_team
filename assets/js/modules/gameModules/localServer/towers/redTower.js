@@ -2,7 +2,7 @@ import Tower from './tower.js';
 
 export default class RedTower extends Tower {
     constructor() {
-        super('RedTower', 2, 100, 2000 , 60, {x: 0, y: 0}, 'redtower.png');
+        super('RedTower', 2, 50, 2000 , 60, {x: 0, y: 0}, 'redtower.png');
     }
 
     static Create() {

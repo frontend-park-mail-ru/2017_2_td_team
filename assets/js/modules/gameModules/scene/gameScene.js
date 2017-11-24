@@ -189,7 +189,7 @@ export default class GameScene {
     }
 
     render(ms) {
-
+        this.updateWaveTimer();
         this.updateTowersSprites();
         this.updateMonstersSprites();
         this.updateAnimations(ms);
@@ -296,6 +296,7 @@ export default class GameScene {
         this.bus.emit(Events.PLAYER_STATE_UPDATE, {hp: this.state.hp, money: this.state.player.money});
         this.updateScores();
     }
+
     createScores() {
         const scores = this.state.players.map(player => {
             return {
@@ -448,4 +449,13 @@ export default class GameScene {
     }
 
 
+    updateWaveTimer() {
+        if (this.state.wave.msToStart > 0) {
+            this.bus.emit(Events.TIMER_UPDATE, ( this.state.wave.msToStart / 1000).toFixed(1));
+            return;
+        }
+        if (!this.state.wave.msToStart) {
+            this.bus.emit(Events.TIMER_UPDATE, 0);
+        }
+    }
 }
