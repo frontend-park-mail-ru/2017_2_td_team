@@ -34,14 +34,14 @@ this.addEventListener('install', event => {
     );
 });
 
-this.addEventListener('fetch', event => {
-
-
-    event.respondWith(
-        () => fetch(event.request)
-            .then(r => r)
-            .catch(r => cache.match(event.request))
-    );
-
-});
+// this.addEventListener('fetch', event => {
+//
+//
+//     event.respondWith(
+//         () => fetch(event.request)
+//             .then(r => r)
+//             .catch(r => cache.match(event.request))
+//     );
+//
+// });
 
