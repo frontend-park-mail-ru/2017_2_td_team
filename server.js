@@ -24,6 +24,7 @@ app.get('/game', handler);
 app.get('/signin', handler);
 app.get('/signup', handler);
 app.get('/logout', handler);
+app.get('/settings', handler);
 
 app.use((req, res) => {
     res.status(httpStatus.NOT_FOUND)
