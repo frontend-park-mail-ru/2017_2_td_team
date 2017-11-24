@@ -58,23 +58,19 @@ UserService
 
         router.start();
         globalEventBus.emit(Events.SPINNER_OFF);
-
-        if (window.location.pathname !== '/signin' && window.location.pathname !== '/' && window.location.pathname !== '/game') {
+        if (window.location.pathname === '/settings') {
             globalEventBus.emit(Events.NOTIFY, {
                 message: 'Please login',
                 duration: 5,
             });
-        }
-        if (window.location.pathname !== '/' && window.location.pathname !== '/game') {
             globalEventBus.emit('router:redirect', {path: '/signin'});
         }
     });
 
-navigator.serviceWorker.register('/sw.js', { scope: '/' })
-    .then(function(reg) {
-    // регистрация сработала
-    console.log('Registration succeeded. Scope is ' + reg.scope);
-}).catch(function(error) {
-    // регистрация прошла неудачно
-    console.log('Registration failed with ' + error);
-});
+navigator.serviceWorker.register('/sw.js', {scope: '/'})
+    .then(reg => {
+        console.log('Registration succeeded. Scope is ' + reg.scope);
+    })
+    .catch(error => {
+        console.log('Registration failed with ' + error);
+    });

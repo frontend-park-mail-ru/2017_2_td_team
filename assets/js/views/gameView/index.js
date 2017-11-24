@@ -27,7 +27,9 @@ export default class GameView extends View {
                 this.createGame(LocalGameServer);
             } else if (data === 'online') {
                 UserService.requestCurrentUser()
-                    .then(() => this.createGame(MultiplayerStrategy))
+                    .then(() => {
+                        this.createGame(MultiplayerStrategy);
+                    })
                     .catch(() => this._bus.emit(Events.REDIRECT, {path: '/signin'}));
             }
         };
@@ -151,7 +153,10 @@ export default class GameView extends View {
         if (this._canvas) {
             this._canvas.remove();
         }
-        this._hud.destroy();
+        if (this._hud) {
+            this._hud.destroy();
+        }
+        this._hud = null;
         this._canvas = null;
         this._game = null;
         this._element.innerHTML = '';

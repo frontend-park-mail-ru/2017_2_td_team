@@ -12,6 +12,7 @@ export default class MultiplayerStrategy extends Strategy {
 
     onNewGame() {
         this.subscribe(Events.NEW_SERVER_MESSAGE, (ev, ctx) => this.parseCtx(ctx));
+        this.bus.emit(Events.SPINNER_ON);
         this.transport.connectTo(this.wsUrl, Events.NEW_SERVER_MESSAGE)
             .then(() => this.transport.send('{"class":"join"}'));
     }
@@ -22,6 +23,7 @@ export default class MultiplayerStrategy extends Strategy {
 
     parseCtx(ctx) {
         if (ctx.class === 'init') {
+            this.bus.emit(Events.SPINNER_OFF);
             this.parseInit(ctx);
         } else if (ctx.class === 'state') {
             this.parseState(ctx);
@@ -62,9 +64,6 @@ export default class MultiplayerStrategy extends Strategy {
 
     parseState(ctx) {
         const currentPlayer = ctx.players.find(player => player.id === this.playerId);
-        if (ctx.shotEvents.length > 0) {
-            console.log(ctx);
-        }
         this.bus.emit(Events.GAME_STATE_UPDATE, {
             hp: ctx.hp,
             players: ctx.players,
@@ -79,7 +78,7 @@ export default class MultiplayerStrategy extends Strategy {
         this.bus.emit(Events.GAME_FINISHED, ctx.scores);
     }
 
-    destroy(){
+    destroy() {
         this.transport.destroy();
         super.destroy();
     }
