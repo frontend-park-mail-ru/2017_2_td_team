@@ -29,7 +29,7 @@ export default class LogoSpinner extends Block {
             [0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0],
         ];
 
-        image.forEach((row, j, rows) => row.forEach((pixel, i, pixels) => {
+        image.forEach((row, j) => row.forEach((pixel, i) => {
             let pixelElement = document.createElement('div');
             pixelElement.className = 'logo-spinner__pixel';
 
