@@ -28,6 +28,7 @@ this.addEventListener('install', event => {
                     '/signup',
                     '/signin',
                     '/settings',
+                    '/logout'
                 ]);
             })
     );
