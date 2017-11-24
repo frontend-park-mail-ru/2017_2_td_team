@@ -5,8 +5,9 @@ import SubmitButton from '../../blocks/form/__submit-button/form__submit-button.
 import InputBlock from '../../blocks/form/__input-block/form__input-block.js';
 import UserService from '../../services/user-service.js';
 import Auth from '../../modules/auth.js';
-import {globalEventBus} from '../../modules/globalEventBus.js';
+import globalEventBus from '../../modules/globalEventBus.js';
 import {SigninButton, SigninFields} from '../../configs/signin-fields.js';
+import Events from '../../events.js';
 
 export default class SigninView extends View {
     render() {
@@ -35,22 +36,20 @@ export default class SigninView extends View {
                     this.signinForm.reset();
                     globalEventBus.emit('router:redirect', {path: '/'});
                 })
-                .catch(err => {
-                    err.incorrectRequestDataErrors.forEach(err => {
-                        let inputName = '';
+                .catch(errResponse => {
+                    let message = '';
+                    if (errResponse.authorizationError) {
+                        message = errResponse.authorizationError.description;
+                    } else {
+                        message = 'Internal error: try again';
+                    }
 
-                        switch (err.fieldName) {
-                            case 'email':
-                                inputName = 'email-field';
-                                break;
-                            case 'password':
-                                inputName = 'password-field';
-                                break;
-                        }
-
-                        this.signinForm._element[inputName].setCustomValidity(err.description);
-                        this.signinForm._element[inputName].reportValidity();
+                    globalEventBus.emit(Events.NOTIFY, {
+                        message: message,
+                        duration: 5,
                     });
+
+
                 });
         });
 

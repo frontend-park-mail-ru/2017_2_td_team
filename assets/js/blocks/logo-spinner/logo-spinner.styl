@@ -1,19 +1,33 @@
-.logo-spinner {
-    width: 28vw;
-    height: 14vw;
-}
+@import '../../../css/consts.styl'
 
-.logo-spinner .pixel {
-    width: 2vw;
-    height: 2vw;
-    float: left;
-    animation: logo-spinner-animation 5s infinite ease-in-out; 
-}
+.logo-spinner
+  display: grid
+  grid-template-columns: repeat(14, 1fr)
+  width: 28vw
+  height: 14vw
 
-@keyframes logo-spinner-animation {
-    0%, 70%, 100% {
-        transform: scale3D(1, 1, 1);
-    } 35% {
-        transform: scale3D(0, 0, 1);
-    } 
-}
+.logo-spinner__overlay
+  width: 100%
+  height: 100%
+  position: fixed
+  display: flex
+  flex: 1 1 auto
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  background-color: background-color
+  transition-timing-function: ease-in-out
+  transition: opacity 1s
+
+.logo-spinner .logo-spinner__pixel
+  background-color: foreground-color
+  width: 2vw
+  height: 2vw
+  float: left
+  animation: logo-spinner-animation 5s infinite ease-in-out
+
+@keyframes logo-spinner-animation
+  0%, 70%, 100%
+    transform: scale3D(1, 1, 1)
+  35%
+    transform: scale3D(0, 0, 1)

@@ -1,5 +1,5 @@
 import View from '../view/index.js';
-import {MenuButtons} from '../../configs/menu-buttons.js';
+import MenuButtons from '../../configs/menu-buttons.js';
 import Menu from '../../blocks/menu/menu.js';
 import Button from '../../blocks/button/button.js';
 

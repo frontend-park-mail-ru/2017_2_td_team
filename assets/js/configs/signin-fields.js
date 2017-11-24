@@ -2,13 +2,13 @@ export const SigninFields = new Map([
     ['EmailField', {
         type: 'email',
         label: 'E-Mail',
-        name: 'email-field',
+        name: 'email',
         classes: ['form__input-block'],
     }],
     ['PasswordField', {
         type: 'password',
         label: 'Password',
-        name: 'password-field',
+        name: 'current-password',
         classes: ['form__input-block'],
     }],
 ]);

@@ -53,9 +53,11 @@ export default class UserService {
         const updateDto = {};
         if (UserService.currentUser) {
             for (let key in updateData) {
-                if (updateData[key] && updateData[key] !== current[key]) {
-                    current[key] = updateData[key];
-                    updateDto[key] = updateData[key];
+                if (updateData[key]) {
+                    if (updateData[key] !== current[key]) {
+                        current[key] = updateData[key];
+                        updateDto[key] = updateData[key];
+                    }
                 }
             }
             updateDto['id'] = current['id'];

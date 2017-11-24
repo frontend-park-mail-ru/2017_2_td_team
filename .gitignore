@@ -62,4 +62,6 @@ typings/
 
 # WebPack
 bundle.js
+bundle.js.map
 styles.css
+styles.css.map

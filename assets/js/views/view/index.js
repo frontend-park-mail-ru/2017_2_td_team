@@ -1,12 +1,21 @@
-import {globalEventBus} from '../../modules/globalEventBus.js';
+import globalEventBus from '../../modules/globalEventBus.js';
 
 export default class View {
 
     constructor(parentElement) {
         this._element = document.createElement('section');
         this._bus = globalEventBus;
-
+        this._cleanupScripts = [];
         parentElement.appendChild(this._element);
+    }
+
+    subscribe(event, method) {
+        const off = this._bus.register(event, method);
+        this._cleanupScripts.push(off);
+    }
+
+    destroy() {
+        this._cleanupScripts.forEach(off => off());
     }
 
     render() {

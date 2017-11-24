@@ -1,5 +1,5 @@
 import Route from './route.js';
-import {globalEventBus} from './globalEventBus.js';
+import globalEventBus from './globalEventBus.js';
 
 export default class Router {
 
@@ -17,18 +17,21 @@ export default class Router {
     }
 
     start() {
-        window.onpopstate = event => {
-
-            this.go(window.location.pathname, event.state);
-        };
+        window.onpopstate = event => this.go(window.location.pathname, event.state);
 
         this.viewsParent.addEventListener('click', event => {
             if (event.target.tagName.toLowerCase() !== 'a') {
                 return;
             }
+
+            if (event.target.origin !== window.location.origin) {
+                return;
+            }
+
             if (event.target.getAttribute('target') === '_blank') {
                 return;
             }
+
             event.preventDefault();
             const pathname = event.target.pathname;
             this.go(pathname);
@@ -44,15 +47,17 @@ export default class Router {
         if (!route) {
             return;
         }
-        console.log(this.currentView);
+        console.log('Current view:', this.currentView);
+        console.log('Poped state:', state);
+        console.log('pushing', {path: path}, route.title, path);
+        if (state && state.path !== path) {
+            window.history.replaceState({path: state.path}, state.title, state.path);
+        } else if (!state) {
+            window.history.pushState({path: path}, route.title, path);
+        }
+
         if (this.currentView) {
             this.currentView.pause();
-        }
-        console.log('pushing', {path: path}, route.title, path);
-        if (state) {
-            window.history.replaceState({path: state.path}, state.title, state.path);
-        } else {
-            window.history.pushState({path: path}, route.title, path);
         }
         this.currentView = route.view;
         route.prepare();

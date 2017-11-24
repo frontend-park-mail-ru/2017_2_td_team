@@ -1,20 +1,16 @@
-import {globalEventBus} from '../../globalEventBus.js';
+import globalEventBus from '../../globalEventBus.js';
 
-import {Events} from '../../../events.js';
+import Events from '../../../events.js';
 
 export default class Strategy {
     constructor() {
-        this.transport = globalEventBus;
-        this._registered = [];
+        this.bus = globalEventBus;
+        this.clenupScripts = [];
         this.gamectx = {
             players: [],
-            wave: {
-                number: 0
-            },
-            monsters: new Map(),
-            passed: [],
+            wave: {},
             towers: [],
-            events: [],
+            shotEvents: [],
         };
         this.subscribe(Events.NEW_GAME, (event, payload) => this.onNewGame(payload));
         this.subscribe(Events.NEW_TOWER, (event, payload) => this.onNewTower(payload));
@@ -29,12 +25,12 @@ export default class Strategy {
     }
 
     subscribe(event, method) {
-        const off = this.transport.register(event, method);
-        this._registered.push(off);
+        const off = this.bus.register(event, method);
+        this.clenupScripts.push(off);
     }
 
     destroy() {
-        this._registered.forEach(off => off());
+        this.clenupScripts.forEach(off => off());
     }
 
 

@@ -4,8 +4,9 @@ import Form from '../../blocks/form/form.js';
 import InputBlock from '../../blocks/form/__input-block/form__input-block.js';
 import UserService from '../../services/user-service.js';
 import Auth from '../../modules/auth.js';
-import {globalEventBus} from '../../modules/globalEventBus.js';
+import globalEventBus from '../../modules/globalEventBus.js';
 import {SignupButton, SignupFields} from '../../configs/signup-fields.js';
+import Events from '../../events.js';
 
 export default class SignupView extends View {
     render() {
@@ -22,28 +23,37 @@ export default class SignupView extends View {
                     this.signupForm.reset();
                     globalEventBus.emit('router:redirect', {path: '/'});
                 })
-                .catch(err => {
-                    err.incorrectRequestDataErrors.forEach(err => {
+                .catch(errResponse => {
+                    let errors = [];
+                    if (errResponse.incorrectRequestDataErrors) {
+                        errors = errResponse.incorrectRequestDataErrors;
+                    } else if (errResponse.fieldName) {
+                        errors.push(errResponse);
+                    } else {
+                        globalEventBus.emit(Events.NOTIFY, {
+                            message: 'Internal error: try again',
+                            duration: 5,
+                        });
+                    }
+                    errors.forEach(err => {
                         let inputName = '';
                         switch (err.fieldName) {
                             case 'email':
-                                inputName = 'email-field';
+                                inputName = SignupFields.get('EmailField').name;
                                 break;
                             case 'password':
-                                inputName = 'password-field';
+                                inputName = SignupFields.get('PasswordField').name;
                                 break;
                             case 'login':
-                                inputName = 'username-field';
+                                inputName = SignupFields.get('NameField').name;
                                 break;
                         }
-
-                        this.signupForm._element[inputName].setCustomValidity(err.description);
-                        this.signupForm._element[inputName].reportValidity();
+                        this.signupForm._element.elements[inputName].setCustomValidity(err.description);
+                        this.signupForm._element.elements[inputName].reportValidity();
                     });
                 });
         });
 
-        // TODO: fix forward button
         this.signupForm.onInput((input, form) => {
             if (input.value) {
                 input.setCustomValidity('');

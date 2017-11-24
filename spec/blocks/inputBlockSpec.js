@@ -1,5 +1,5 @@
 import {describe, expect, it} from '../helpers/jasmineES6';
-import {InputBlock} from '../../www/js/blocks/__input-block/about.js';
+import InputBlock from '../assets/js/blocks/form/__input-block/form__input-block.js';
 import {injectBlockNodeAccessor} from '../helpers/nodeAccessorMixin.js';
 
 describe('InputBlock', () => {

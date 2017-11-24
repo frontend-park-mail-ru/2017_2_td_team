@@ -4,9 +4,11 @@ export default class MonsterCreator {
         this.idSource = idSource;
 
     }
+
     createMonster() {
         const monster = this._monsterFactory.Create();
         monster.id = this.idSource.next().value;
+        monster.typeid = this._monsterFactory.typeid;
         return monster;
     }
 }

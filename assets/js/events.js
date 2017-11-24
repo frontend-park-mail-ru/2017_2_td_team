@@ -1,4 +1,5 @@
-export const Events = {
+export default {
+    NEW_SERVER_MESSAGE: 'transport:new_server_message',
     NEW_TOWER: 'transport:new_tower',
     NEW_GAME: 'transport:new_game',
     GAME_STATE_UPDATE: 'transport:game_state_update',
@@ -8,5 +9,16 @@ export const Events = {
     TITLE_CLICKED: 'signal:title_clicked',
     LOGO_ON: 'signal:logo_on',
     LOGO_OFF: 'signal:logo_off',
-
+    SPINNER_ON: 'signal:spinner_on',
+    SPINNER_OFF: 'signal:spinner_off',
+    NOTIFY: 'signal:notify',
+    SHOW_MONSTER_INFO: 'hud:show_monster_info',
+    SHOW_TOWER_INFO: 'hud:show_tower_info',
+    HIDE_INFO: 'hud:hide_info',
+    REDIRECT: 'router:redirect',
+    ADD_TOWER: 'hud:add_tower',
+    PLAYER_STATE_UPDATE: 'hud:p_update',
+    SCORES_UPDATE: 'hud:s_update',
+    SCORES_CREATE: 'hud:s_create',
+    TIMER_UPDATE: 'hud:t_update',
 };

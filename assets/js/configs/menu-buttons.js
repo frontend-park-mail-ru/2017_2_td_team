@@ -1,4 +1,4 @@
-export const MenuButtons = [
+const MenuButtons = [
     {
         attrs: {
             'data-section': 'game',
@@ -7,6 +7,7 @@ export const MenuButtons = [
         text: 'Start',
         classes: ['button', 'menu-button'],
     },
+
     {
         attrs: {
             'data-section': 'about',
@@ -33,3 +34,4 @@ export const MenuButtons = [
     },
 ];
 
+export default MenuButtons;
