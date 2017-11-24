@@ -28,7 +28,7 @@ this.addEventListener('install', event => {
                     '/signup',
                     '/signin',
                     '/settings',
-                    '/logout'
+                    '/logout',
                 ]);
             })
     );
@@ -41,7 +41,7 @@ this.addEventListener('fetch', event => {
             caches.match(event.request)
         );
     } else {
-        fetch(event.request);
+        event.respondWith(() => fetch(event.request));
     }
 });
 
