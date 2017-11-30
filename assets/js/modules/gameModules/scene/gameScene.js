@@ -54,7 +54,6 @@ export default class GameScene {
         this.resizers.forEach(resizer => resizer());
         this.renderer.resize(this.width, this.height);
 
-
     }
 
     calcDimensions() {
@@ -381,6 +380,7 @@ export default class GameScene {
     get titlesSprites() {
         return this.sprites.titleSprites;
     }
+
 
     set titlesSprites(sprites) {
         this.sprites.titleSprites = sprites;

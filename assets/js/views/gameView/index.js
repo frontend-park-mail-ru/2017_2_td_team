@@ -114,6 +114,7 @@ export default class GameView extends View {
             this._info1.hide();
             this._info2.hide();
         });
+
         this.subscribe(Events.ADD_TOWER, (ev, payload) => this._hud.appendToRightSidebar(payload));
 
         this._game = new Game(this._canvas, strategy, [{nickname: 'anon'}]);

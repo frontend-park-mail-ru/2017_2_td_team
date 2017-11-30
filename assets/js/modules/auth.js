@@ -1,5 +1,5 @@
 import Http from './http.js';
-import {SignupFields} from '../configs/signup-fields.js';
+import {SignupFields, SelectField} from '../configs/signup-fields.js';
 import {buildBackendUrl} from '../configs/backend.js';
 import {SigninFields} from '../configs/signin-fields.js';
 
@@ -39,9 +39,9 @@ export default class Auth {
         const email = formData[SignupFields.get('EmailField').name];
         const password = formData[SignupFields.get('PasswordField').name];
         const login = formData[SignupFields.get('NameField').name];
-
+        const gameClass = formData[SelectField.name];
         return Http
-            .post(buildBackendUrl('/auth/signup'), {login, email, password})
+            .post(buildBackendUrl('/auth/signup'), {login, email, password,gameClass})
             .then(res => res.json())
             .catch(err =>
                 err.json()
