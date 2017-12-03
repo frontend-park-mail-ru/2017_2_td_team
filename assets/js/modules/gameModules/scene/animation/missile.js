@@ -1,4 +1,4 @@
-export default class Missle {
+export default class Missile {
     constructor(animationSprite, source, target, offset, timeLimit) {
 
         this._sprite = animationSprite;
