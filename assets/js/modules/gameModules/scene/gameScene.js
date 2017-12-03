@@ -163,7 +163,8 @@ export default class GameScene {
         });
         this.bus.emit(Events.SCORES_UPDATE, scores);
     }
-   updateWaveTimer() {
+
+    updateWaveTimer() {
         const msToStart = this.state.wave.msToStart;
         if (msToStart > 0) {
             this.bus.emit(Events.TIMER_UPDATE, ( msToStart / 1000).toFixed(1));

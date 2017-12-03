@@ -1,5 +1,5 @@
 import AnimationsAtlas from './../animationsAtlas.js';
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js';
 
 export default class AnimationService {
     constructor(textureProvider, parent) {

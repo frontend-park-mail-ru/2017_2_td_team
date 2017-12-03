@@ -23,7 +23,7 @@ export default class Missile {
         if (this.timeBuffer >= this.timeLimit) {
             return false;
         }
-        if(this.offsetTimeBuffer > delta){
+        if (this.offsetTimeBuffer > delta) {
             this.offsetTimeBuffer -= delta;
             return;
         }
