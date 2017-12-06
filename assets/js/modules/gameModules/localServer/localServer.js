@@ -17,7 +17,7 @@ export default class LocalGameServer extends Strategy {
     constructor() {
         super();
         this.pixi = PIXI;
-        this.pixi.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
         this.genIdSource = function* () {
             let i = 0;
             while (true) {
@@ -193,6 +193,7 @@ export default class LocalGameServer extends Strategy {
             {coord: {x: 17, y: 12}, dir: {x: 1, y: 0}},
             {coord: {x: 18, y: 12}, dir: {x: 1, y: 0}},
             {coord: {x: 19, y: 12}, dir: {x: 1, y: 0}},
+            {coord: {x: 20, y: 12}, dir: {x: 1, y: 0}},
 
         ];
 
@@ -275,14 +276,14 @@ export default class LocalGameServer extends Strategy {
 
     checkFinishConditions() {
         if (this.gamectx.hp <= 0) {
-            this.finishGame();
+           this.finishGame();
         }
     }
 
     finishGame() {
         this.localGameCtx.gameLoopTicker.stop();
         this.bus.emit(Events.GAME_FINISHED, this.gamectx.players[0].scores);
-        this.localGameCtx.gameLoopTicker.destroy();
+
     }
 
     checkHitAreas() {
@@ -291,6 +292,8 @@ export default class LocalGameServer extends Strategy {
                 Array
                     .from(this.gamectx.wave.monsters)
                     .filter(monster => area.checkCollision(monster));
+
+
         });
 
     }
@@ -323,7 +326,6 @@ export default class LocalGameServer extends Strategy {
     }
 
     destroy(){
-        this.localGameCtx.gameLoopTicker.stop();
         this.localGameCtx.gameLoopTicker.destroy();
         super.destroy();
     }
