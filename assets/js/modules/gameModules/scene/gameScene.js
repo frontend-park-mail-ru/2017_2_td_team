@@ -23,7 +23,7 @@ export default class GameScene {
         this.calcDimensions();
 
         this.pixi = window.PIXI;
-
+        this.pixi.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
         const elemResizer = this.resize.bind(this);
         window.addEventListener('resize', elemResizer);
 

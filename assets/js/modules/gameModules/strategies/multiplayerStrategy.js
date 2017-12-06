@@ -64,6 +64,7 @@ export default class MultiplayerStrategy extends Strategy {
 
     parseState(ctx) {
         const currentPlayer = ctx.players.find(player => player.id === this.playerId);
+        ctx.currentWave.running = new Map(ctx.currentWave.running.map(monster => [monster.id, monster]));
         this.bus.emit(Events.GAME_STATE_UPDATE, {
             hp: ctx.hp,
             players: ctx.players,

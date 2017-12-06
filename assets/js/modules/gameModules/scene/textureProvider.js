@@ -36,6 +36,12 @@ export default class TextureProvider {
         return this.textures[this.textureAtlas.atlas[typeid].texture];
     }
 
+    getTexturesSetForType(typeid) {
+        return this.textureAtlas.atlas[typeid].texture
+            .map(textureSet => textureSet
+                .map(path => this.textures[path]));
+    }
+
     getSpriteByTexture(typeid) {
         return new this.pixi.Sprite(this.getTextureForType(typeid));
     }
