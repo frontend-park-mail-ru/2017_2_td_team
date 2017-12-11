@@ -1,5 +1,5 @@
 import Http from './http.js';
-import {SignupFields, SelectField} from '../configs/signup-fields.js';
+import {SelectField, SignupFields} from '../configs/signup-fields.js';
 import {buildBackendUrl} from '../configs/backend.js';
 import {SigninFields} from '../configs/signin-fields.js';
 
@@ -23,10 +23,8 @@ export default class Auth {
 
         return Http
             .post(buildBackendUrl('/auth/signin'), {email, password})
-            .then(res => res.json())
-            .catch(err =>
-                err.json()
-                    .then(errJson => Promise.reject(errJson)));
+            .then(res => res.json());
+
     }
 
     /**
@@ -41,11 +39,9 @@ export default class Auth {
         const login = formData[SignupFields.get('NameField').name];
         const gameClass = formData[SelectField.name];
         return Http
-            .post(buildBackendUrl('/auth/signup'), {login, email, password,gameClass})
-            .then(res => res.json())
-            .catch(err =>
-                err.json()
-                    .then(errJson => Promise.reject(errJson)));
+            .post(buildBackendUrl('/auth/signup'), {login, email, password, gameClass})
+            .then(res => res.json());
+
 
     }
 
@@ -56,10 +52,8 @@ export default class Auth {
      */
     static requestSignOut() {
         return Http.post(buildBackendUrl('/auth/logout'))
-            .then(res => res.json())
-            .catch(err =>
-                err.json()
-                    .then(errJson => Promise.reject(errJson)));
+            .then(res => res.json());
+
 
     }
 }

@@ -5,7 +5,7 @@ export default class Wave {
         this.passed = [];
         this.timer = 100;
         this.monsterEnterDelay = 500;
-        this.startDelay = 10000;
+        this.startDelay = 100;
         this.localTimeBuffer = this.startDelay;
         this.isPending = true;
         this.isStarted = false;
@@ -82,7 +82,7 @@ export default class Wave {
         return {
             status: status,
             pending: this.pending,
-            running: this.monsters,
+            running: this.running,
             passed: this.passed,
             msToStart: msToStart,
         };

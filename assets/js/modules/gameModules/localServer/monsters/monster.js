@@ -10,6 +10,7 @@ export default class Monster {
         this.vx = this.speed;
         this.vy = this.speed;
         this.reward = reward;
+        this.direction = 0;
 
     }
 
@@ -21,6 +22,7 @@ export default class Monster {
         this.vx = path[0].dir.x * this.vx;
 
         this.vy = path[0].dir.y * this.vy;
+        this.setDirection(path[0]);
     }
 
     getNextPoint() {
@@ -54,7 +56,12 @@ export default class Monster {
         this.vx = this.speed * nextPoint.dir.x;
         this.vy = this.speed * nextPoint.dir.y;
         this.coord = nextPoint.coord;
+        this.setDirection(nextPoint);
 
+    }
+
+    setDirection(point) {
+        this.direction = Math.abs(2 * point.dir.x) + point.dir.x + Math.abs(point.dir.y) + point.dir.y;
     }
 
     updatePosition(delta) {
@@ -73,7 +80,7 @@ export default class Monster {
         return {x: this.coord.x + this.relativeCoord.x, y: this.coord.y + this.relativeCoord.y};
     }
 
-    get titleCoord(){
+    get titleCoord() {
         return this.coord;
     }
 

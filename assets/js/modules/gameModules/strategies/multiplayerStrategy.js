@@ -1,11 +1,12 @@
 import Events from '../../../events.js';
 import Strategy from './strategy';
 import Transport from '../../transport';
+import {buildWebsocketUrl} from '../../../configs/backend';
 
 export default class MultiplayerStrategy extends Strategy {
     constructor() {
         super();
-        this.wsUrl = 'wss://td-java.herokuapp.com/game';
+        this.wsUrl = buildWebsocketUrl('/game');
         this.transport = new Transport();
         this.playerId = null;
     }
@@ -48,7 +49,6 @@ export default class MultiplayerStrategy extends Strategy {
 
         const currentPlayer = ctx.players.find(player => player.id === ctx.playerId);
         this.playerId = currentPlayer.id;
-
         this.bus.emit(Events.NEW_GAME_STATE, {
             map: map,
             hp: ctx.hp,
@@ -63,7 +63,10 @@ export default class MultiplayerStrategy extends Strategy {
     }
 
     parseState(ctx) {
+
         const currentPlayer = ctx.players.find(player => player.id === this.playerId);
+        ctx.currentWave.running = new Map(ctx.currentWave.running.map(monster => [monster.id, monster]));
+
         this.bus.emit(Events.GAME_STATE_UPDATE, {
             hp: ctx.hp,
             players: ctx.players,

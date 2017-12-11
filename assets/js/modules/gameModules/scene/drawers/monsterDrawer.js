@@ -1,5 +1,6 @@
-import ElementDrawer from './elemDrawer';
-import Events from '../../../../events';
+import ElementDrawer from './elemDrawer.js';
+import Events from '../../../../events.js';
+import MonsterSprite from '../animation/monster.js';
 
 export default class MonsterDrawer extends ElementDrawer {
 
@@ -18,42 +19,51 @@ export default class MonsterDrawer extends ElementDrawer {
 
     updateMonsterSprites() {
         const monsters = this.state.wave.running;
-        for (let monster of monsters) {
-            if (!this.monstersSprites.has(monster.id)) {
+        for (let [id, monster] of monsters) {
+            const monsterSprite = this.monstersSprites.get(id);
+            if (!monsterSprite) {
                 this.registerMonsterSprite(monster);
             } else {
+                monsterSprite.meta = monster;
                 this.moveMonster(monster);
             }
         }
         this.rearrangeMonsterSprites();
+
     }
 
     registerMonsterSprite(monster) {
+        const monsterSpritesContainer = this
+            .animationService
+            .createAnimationSpritesContainer('monsters', monster.typeid);
 
-        const monsterSprite = this.textureProvider.getScaledSprite(monster.typeid);
-        this.registerResizer(monsterSprite, () => {
-            monsterSprite.width = this.titleWidth;
-            monsterSprite.height = this.titleHeight;
-        });
 
-        monsterSprite
-            .position
-            .set(this.titleWidth * monster.titleCoord.x,
-                this.titleHeight * monster.titleCoord.y);
+        monsterSpritesContainer.x = (monster.titleCoord.x + monster.relativeCoord.x) * this.titleWidth;
+        monsterSpritesContainer.y = (monster.titleCoord.y + monster.relativeCoord.y) * this.titleHeight;
 
-        monsterSprite.interactive = true;
-        monsterSprite.on('pointertap', () => {
+
+        monsterSpritesContainer.interactive = true;
+        monsterSpritesContainer.on('pointertap', () => {
             this.bus.emit(Events.SHOW_MONSTER_INFO, {hp: monster.hp, damage: monster.weight});
         });
-        this.pane.addChild(monsterSprite);
+
+        this.registerResizer(monsterSpritesContainer, () => {
+            monsterSpritesContainer.width = this.titleWidth;
+            monsterSpritesContainer.height = this.titleHeight;
+        });
+        const monsterSprite = new MonsterSprite(monsterSpritesContainer, monster);
+        this.animationService.runAnimation(monster.id, monsterSprite);
         this.monstersSprites.set(monster.id, monsterSprite);
+
     }
 
     moveMonster(monster) {
         const monsterSprite = this.monstersSprites.get(monster.id);
+        const rawSprite = monsterSprite.getSpritesContainer();
         const titleParams = this.titleParams;
-        monsterSprite.x = (monster.titleCoord.x + monster.relativeCoord.x) * titleParams.titleWidth;
-        monsterSprite.y = (monster.titleCoord.y + monster.relativeCoord.y) * titleParams.titleHeight;
+        rawSprite.x = (monster.titleCoord.x + monster.relativeCoord.x) * titleParams.titleWidth;
+        rawSprite.y = (monster.titleCoord.y + monster.relativeCoord.y) * titleParams.titleHeight;
+        monsterSprite.rotate();
     }
 
     rearrangeMonsterSprites() {
@@ -77,14 +87,10 @@ export default class MonsterDrawer extends ElementDrawer {
     processPassedMonsters() {
         for (let passedMonster of this.state.wave.passed) {
             const monsterSprite = this.monstersSprites.get(passedMonster.id);
-            if (monsterSprite) {
-                const binded = this.animationService.hasAnimation(passedMonster.id);
-                if (!binded) {
-                    this.monstersSprites.delete(passedMonster.id);
-                    this.pane.removeChild(monsterSprite);
-                } else {
-                    this.graveyard.add(passedMonster.id);
-                }
+            if (monsterSprite && !this.graveyard.has(passedMonster.id)) {
+                monsterSprite.meta = passedMonster;
+                monsterSprite.running = false;
+                this.graveyard.add(passedMonster.id);
             }
         }
     }
@@ -93,9 +99,12 @@ export default class MonsterDrawer extends ElementDrawer {
         this.graveyard.forEach(id => {
             const inUse = this.animationService.hasAnimation(id);
             if (!inUse) {
-                this.pane.removeChild(this.monstersSprites.get(id));
+                const sprite = this.monstersSprites.get(id).getSpritesContainer();
+                this.pane.removeChild(sprite);
                 this.monstersSprites.delete(id);
+                this.resizers.delete(sprite);
                 this.graveyard.delete(id);
+                sprite.destroy();
             }
         });
     }

@@ -13,13 +13,13 @@ export default class MissilesEmitter extends ElementDrawer {
     }
 
     emitMissiles() {
+
         const shotEvents = this.state.shotEvents;
         shotEvents.forEach(event => {
             const monsterSprite = this.monsterDrawer.getMonsterSprite(event.monsterId);
             const towerMeta = this.towerDrawer.getTower(event.towerId);
-            const animation = this.animationService.createAnimatedSprite(this.layer, towerMeta.typeid, 2, 2);
-
-            const missile = new Missile(animation, towerMeta.sprite, monsterSprite, event.offset, 250);
+            const animation = this.animationService.createAnimatedSprite(this.layer, towerMeta.typeid);
+            const missile = new Missile(animation, towerMeta.sprite, monsterSprite.getSpritesContainer(), event.offset, 250);
             this.animationService.runAnimation(event.monsterId, missile);
         });
     }
