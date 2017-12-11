@@ -1,14 +1,14 @@
 #!/bin/sh
 
 PORT=228
-DIST_PATH=./dist/www
+DIST_PATH=./www
 DEPLOY_PATH=/var/www/td
 SERVER_IP=$1
 echo "Deploying to $SERVER_IP"
 
 echo "Setting up ssh..."
 eval "$(ssh-agent -s)"
-ssh-keyscan -p228 -H $SERVER_IP >> ~/.ssh/known_hosts
+ssh-keyscan -p $PORT -H $SERVER_IP >> ~/.ssh/known_hosts
 chmod 600 $HOME/.ssh/server
 ssh-add $HOME/.ssh/server
 
@@ -16,7 +16,7 @@ echo "Build..."
 npm run build
 
 echo "Cleaning up..."
-ssh -p228 td@$SERVER_IP "rm -rf /var/www/td/*"
+ssh -p $PORT td@$SERVER_IP "rm -rf $DEPLOY_PATH/*"
 
 echo "Uploading..."
-scp -P228 -r ./www td@$SERVER_IP:/var/www/td
+scp -P $PORT -r $DIST_PATH/* td@$SERVER_IP:$DEPLOY_PATH
