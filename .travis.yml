@@ -4,9 +4,6 @@ language: node_js
 node_js:
   - "node"
 cache: yarn
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
 branches:
   only:
   - master
@@ -18,20 +15,5 @@ deploy:
   on:
     branch:
     - dev
-
-#  provider: heroku
-#  skip_cleanup: true
-#  app:
-#    master: top-tdteam
-#    dev: tdteam
-#  on:
-#    branch:
-#    - dev
-#    - master
-#  api_key:
-#    secure: kyRrYBPndbGph6Xne9UIbddRIgLj7g0gwCqv+H2xV9HOwSTacXZU8990ZQfMP+fzEq6GHfPstvEYlIBsDFEGihB6UIoaRf6GtT+VZDGYWIt5VtORbOHJsD6Uhp0J8a+63TvDjJvYnZH06EK+5w34QYpu19cnZPaO8zRzJKT9BcaAtwkr537k2/bhb3EgAv0TYtjZ7ztY8nf6uzTQjvczivqbEVlAgun8yQ/idV2rYWvUFU0ZnhKy6yJmywh0Zqdaj2ClBy0Jq99jhOzR0jVAvpjvlv1JtyNv9j+cb/S7SsVG0otGRShYBr/SOPf9adWe1I7asJvY4MYAJf74pRKG6PK3v19h4mk1arpc+b1UI3UOuvXVkhVyGL2Uk6OcfmWOqafOk2cjPTqBKFbgCD4WAZaFTNNHLstWAY8nr+WtEFMPES38Al8aUF3Kyew7TohMVIBMoJIwkDeYrFszB71r9oVMprUgnGlSqXcwyErBEt3RJ27moCLy+UwWLwiEp9Ggioej6Tq2gNkdSILXV08LHMMjxMG/Y6lDwImgcptx3ILb+Z2+vz3SBmVuSwf6OfyASqRPAiyV3lqzIhZVLgLIa/UBNWp9+WMZBLbE0qQX+LN89ZsbpJ/G3IFqJKDU/KQ48o/FsXcEnfMBely/oPQuNC4BWpYWV0Gqzkg/OX/Bgbo=
-
-
-
 before_install:
   - openssl aes-256-cbc -K $encrypted_a1f31b26211c_key -iv $encrypted_a1f31b26211c_iv -in server.enc -out $HOME/.ssh/server -d
