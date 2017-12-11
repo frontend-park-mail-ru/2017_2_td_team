@@ -4,7 +4,7 @@ SERVER_IP=$1
 echo "Deploying to $SERVER_IP"
 
 eval "$(ssh-agent -s)"
-ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+ssh-keyscan -p228 -H $SERVER_IP >> ~/.ssh/known_hosts
 chmod 600 $HOME/.ssh/server
 ssh-add $HOME/.ssh/server
 
