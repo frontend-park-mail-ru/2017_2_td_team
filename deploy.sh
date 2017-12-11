@@ -12,9 +12,6 @@ ssh-keyscan -p $PORT -H $SERVER_IP >> ~/.ssh/known_hosts
 chmod 600 $HOME/.ssh/server
 ssh-add $HOME/.ssh/server
 
-echo "Build..."
-npm run build
-
 echo "Cleaning up..."
 ssh -p $PORT td@$SERVER_IP "rm -rf $DEPLOY_PATH/*"
 
