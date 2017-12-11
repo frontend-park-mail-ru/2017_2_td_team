@@ -21,7 +21,7 @@ export default {
     },
     1001: {
         text: 'Red monster',
-        texture:
+        texturesPacks:
             [
                 ['redMonster/redMonster_0_00.png',
                     'redMonster/redMonster_0_01.png',
@@ -44,7 +44,7 @@ export default {
     },
     1002: {
         text: 'Blue monster',
-        texture: [
+        texturesPacks: [
             ['blueMonster/blueMonster_0_00.png',
                 'blueMonster/blueMonster_0_01.png',
                 'blueMonster/blueMonster_0_02.png',
@@ -69,7 +69,7 @@ export default {
     },
     1003: {
         text: 'Orange monster',
-        texture: [
+        texturesPacks: [
             ['orangeMonster/orangeMonster_0_00.png',
                 'orangeMonster/orangeMonster_0_01.png',
                 'orangeMonster/orangeMonster_0_02.png',

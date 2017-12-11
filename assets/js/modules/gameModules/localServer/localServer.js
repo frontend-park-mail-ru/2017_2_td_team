@@ -276,7 +276,7 @@ export default class LocalGameServer extends Strategy {
 
     checkFinishConditions() {
         if (this.gamectx.hp <= 0) {
-           this.finishGame();
+            this.finishGame();
         }
     }
 
@@ -291,8 +291,8 @@ export default class LocalGameServer extends Strategy {
             area.monsters =
                 Array
                     .from(this.gamectx.wave.monsters)
-                    .filter(monster => area.checkCollision(monster));
-
+                    .filter(monster => area.checkCollision(monster)
+                    );
 
         });
 
@@ -325,7 +325,7 @@ export default class LocalGameServer extends Strategy {
         return this.gamectx.players[0];
     }
 
-    destroy(){
+    destroy() {
         this.localGameCtx.gameLoopTicker.destroy();
         super.destroy();
     }

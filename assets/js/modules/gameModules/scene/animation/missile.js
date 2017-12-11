@@ -2,8 +2,8 @@ export default class Missile {
     constructor(animationSprite, source, target, offset, timeLimit) {
 
         this._sprite = animationSprite;
-        this.startPoint = source;
-        this.finishPoint = target;
+        this.startPoint = Object.assign(source);
+        this.finishPoint = Object.assign(target);
         this.timeLimit = timeLimit;
 
         this.vx = (this.finishPoint.x - this.startPoint.x) / timeLimit;

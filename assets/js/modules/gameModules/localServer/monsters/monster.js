@@ -60,7 +60,7 @@ export default class Monster {
 
     }
 
-    setDirection(point){
+    setDirection(point) {
         this.direction = Math.abs(2 * point.dir.x) + point.dir.x + Math.abs(point.dir.y) + point.dir.y;
     }
 

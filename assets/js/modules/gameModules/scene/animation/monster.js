@@ -7,17 +7,18 @@ export default class MonsterSprite {
         this.running = true;
         this._sprites.children.forEach(sprite => {
             sprite.animationSpeed = 0.25;
-            if(sprite !== this._current){
+            if (sprite !== this._current) {
                 sprite.visible = false;
             }
         });
+
     }
 
     start() {
         this._current.play();
     }
 
-    update(delta) {
+    update() {
         return this.running;
     }
 
@@ -37,7 +38,7 @@ export default class MonsterSprite {
     }
 
     destroy() {
-        this._sprites.destroy();
+        this._current.stop();
     }
 
 }

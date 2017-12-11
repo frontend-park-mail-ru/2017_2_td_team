@@ -2,15 +2,18 @@ import ElementDrawer from './elemDrawer';
 import Events from '../../../../events';
 
 export default class TowerDrawer extends ElementDrawer {
-    constructor(gameScene,parent, animationService) {
+    constructor(gameScene, parent, animationService) {
         super(gameScene, animationService);
+        this.areasContainer = new this.pixi.Container();
+
         this.pane = new this.pixi.Container();
+        this.pane.addChild(this.areasContainer);
         this.towersSprites = new Map();
         parent.addChild(this.pane);
 
     }
 
-    getTower(id){
+    getTower(id) {
         return this.towersSprites.get(id);
     }
 
@@ -20,9 +23,29 @@ export default class TowerDrawer extends ElementDrawer {
             .forEach(tower => this.registerTowerSprite(tower));
     }
 
+    createTowerArea(tower, towerSprite) {
+        const [topx, topy, height, width] = [
+            this.titleWidth * (tower.titlePosition.x - tower.range),
+            this.titleHeight * (tower.titlePosition.y - tower.range),
+            this.titleHeight * (2 * tower.range + 1),
+            this.titleWidth * (2 * tower.range + 1),
+        ];
+        const area = new this.pixi.Graphics();
+        area.fillAlpha = 0.3;
+        area.drawRect(topx, topy, width, height);
+        area.visible = false;
+        towerSprite.on('pointerover', () => {
+            area.visible = true;
+        });
+        towerSprite.on('pointerout', () => {
+            area.visible = false;
+        });
+        return area;
+    }
+
     registerTowerSprite(tower) {
         const towerSprite = this.textureProvider.getSpriteByTexture(tower.typeid);
-
+        const area = this.createTowerArea(tower, towerSprite);
         const placeSprite = () => {
             towerSprite.position.set(tower.titlePosition.x * this.titleWidth, tower.titlePosition.y * this.titleHeight);
             this.textureProvider.scaleElements(towerSprite);
@@ -38,7 +61,7 @@ export default class TowerDrawer extends ElementDrawer {
                 aspeed: (1000 / tower.period).toFixed(2)
             });
         });
-
+        this.areasContainer.addChild(area);
         this.pane.addChild(towerSprite);
         this.towersSprites.set(tower.id, {sprite: towerSprite, typeid: tower.typeid});
     }

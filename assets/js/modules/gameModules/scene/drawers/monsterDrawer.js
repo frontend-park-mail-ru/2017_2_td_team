@@ -20,13 +20,16 @@ export default class MonsterDrawer extends ElementDrawer {
     updateMonsterSprites() {
         const monsters = this.state.wave.running;
         for (let [id, monster] of monsters) {
-            if (!this.monstersSprites.has(id)) {
+            const monsterSprite = this.monstersSprites.get(id);
+            if (!monsterSprite) {
                 this.registerMonsterSprite(monster);
             } else {
+                monsterSprite.meta = monster;
                 this.moveMonster(monster);
             }
         }
         this.rearrangeMonsterSprites();
+
     }
 
     registerMonsterSprite(monster) {
@@ -84,7 +87,8 @@ export default class MonsterDrawer extends ElementDrawer {
     processPassedMonsters() {
         for (let passedMonster of this.state.wave.passed) {
             const monsterSprite = this.monstersSprites.get(passedMonster.id);
-            if (monsterSprite) {
+            if (monsterSprite && !this.graveyard.has(passedMonster.id)) {
+                monsterSprite.meta = passedMonster;
                 monsterSprite.running = false;
                 this.graveyard.add(passedMonster.id);
             }
@@ -100,6 +104,7 @@ export default class MonsterDrawer extends ElementDrawer {
                 this.monstersSprites.delete(id);
                 this.resizers.delete(sprite);
                 this.graveyard.delete(id);
+                sprite.destroy();
             }
         });
     }

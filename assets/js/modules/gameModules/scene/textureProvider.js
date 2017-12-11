@@ -37,7 +37,7 @@ export default class TextureProvider {
     }
 
     getTexturesSetForType(typeid) {
-        return this.textureAtlas.atlas[typeid].texture
+        return this.textureAtlas.atlas[typeid].texturesPacks
             .map(textureSet => textureSet
                 .map(path => this.textures[path]));
     }

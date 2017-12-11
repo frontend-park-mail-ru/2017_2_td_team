@@ -6,6 +6,7 @@ import TowerDrawer from './drawers/towerDrawer';
 import AnimationService from './animation/animationService';
 import MapDrawer from './drawers/mapDrawer';
 import MissilesEmitter from './animation/misslesEmitter';
+import * as PIXI from 'pixi.js';
 
 export default class GameScene {
 
@@ -22,7 +23,7 @@ export default class GameScene {
 
         this.calcDimensions();
 
-        this.pixi = window.PIXI;
+        this.pixi = PIXI;
         this.pixi.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
         const elemResizer = this.resize.bind(this);
         window.addEventListener('resize', elemResizer);
@@ -108,6 +109,7 @@ export default class GameScene {
             tower.style.width = `${this.titleWidth * 2}px`;
             tower.style.backgroundSize = 'cover';
             tower.style.backgroundImage = `url(img/textures/${this.state.textureAtlas.atlas[towerid].texture})`;
+
             tower.addEventListener('pointerup', () => this.bus.emit(Events.TOWER_CLICKED, {
                 type: towerid,
                 elem: tower,
@@ -118,6 +120,7 @@ export default class GameScene {
 
 
     render(ms) {
+
         this.updateWaveTimer();
         this.towerDrawer.updateTowerSprites();
         this.monsterDrawer.updateMonsterSprites();
@@ -167,7 +170,7 @@ export default class GameScene {
     updateWaveTimer() {
         const msToStart = this.state.wave.msToStart;
         if (msToStart > 0) {
-            this.bus.emit(Events.TIMER_UPDATE, ( msToStart / 1000).toFixed(1));
+            this.bus.emit(Events.TIMER_UPDATE, (msToStart / 1000).toFixed(1));
             return;
         }
         if (!msToStart) {

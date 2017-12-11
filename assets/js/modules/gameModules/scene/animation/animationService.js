@@ -37,7 +37,7 @@ export default class AnimationService {
         animationSprite.start();
     }
 
-    createAnimatedSprite(layer, typeid, scalex = 1, scaley = 1) {
+    createAnimatedSprite(layer, typeid) {
         const frames = this.FxAtlas.get(typeid).map(path => this.pixi.Texture.fromFrame(path));
         const animation = new this.pixi.extras.AnimatedSprite(frames);
         animation.anchor.set(0.5, 0.5);
