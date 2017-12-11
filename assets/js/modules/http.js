@@ -47,6 +47,13 @@ export default class Http {
         if (res.status < 400) {
             return Promise.resolve(res);
         } else {
+            const contentType = res.headers.get('content-type');
+
+            if (contentType && contentType.includes('application/json')) {
+                return res
+                    .json()
+                    .then(err => Promise.reject(err));
+            }
             return Promise.reject(res);
         }
     }

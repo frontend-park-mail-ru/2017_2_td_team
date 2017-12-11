@@ -21,6 +21,7 @@ export default class GameView extends View {
 
         this._choose_game.className = 'box';
         this._choose_game.onclick = event => {
+            this._choose_game.removeEventListener('click', this._choose_game.onclick);
             event.preventDefault();
             const data = event.target.getAttribute('data-section');
             if (data === 'offline') {
@@ -30,8 +31,12 @@ export default class GameView extends View {
                     .then(() => {
                         this.createGame(MultiplayerStrategy);
                     })
-                    .catch(() => this._bus.emit(Events.REDIRECT, {path: '/signin'}));
+                    .catch(() => {
+                        this._bus.emit(Events.NOTIFY, {message: 'Signin, please!', duration: 5});
+                        this._bus.emit(Events.REDIRECT, {path: '/signin'});
+                    });
             }
+
         };
         this.hide();
     }
@@ -126,7 +131,6 @@ export default class GameView extends View {
 
 
     pause() {
-        console.log(this);
         this.destroy();
         super.pause();
     }
@@ -136,6 +140,7 @@ export default class GameView extends View {
         this._element.innerHTML = FinishGameTemplate({context: {scores: result}});
         this._element.addEventListener('click', event => {
             event.preventDefault();
+            this._element.removeEventListener('click');
             const data = event.target.getAttribute('data-section');
             if (data === 'again') {
                 this._element.innerHTML = '';

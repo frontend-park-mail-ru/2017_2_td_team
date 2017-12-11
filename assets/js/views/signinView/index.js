@@ -36,7 +36,8 @@ export default class SigninView extends View {
                     this.signinForm.reset();
                     globalEventBus.emit('router:redirect', {path: '/'});
                 })
-                .catch(errResponse => {
+                .then(errResponse => {
+
                     let message = '';
                     if (errResponse.authorizationError) {
                         message = errResponse.authorizationError.description;
