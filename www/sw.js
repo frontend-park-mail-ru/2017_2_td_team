@@ -54,7 +54,7 @@ this.addEventListener('fetch', event => {
                             }
                             return response;
                         }
-                    );
+                    ).catch(err => Promise.reject(err));
             })
     );
 });
