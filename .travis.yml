@@ -13,7 +13,7 @@ branches:
   - dev
 deploy:
   provider: script
-  script: deploy.sh 5.2.76.53
+  script: ./deploy.sh 5.2.76.53
   skip_cleanup: true
   on:
     branch:
