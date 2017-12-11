@@ -16,7 +16,7 @@ echo "Build..."
 npm run build
 
 echo "Cleaning up..."
-# ssh -p228 td@$SERVER_IP rm -rf /var/www/td/*
+ssh -p228 td@$SERVER_IP "rm -rf /var/www/td/*"
 
 echo "Uploading..."
-scp -P228 -r ./dist/www td@$SERVER_IP:/var/www/td
+scp -P228 -r ./www td@$SERVER_IP:/var/www/td
