@@ -1,3 +1,5 @@
+@import '../../../../css/consts.styl'
+
 .form__input-block
   font-size: x-large
   margin-bottom: 0.5rem
@@ -22,9 +24,9 @@
 
   // Remove chrome autocomplete yellow background
   &:-webkit-autofill
-    color: #DB328A
-    border-color: #DB328A
-    -webkit-box-shadow: 0 0 0 1000px #082B57 inset
+    color: foreground-color !important
+    border-color: foreground-color
+    -webkit-box-shadow: 0 0 0 1000px background-color inset
 
 .form__input-block label
   padding: 0.25rem
