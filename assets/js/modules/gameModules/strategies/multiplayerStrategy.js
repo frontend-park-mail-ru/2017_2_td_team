@@ -13,7 +13,6 @@ export default class MultiplayerStrategy extends Strategy {
 
     onNewGame() {
         this.subscribe(Events.NEW_SERVER_MESSAGE, (ev, ctx) => this.parseCtx(ctx));
-        this.bus.emit(Events.SPINNER_ON);
         this.transport.connectTo(this.wsUrl, Events.NEW_SERVER_MESSAGE)
             .then(() => this.transport.send('{"class":"join"}'));
     }
@@ -24,7 +23,6 @@ export default class MultiplayerStrategy extends Strategy {
 
     parseCtx(ctx) {
         if (ctx.class === 'init') {
-            this.bus.emit(Events.SPINNER_OFF);
             this.parseInit(ctx);
         } else if (ctx.class === 'state') {
             this.parseState(ctx);

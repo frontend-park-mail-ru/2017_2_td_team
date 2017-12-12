@@ -21,19 +21,23 @@ export default class GameView extends View {
 
         this._choose_game.className = 'box';
         this._choose_game.onclick = event => {
+            this._bus.emit(Events.SPINNER_ON);
             this._choose_game.removeEventListener('click', this._choose_game.onclick);
             event.preventDefault();
             const data = event.target.getAttribute('data-section');
             if (data === 'offline') {
                 this.createGame(LocalGameServer);
+                this._bus.emit(Events.SPINNER_OFF);
             } else if (data === 'online') {
                 UserService.requestCurrentUser()
                     .then(() => {
                         this.createGame(MultiplayerStrategy);
+                        this._bus.emit(Events.SPINNER_OFF);
                     })
                     .catch(() => {
                         this._bus.emit(Events.NOTIFY, {message: 'Signin, please!', duration: 5});
                         this._bus.emit(Events.REDIRECT, {path: '/signin'});
+                        this._bus.emit(Events.SPINNER_OFF);
                     });
             }
 
@@ -138,20 +142,20 @@ export default class GameView extends View {
     finishGame(result) {
         this.destroy();
         this._element.innerHTML = FinishGameTemplate({context: {scores: result}});
-        this._element.addEventListener('click', event => {
+        const clickHandler = event => {
             event.preventDefault();
-            this._element.removeEventListener('click');
+            this._element.removeEventListener('click', clickHandler);
             const data = event.target.getAttribute('data-section');
             if (data === 'again') {
                 this._element.innerHTML = '';
                 this._element.appendChild(this._choose_game);
                 this.resume();
             }
-        });
+        };
+        this._element.addEventListener('click', clickHandler);
     }
 
     destroy() {
-
         this._bus.emit(Events.LOGO_ON);
         if (this._game) {
             this._game.destroy();
