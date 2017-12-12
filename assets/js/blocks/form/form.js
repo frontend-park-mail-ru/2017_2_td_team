@@ -42,7 +42,7 @@ export default class Form extends Block {
      * @param {*}rawForm - node формы
      * @returns {*}
      */
-    static ExtractFormData(rawForm) {
+    static extractFormData(rawForm) {
         const formdata = {};
         const elements = rawForm.elements;
         for (let key in elements) {
@@ -77,7 +77,7 @@ export default class Form extends Block {
     onSubmit(callback) {
         this._element.addEventListener('submit', event => {
             event.preventDefault();
-            const formdata = Form.ExtractFormData(event.target);
+            const formdata = Form.extractFormData(event.target);
             callback(formdata);
         });
     }
