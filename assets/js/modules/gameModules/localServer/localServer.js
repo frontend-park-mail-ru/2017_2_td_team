@@ -218,7 +218,6 @@ export default class LocalGameServer extends Strategy {
     }
 
     gameLoop(ms) {
-        this.updateWaveState(ms);
         this.reloadTowers(ms);
         this.checkHitAreas();
         this.emitShotEvents();
@@ -231,6 +230,7 @@ export default class LocalGameServer extends Strategy {
             towers: this.gamectx.towers,
             shotEvents: this.gamectx.events,
         });
+        this.updateWaveState(ms);
     }
 
 

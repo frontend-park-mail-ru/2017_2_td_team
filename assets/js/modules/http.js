@@ -13,7 +13,7 @@ export default class Http {
         return fetch(address, {
             method: 'get',
             credentials: 'include',
-            mode: 'cors',
+            // mode: 'cors',
         })
             .then(Http.checkStatus);
     }
@@ -30,7 +30,7 @@ export default class Http {
         return fetch(address, {
             method: 'post',
             credentials: 'include',
-            mode: 'cors',
+            // mode: 'cors',
             headers: {'Content-Type': 'application/json; charset=utf8'},
             body: JSON.stringify(body)
         })
