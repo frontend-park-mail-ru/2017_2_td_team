@@ -37,5 +37,5 @@ export const SignupButton = {
 export const SelectField = {
     name: 'gameClass',
     fields: ['Adventurer'],
-    title: ['Choose character class...'],
+    title: ['Adventurer'],
 };

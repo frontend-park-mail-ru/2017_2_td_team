@@ -54,7 +54,12 @@ this.addEventListener('fetch', event => {
                             }
                             return response;
                         }
-                    ).catch(err => Promise.reject(err));
+                    ).catch(err => {
+                        if (err instanceof Response) {
+                            return Promise.reject(err.clone());
+                        }
+                        return Promise.reject(err);
+                    });
             })
     );
 });

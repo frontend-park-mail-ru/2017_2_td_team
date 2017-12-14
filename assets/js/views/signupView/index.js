@@ -13,7 +13,9 @@ export default class SignupView extends View {
     render() {
         const signupButton = new SubmitButton(SignupButton);
         const signupInputs = Array.from(SignupFields.values()).map(field => new InputBlock(field));
-        signupInputs.push(new SelectBlock(SelectField));
+        const select = new SelectBlock(SelectField);
+        select.hide();
+        signupInputs.push(select);
 
         this.signupForm = new Form(signupButton, signupInputs, {action: '', method: 'post'}, ['default-form', 'box']);
 

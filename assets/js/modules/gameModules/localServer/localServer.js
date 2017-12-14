@@ -55,7 +55,7 @@ export default class LocalGameServer extends Strategy {
         this.gamectx.players[0] = payload.players[0];
         this.gamectx.players[0].scores = 0;
         this.gamectx.players[0].money = 100;
-        this.gamectx.hp = 1;
+        this.gamectx.hp = 100;
         this.localGameCtx.waveNumber = 0;
         this.startNewWave();
         const mapDto = {
