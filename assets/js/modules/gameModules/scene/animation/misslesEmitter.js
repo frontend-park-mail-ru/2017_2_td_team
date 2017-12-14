@@ -22,6 +22,7 @@ export default class MissilesEmitter extends ElementDrawer {
             const missile = new Missile(animation, towerMeta.sprite, monsterSprite.getSpritesContainer(), event.offset, 250);
             this.animationService.runAnimation(event.monsterId, missile);
         });
+        this.state.shotEvents = [];
     }
 
 }

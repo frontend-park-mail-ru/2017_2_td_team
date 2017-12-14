@@ -47,11 +47,13 @@ export default class LogoSpinner extends Block {
 
     show() {
         this._element.style.opacity = 1;
-        this._element.addEventListener('transitionend', () => this._element.style.display = '', true, true, 'opacity');
+        // this._element.addEventListener('transitionend', () => this._element.style.display = '', true, true, 'opacity');
+        this._element.style.display = '';
     }
 
     hide() {
         this._element.style.opacity = 0;
-        this._element.addEventListener('transitionend', () => this._element.style.display = 'none', true, true, 'opacity');
+        // this._element.addEventListener('transitionend', () => this._element.style.display = 'none', true, true, 'opacity');
+        this._element.style.display = 'none';
     }
 }

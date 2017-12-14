@@ -5,12 +5,11 @@ import globalEventBus from '../../modules/globalEventBus.js';
 export default class LogoutView extends View {
 
     resume() {
+        const redirection = () => globalEventBus.emit('router:redirect', {path: '/signin'});
         Auth
             .requestSignOut()
-            .then(globalEventBus.emit('router:redirect', {path: '/signin'}))
-            .catch(err => err
-                .json()
-                .then(errBody => console.log(errBody)));
+            .then(() => redirection())
+            .catch(() => redirection());
     }
 
 }

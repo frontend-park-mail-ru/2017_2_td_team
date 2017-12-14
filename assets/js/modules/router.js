@@ -18,7 +18,6 @@ export default class Router {
 
     start() {
         window.onpopstate = event => this.go(window.location.pathname, event.state);
-
         this.viewsParent.addEventListener('click', event => {
             if (event.target.tagName.toLowerCase() !== 'a') {
                 return;
@@ -38,8 +37,8 @@ export default class Router {
         });
 
         this.bus.register('router:redirect', (event, payload) => this.go(payload.path));
-
         this.go(window.location.pathname);
+
     }
 
     go(path, state) {
@@ -47,15 +46,12 @@ export default class Router {
         if (!route) {
             return;
         }
-        console.log('Current view:', this.currentView);
-        console.log('Poped state:', state);
-        console.log('pushing', {path: path}, route.title, path);
         if (state && state.path !== path) {
             window.history.replaceState({path: state.path}, state.title, state.path);
-        } else if (!state) {
+        }
+        if (window.location.pathname !== path) {
             window.history.pushState({path: path}, route.title, path);
         }
-
         if (this.currentView) {
             this.currentView.pause();
         }
@@ -63,5 +59,7 @@ export default class Router {
         route.prepare();
         route.view.resume();
     }
+
+
 
 }

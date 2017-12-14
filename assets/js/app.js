@@ -51,7 +51,6 @@ UserService
     .then(user => {
         UserService.currentUser = user;
         router.start();
-        console.log(user);
         globalEventBus.emit(Events.SPINNER_OFF);
         globalEventBus.emit(Events.NOTIFY, {
             message: `Hello, ${user.login}`,
