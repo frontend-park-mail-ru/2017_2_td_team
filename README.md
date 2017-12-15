@@ -3,11 +3,10 @@
 	<br>Tower Defence by TD Team
 </h3>
 
-## Status
-[![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_td_team.svg?branch=dev_module_3)](https://travis-ci.org/frontend-park-mail-ru/2017_2_td_team)
+[![Play!](https://raw.githubusercontent.com/frontend-park-mail-ru/2017_2_td_team/master/www/img/play.png)](https://tdgame.pw)
 
-## Play
-[Production](https://top-tdteam.herokuapp.com) / [Development](https://tdteam.herokuapp.com)
+## Status
+[![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_td_team.svg?branch=master)](https://travis-ci.org/frontend-park-mail-ru/2017_2_td_team)
 
 ## How to install and run
 1. `git clone https://github.com/frontend-park-mail-ru/2017_2_td_team`
