@@ -3,7 +3,7 @@
 	<br>Tower Defence by TD Team
 </h3>
 
-[![Play!](https://raw.githubusercontent.com/frontend-park-mail-ru/2017_2_td_team/master/www/img/play.png)](https://tdgame.pw)
+[![Play!](https://raw.githubusercontent.com/frontend-park-mail-ru/2017_2_td_team/dev/www/img/play.png)](https://tdgame.pw)
 
 ## Status
 [![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_td_team.svg?branch=master)](https://travis-ci.org/frontend-park-mail-ru/2017_2_td_team)
