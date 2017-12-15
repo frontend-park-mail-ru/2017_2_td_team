@@ -17,7 +17,7 @@ export default class LocalGameServer extends Strategy {
     constructor() {
         super();
         this.pixi = PIXI;
-        this.pixi.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
         this.genIdSource = function* () {
             let i = 0;
             while (true) {
@@ -193,6 +193,7 @@ export default class LocalGameServer extends Strategy {
             {coord: {x: 17, y: 12}, dir: {x: 1, y: 0}},
             {coord: {x: 18, y: 12}, dir: {x: 1, y: 0}},
             {coord: {x: 19, y: 12}, dir: {x: 1, y: 0}},
+            {coord: {x: 20, y: 12}, dir: {x: 1, y: 0}},
 
         ];
 
@@ -217,7 +218,6 @@ export default class LocalGameServer extends Strategy {
     }
 
     gameLoop(ms) {
-        this.updateWaveState(ms);
         this.reloadTowers(ms);
         this.checkHitAreas();
         this.emitShotEvents();
@@ -230,6 +230,7 @@ export default class LocalGameServer extends Strategy {
             towers: this.gamectx.towers,
             shotEvents: this.gamectx.events,
         });
+        this.updateWaveState(ms);
     }
 
 
@@ -282,7 +283,7 @@ export default class LocalGameServer extends Strategy {
     finishGame() {
         this.localGameCtx.gameLoopTicker.stop();
         this.bus.emit(Events.GAME_FINISHED, this.gamectx.players[0].scores);
-        this.localGameCtx.gameLoopTicker.destroy();
+
     }
 
     checkHitAreas() {
@@ -290,7 +291,9 @@ export default class LocalGameServer extends Strategy {
             area.monsters =
                 Array
                     .from(this.gamectx.wave.monsters)
-                    .filter(monster => area.checkCollision(monster));
+                    .filter(monster => area.checkCollision(monster)
+                    );
+
         });
 
     }
@@ -322,8 +325,7 @@ export default class LocalGameServer extends Strategy {
         return this.gamectx.players[0];
     }
 
-    destroy(){
-        this.localGameCtx.gameLoopTicker.stop();
+    destroy() {
         this.localGameCtx.gameLoopTicker.destroy();
         super.destroy();
     }

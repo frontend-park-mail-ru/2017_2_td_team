@@ -12,12 +12,10 @@ export default class GameManager {
         this.state = {};
         this.pixi = PIXI;
         this.ticker = this.pixi.ticker.shared;
-
         this.controller = new InteractionController(this.state);
 
         const unreg1 = this.bus.register(Events.NEW_GAME_STATE, (event, ctx) => {
             Object.assign(this.state, ctx);
-
             const loopRunner = () => this.gameLoop(this.ticker.elapsedMS);
             this.scene = new GameScene(parent, 32, ctx);
             this.scene
@@ -25,6 +23,8 @@ export default class GameManager {
                 .then(() => {
                     this.ticker.add(loopRunner);
                     this.clenupScripts.push(() => this.ticker.remove(loopRunner));
+
+                    this.bus.emit(Events.SPINNER_OFF);
                 });
         });
 
@@ -40,6 +40,7 @@ export default class GameManager {
     }
 
     destroy() {
+
         this.ticker.stop();
         this.clenupScripts.forEach(off => off());
         if (this.scene) {

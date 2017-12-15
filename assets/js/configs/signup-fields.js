@@ -22,7 +22,8 @@ export const SignupFields = new Map([
         label: 'Repeat Password',
         name: 'new-password',
         classes: ['form__input-block']
-    }]
+    }],
+
 ]);
 
 export const SignupButton = {
@@ -31,4 +32,10 @@ export const SignupButton = {
     },
     text: 'Sign Up',
     classes: ['button', 'form-button'],
+};
+
+export const SelectField = {
+    name: 'gameClass',
+    fields: ['Adventurer'],
+    title: ['Adventurer'],
 };

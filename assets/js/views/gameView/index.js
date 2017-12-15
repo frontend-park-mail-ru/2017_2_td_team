@@ -21,6 +21,9 @@ export default class GameView extends View {
 
         this._choose_game.className = 'box';
         this._choose_game.onclick = event => {
+            this._bus.emit(Events.SPINNER_ON);
+            console.log('spinner on');
+            this._choose_game.removeEventListener('click', this._choose_game.onclick);
             event.preventDefault();
             const data = event.target.getAttribute('data-section');
             if (data === 'offline') {
@@ -30,8 +33,14 @@ export default class GameView extends View {
                     .then(() => {
                         this.createGame(MultiplayerStrategy);
                     })
-                    .catch(() => this._bus.emit(Events.REDIRECT, {path: '/signin'}));
+                    .catch(() => {
+                        this._bus.emit(Events.NOTIFY, {message: 'Signin, please!', duration: 5});
+                        this._bus.emit(Events.REDIRECT, {path: '/signin'});
+
+                        this._bus.emit(Events.SPINNER_OFF);
+                    });
             }
+
         };
         this.hide();
     }
@@ -114,6 +123,7 @@ export default class GameView extends View {
             this._info1.hide();
             this._info2.hide();
         });
+
         this.subscribe(Events.ADD_TOWER, (ev, payload) => this._hud.appendToRightSidebar(payload));
 
         this._game = new Game(this._canvas, strategy, [{nickname: 'anon'}]);
@@ -125,7 +135,6 @@ export default class GameView extends View {
 
 
     pause() {
-        console.log(this);
         this.destroy();
         super.pause();
     }
@@ -133,20 +142,22 @@ export default class GameView extends View {
     finishGame(result) {
         this.destroy();
         this._element.innerHTML = FinishGameTemplate({context: {scores: result}});
-        this._element.addEventListener('click', event => {
+        const clickHandler = event => {
             event.preventDefault();
+            this._element.removeEventListener('click', clickHandler);
             const data = event.target.getAttribute('data-section');
             if (data === 'again') {
                 this._element.innerHTML = '';
                 this._element.appendChild(this._choose_game);
                 this.resume();
             }
-        });
+        };
+        this._element.addEventListener('click', clickHandler);
     }
 
     destroy() {
-
         this._bus.emit(Events.LOGO_ON);
+        this._bus.emit(Events.SPINNER_OFF);
         if (this._game) {
             this._game.destroy();
         }

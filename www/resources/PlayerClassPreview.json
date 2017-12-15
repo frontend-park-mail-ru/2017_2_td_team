@@ -1,0 +1,24 @@
+{
+  "classes": [
+    {
+      "className": "Adventurer",
+      "towers": [
+        {
+          "name": "Orange Tower",
+          "description": "...",
+          "preview": "otower.png"
+        },
+        {
+          "name": "Blue Tower",
+          "description": "...",
+          "preview": "bluetower.png"
+        },
+        {
+          "name": "Red Tower",
+          "description": "...",
+          "preview": "redtower.png"
+        }
+      ]
+    }
+  ]
+}

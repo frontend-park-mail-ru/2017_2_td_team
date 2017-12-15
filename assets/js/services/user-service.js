@@ -34,10 +34,8 @@ export default class UserService {
     static requestCurrentUser() {
         return Http
             .get(buildBackendUrl('/user'))
-            .then(res => res.json())
-            .catch(err =>
-                err.json()
-                    .then(errJson => Promise.reject(errJson)));
+            .then(res => res.json());
+
     }
 
     /**
@@ -67,9 +65,6 @@ export default class UserService {
             .then(res => {
                 Object.assign(UserService.currentUser, current);
                 return res.json();
-            })
-            .catch(err =>
-                err.json()
-                    .then(errJson => Promise.reject(errJson)));
+            });
     }
 }

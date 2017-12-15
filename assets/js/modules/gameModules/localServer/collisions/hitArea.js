@@ -2,22 +2,32 @@ export default class HitArea {
     constructor(tower) {
         this.position = {x: tower.x - tower.range, y: tower.y - tower.range};
 
-        this.width = tower.range * 2 + 1;
-        this.height = tower.range * 2 + 1;
+        this.width = 2 * tower.range + 1;
+        this.height = 2 * tower.range + 1;
         this.tower = tower;
-        this.monsters = [];
     }
+
+    isUnderTopPoint(point) {
+        return point.x >= this.position.x
+            && point.y >= this.position.y
+            && point.x < (this.position.x + this.width)
+            && point.y < (this.position.y + this.height);
+    }
+
+    isOverBotPoint(point) {
+        return point.x > this.position.x
+            && point.y > this.position.y
+            && point.x <= (this.position.x + this.width)
+            && point.y <= (this.position.y + this.height);
+    }
+
 
     checkCollision(object) {
-        const objCoords = object.realPosition;
-        return objCoords.x > this.position.x &&
-            objCoords.y > this.position.y &&
-            objCoords.x < this.position.x + this.width &&
-            objCoords.y < this.position.y + this.height;
-    }
 
-    pushMonsters(...monsters) {
-        this.monsters.push(monsters);
+        const topPoint = object.realPosition;
+        const botPoint = {x: topPoint.x + 1, y: topPoint.y + 1};
+
+        return this.isUnderTopPoint(topPoint) || this.isOverBotPoint(botPoint);
     }
 
 }

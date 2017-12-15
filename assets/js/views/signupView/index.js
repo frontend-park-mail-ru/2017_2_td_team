@@ -5,13 +5,18 @@ import InputBlock from '../../blocks/form/__input-block/form__input-block.js';
 import UserService from '../../services/user-service.js';
 import Auth from '../../modules/auth.js';
 import globalEventBus from '../../modules/globalEventBus.js';
-import {SignupButton, SignupFields} from '../../configs/signup-fields.js';
+import {SelectField, SignupButton, SignupFields} from '../../configs/signup-fields.js';
 import Events from '../../events.js';
+import SelectBlock from '../../blocks/form/__select-block/form__select-block';
 
 export default class SignupView extends View {
     render() {
         const signupButton = new SubmitButton(SignupButton);
         const signupInputs = Array.from(SignupFields.values()).map(field => new InputBlock(field));
+        const select = new SelectBlock(SelectField);
+        select.hide();
+        signupInputs.push(select);
+
         this.signupForm = new Form(signupButton, signupInputs, {action: '', method: 'post'}, ['default-form', 'box']);
 
         this.signupForm.injectTo(this._element);

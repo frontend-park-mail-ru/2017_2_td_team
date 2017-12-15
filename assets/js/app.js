@@ -48,14 +48,22 @@ router.register('/game', 'TD| Game', GameView);
 
 UserService
     .requestCurrentUser()
-    .then((user) => {
+    .then(user => {
         UserService.currentUser = user;
         router.start();
         globalEventBus.emit(Events.SPINNER_OFF);
+        globalEventBus.emit(Events.NOTIFY, {
+            message: `Hello, ${user.login}`,
+            duration: 5,
+        });
     })
-    .catch(errJson => {
-        console.log('User is not authorized', errJson);
-
+    .catch(() => {
+        if (window.location.pathname !== '/signin' && window.location.pathname !== '/signup') {
+            globalEventBus.emit(Events.NOTIFY, {
+                message: 'You are not authorized!',
+                duration: 5,
+            });
+        }
         router.start();
         globalEventBus.emit(Events.SPINNER_OFF);
         if (window.location.pathname === '/settings') {

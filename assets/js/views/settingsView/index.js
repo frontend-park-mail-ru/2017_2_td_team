@@ -3,12 +3,13 @@ import Profile from '../../blocks/profile/profile.js';
 import Button from '../../blocks/button/button.js';
 import UserService from '../../services/user-service.js';
 import globalEventBus from '../../modules/globalEventBus.js';
+import Events from '../../events';
 
 export default class SettingsView extends View {
 
 
     render() {
-        console.log('render');
+        this.bus = globalEventBus;
         const button = new Button({
             attrs: {
                 type: 'button',
@@ -19,12 +20,12 @@ export default class SettingsView extends View {
 
         button.on('click', event => {
             event.preventDefault();
-            globalEventBus.emit('router:redirect', {path: '/'});
+            this.bus.emit('router:redirect', {path: '/'});
         });
         this.profile = new Profile({}, ['profile', 'box']);
         this.profile.injectTo(this._element);
         this.profile.append(button);
-        console.log(UserService.currentUser);
+
         this.profile.onUpdate(formdata => {
             UserService
                 .updateCurrentUser(formdata)
@@ -33,23 +34,28 @@ export default class SettingsView extends View {
                     this.profile.append(this.button);
                 })
                 .catch(err => {
-                    console.log(err);
+                    this.bus.emit(Events.NOTIFY, {
+                        message: JSON.stringify(err),
+                        duration: 5,
+                    });
                 });
         });
     }
 
     resume() {
-        console.log('resume');
+
         UserService
             .requestCurrentUser()
             .then(user => {
-                console.log(user);
                 UserService.currentUser = user;
                 this.profile.setContent(UserService.currentUser);
             })
             .then(() => super.resume())
-            .catch(errJson => {
-                console.log(errJson);
+            .catch(() => {
+                this.bus.emit(Events.NOTIFY, {
+                    message: 'Not authorized!',
+                    duration: 5,
+                });
                 globalEventBus.emit('router:redirect', {path: '/signin'});
             });
     }
