@@ -62,7 +62,7 @@ export default class Tower {
         }, {fire: [], passed: []});
     }
 
-    get titlePosition() {
+    get tilePosition() {
         return {x: this.x, y: this.y};
     }
 

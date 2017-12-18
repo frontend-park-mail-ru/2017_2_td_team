@@ -38,8 +38,8 @@ export default class MonsterDrawer extends ElementDrawer {
             .createAnimationSpritesContainer('monsters', monster.typeid);
 
 
-        monsterSpritesContainer.x = (monster.titleCoord.x + monster.relativeCoord.x) * this.titleWidth;
-        monsterSpritesContainer.y = (monster.titleCoord.y + monster.relativeCoord.y) * this.titleHeight;
+        monsterSpritesContainer.x = (monster.tileCoord.x + monster.relativeCoord.x) * this.tileWidth;
+        monsterSpritesContainer.y = (monster.tileCoord.y + monster.relativeCoord.y) * this.tileHeight;
 
 
         monsterSpritesContainer.interactive = true;
@@ -48,8 +48,8 @@ export default class MonsterDrawer extends ElementDrawer {
         });
 
         this.registerResizer(monsterSpritesContainer, () => {
-            monsterSpritesContainer.width = this.titleWidth;
-            monsterSpritesContainer.height = this.titleHeight;
+            monsterSpritesContainer.width = this.tileWidth;
+            monsterSpritesContainer.height = this.tileHeight;
         });
         const monsterSprite = new MonsterSprite(monsterSpritesContainer, monster);
         this.animationService.runAnimation(monster.id, monsterSprite);
@@ -60,9 +60,9 @@ export default class MonsterDrawer extends ElementDrawer {
     moveMonster(monster) {
         const monsterSprite = this.monstersSprites.get(monster.id);
         const rawSprite = monsterSprite.getSpritesContainer();
-        const titleParams = this.titleParams;
-        rawSprite.x = (monster.titleCoord.x + monster.relativeCoord.x) * titleParams.titleWidth;
-        rawSprite.y = (monster.titleCoord.y + monster.relativeCoord.y) * titleParams.titleHeight;
+        const tileParams = this.tileParams;
+        rawSprite.x = (monster.tileCoord.x + monster.relativeCoord.x) * tileParams.tileWidth;
+        rawSprite.y = (monster.tileCoord.y + monster.relativeCoord.y) * tileParams.tileHeight;
         monsterSprite.rotate();
     }
 

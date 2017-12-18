@@ -13,20 +13,20 @@ export default class ElementDrawer {
         this.clenupScripts = [];
         this.bus = globalEventBus;
         this.textureProvider = gameScene.textureProvider;
-        this.titleParams = {titleWidth: gameScene.titleWidth, titleHeight: gameScene.titleHeight};
+        this.tileParams = {tileWidth: gameScene.tileWidth, tileHeight: gameScene.tileHeight};
         this.pane = null;
     }
 
-    get titleWidth() {
-        return this.titleParams.titleWidth;
+    get tileWidth() {
+        return this.tileParams.tileWidth;
     }
 
-    get titleHeight() {
-        return this.titleParams.titleHeight;
+    get tileHeight() {
+        return this.tileParams.tileHeight;
     }
 
     toggleResizers(params) {
-        this.titleParams = params;
+        this.tileParams = params;
         this.resize();
         this.resizers.forEach(resizer => resizer());
     }

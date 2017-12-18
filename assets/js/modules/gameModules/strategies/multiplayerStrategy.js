@@ -33,16 +33,16 @@ export default class MultiplayerStrategy extends Strategy {
 
     parseInit(ctx) {
         const map = {
-            titles: []
+            tiles: []
         };
         for (let i = 0; i < ctx.map.height; ++i) {
-            map.titles.push([]);
+            map.tiles.push([]);
             for (let j = 0; j < ctx.map.width; ++j) {
-                map.titles[i].push(1);
+                map.tiles[i].push(1);
             }
         }
-        for (let title of ctx.map.gameMap) {
-            map.titles[title.y][title.x] = title.titleType;
+        for (let tile of ctx.map.gameMap) {
+            map.tiles[tile.y][tile.x] = tile.tileType;
         }
 
         const currentPlayer = ctx.players.find(player => player.id === ctx.playerId);

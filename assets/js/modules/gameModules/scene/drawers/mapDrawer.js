@@ -5,48 +5,48 @@ export default class MapDrawer extends ElementDrawer {
     constructor(gameScene, parent) {
         super(gameScene, null);
         this.pane = new this.pixi.Container();
-        this.titlesSprites = [];
+        this.tilesSprites = [];
         parent.addChild(this.pane);
     }
 
     createGameMap() {
-        const map = this.state.map.titles;
+        const map = this.state.map.tiles;
         for (let j = 0; j < map.length; ++j) {
-            this.titlesSprites.push([]);
+            this.tilesSprites.push([]);
             for (let i = 0; i < map[j].length; ++i) {
-                const titleType = map[j][i];
-                this.createTitle({x: i, y: j}, titleType);
+                const tileType = map[j][i];
+                this.createTile({x: i, y: j}, tileType);
             }
         }
     }
 
-    createTitle(coord, titleType) {
-        const title = this.textureProvider.getScaledSprite(titleType);
+    createTile(coord, tileType) {
+        const tile = this.textureProvider.getScaledSprite(tileType);
 
-        const titlePlacer = () => {
-            title.width = this.titleWidth;
-            title.height = this.titleHeight;
-            title.position.set(coord.x * this.titleWidth, coord.y * this.titleHeight);
+        const tilePlacer = () => {
+            tile.width = this.tileWidth;
+            tile.height = this.tileHeight;
+            tile.position.set(coord.x * this.tileWidth, coord.y * this.tileHeight);
         };
 
-        titlePlacer();
-        this.registerResizer(title, titlePlacer);
+        tilePlacer();
+        this.registerResizer(tile, tilePlacer);
 
-        title.interactive = true;
+        tile.interactive = true;
 
-        title.on('pointerover', () => {
-            title.alpha = 0.7;
+        tile.on('pointerover', () => {
+            tile.alpha = 0.7;
         });
 
-        title.on('pointerout', () => {
-            title.alpha = 1;
+        tile.on('pointerout', () => {
+            tile.alpha = 1;
         });
 
-        title.on('pointertap', () => {
-            this.bus.emit(Events.TITLE_CLICKED, {coord, titleType});
+        tile.on('pointertap', () => {
+            this.bus.emit(Events.TILE_CLICKED, {coord, tileType});
         });
 
-        this.titlesSprites[coord.y].push(title);
-        this.pane.addChild(title);
+        this.tilesSprites[coord.y].push(tile);
+        this.pane.addChild(tile);
     }
 }

@@ -59,13 +59,13 @@ export default class LocalGameServer extends Strategy {
         this.localGameCtx.waveNumber = 0;
         this.startNewWave();
         const mapDto = {
-            titles: []
+            tiles: []
         };
 
         for (let i = 0; i < this.gameMap.length; ++i) {
-            mapDto.titles.push([]);
+            mapDto.tiles.push([]);
             for (let j = 0; j < this.gameMap[i].length; ++j) {
-                mapDto.titles[i].push(this.gameMap[i][j].titleType);
+                mapDto.tiles[i].push(this.gameMap[i][j].tileType);
             }
         }
 
@@ -100,14 +100,14 @@ export default class LocalGameServer extends Strategy {
 
     generateGameMap() {
         const map = {
-            titles: [],
+            tiles: [],
             paths: [],
         };
-        map.titles = [];
+        map.tiles = [];
         for (let i = 0; i < 14; ++i) {
-            map.titles.push([]);
+            map.tiles.push([]);
             for (let j = 0; j < 21; ++j) {
-                map.titles[i].push({titleType: 0, owner: null});
+                map.tiles[i].push({tileType: 0, owner: null});
             }
         }
 
@@ -116,7 +116,7 @@ export default class LocalGameServer extends Strategy {
         map.paths.push([...pathGenerator()]);
 
         map.paths[0].forEach(pathPoint => {
-            map.titles[pathPoint.coord.y][pathPoint.coord.x].titleType = 1;
+            map.tiles[pathPoint.coord.y][pathPoint.coord.x].tileType = 1;
         });
 
         return map;
@@ -318,7 +318,7 @@ export default class LocalGameServer extends Strategy {
     }
 
     get gameMap() {
-        return this.gamectx.map.titles;
+        return this.gamectx.map.tiles;
     }
 
     get player() {

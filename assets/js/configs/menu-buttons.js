@@ -26,6 +26,14 @@ const MenuButtons = [
     },
     {
         attrs: {
+            'data-section': 'scoreboard',
+            href: '/scoreboard',
+        },
+        text: 'Scores',
+        classes: ['button', 'menu-button'],
+    },
+    {
+        attrs: {
             'data-section': 'logout',
             href: '/logout',
         },

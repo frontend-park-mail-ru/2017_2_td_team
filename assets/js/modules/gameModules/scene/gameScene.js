@@ -10,16 +10,16 @@ import * as PIXI from 'pixi.js';
 
 export default class GameScene {
 
-    constructor(parent, titlesz, gamectx) {
+    constructor(parent, tilesz, gamectx) {
 
         this.bus = globalEventBus;
-        this.map = gamectx.map.titles;
+        this.map = gamectx.map.tiles;
 
-        this.titlesz = titlesz;
+        this.tilesz = tilesz;
 
-        this.totalTitlesW = 21;
-        this.totalTitlesH = 14;
-        this.aspect = this.totalTitlesW / this.totalTitlesH;
+        this.totaltilesW = 21;
+        this.totaltilesH = 14;
+        this.aspect = this.totaltilesW / this.totaltilesH;
 
         this.calcDimensions();
 
@@ -62,21 +62,21 @@ export default class GameScene {
     resize() {
         this.calcDimensions();
         this.textureProvider.setScale(this.scalex, this.scaley);
-        this.resizers.forEach(resizer => resizer({titleWidth: this.titleWidth, titleHeight: this.titleHeight}));
+        this.resizers.forEach(resizer => resizer({tileWidth: this.tileWidth, tileHeight: this.tileHeight}));
         this.renderer.resize(this.width, this.height);
     }
 
     calcDimensions() {
 
-        let availheight = (window.innerHeight - this.titlesz) - ((window.innerHeight - this.titlesz) % this.titlesz);
+        let availheight = (window.innerHeight - this.tilesz) - ((window.innerHeight - this.tilesz) % this.tilesz);
 
         this.height = availheight;
         this.width = availheight * this.aspect;
-        this.scaley = this.height / (this.totalTitlesH * this.titlesz);
-        this.scalex = this.width / (this.totalTitlesW * this.titlesz);
+        this.scaley = this.height / (this.totaltilesH * this.tilesz);
+        this.scalex = this.width / (this.totaltilesW * this.tilesz);
 
-        this.titleWidth = this.scalex * this.titlesz;
-        this.titleHeight = this.scaley * this.titlesz;
+        this.tileWidth = this.scalex * this.tilesz;
+        this.tileHeight = this.scaley * this.tilesz;
     }
 
     prepare() {
@@ -105,8 +105,8 @@ export default class GameScene {
     createAvailableTowers() {
         this.state.availableTowers.forEach(towerid => {
             const tower = document.createElement('div');
-            tower.style.height = `${this.titleHeight * 2}px`;
-            tower.style.width = `${this.titleWidth * 2}px`;
+            tower.style.height = `${this.tileHeight * 2}px`;
+            tower.style.width = `${this.tileWidth * 2}px`;
             tower.style.backgroundSize = 'cover';
             tower.style.backgroundImage = `url(img/textures/${this.state.textureAtlas.atlas[towerid].texture})`;
 

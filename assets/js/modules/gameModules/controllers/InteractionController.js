@@ -10,7 +10,7 @@ export default class InteractionController {
         };
         this.bus = globalEventBus;
         this.bus.register(Events.TOWER_CLICKED, (event, tower) => this.onTowerClicked(tower));
-        this.bus.register(Events.TITLE_CLICKED, (event, title) => this.onTitleClicked(title));
+        this.bus.register(Events.TILE_CLICKED, (event, tile) => this.onTileClicked(tile));
 
     }
 
@@ -36,9 +36,9 @@ export default class InteractionController {
 
     }
 
-    onTitleClicked(payload) {
+    onTileClicked(payload) {
         const clicked = this.towerInteraction.clicked;
-        if (payload.titleType === 1) {
+        if (payload.tileType === 1) {
             return;
         }
         if (clicked) {
