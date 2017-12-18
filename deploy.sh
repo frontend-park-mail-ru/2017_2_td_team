@@ -17,3 +17,6 @@ ssh -p $PORT td@$SERVER_IP "rm -rf $DEPLOY_PATH/*"
 
 echo "Uploading..."
 scp -P $PORT -r $DIST_PATH/* td@$SERVER_IP:$DEPLOY_PATH
+
+echo "Restarting..."
+ssh -p $PORT td@$SERVER_IP "supervisorctl restart td"
