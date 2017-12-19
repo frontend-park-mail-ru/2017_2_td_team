@@ -108,6 +108,7 @@ export default class GameScene {
             tower.style.height = `${this.tileHeight * 2}px`;
             tower.style.width = `${this.tileWidth * 2}px`;
             tower.style.backgroundSize = 'cover';
+            tower.style.border = '4px solid #303030';
             tower.style.backgroundImage = `url(img/textures/${this.state.textureAtlas.atlas[towerid].texture})`;
 
             tower.addEventListener('pointerup', () => this.bus.emit(Events.TOWER_CLICKED, {
