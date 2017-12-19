@@ -2,7 +2,7 @@ dist: trusty
 sudo: false
 language: node_js
 node_js:
-  - "node"
+  - "7"
 cache: yarn
 branches:
   only:
