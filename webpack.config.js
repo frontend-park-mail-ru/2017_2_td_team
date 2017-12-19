@@ -1,6 +1,7 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
     entry: ['babel-polyfill', './assets/js/app.js'],
@@ -45,6 +46,9 @@ module.exports = {
         new UglifyJsPlugin({
             parallel: 4,
             cache: true,
+        }),
+        new CompressionPlugin({
+            deleteOriginalAssets: true
         }),
     ],
 };

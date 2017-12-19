@@ -4,17 +4,17 @@ const express = require('express');
 const body = require('body-parser');
 const httpStatus = require('http-status-codes');
 const path = require('path');
-const compression = require('compression');
+const expressStaticGzip = require('express-static-gzip');
+
 
 const app = express();
 
 app.use(body.json());
-app.use(compression());
-app.use(express.static('www'));
+app.use(expressStaticGzip('www'));
 
-const handler = ((req, res) => {
+const handler = (req, res) => {
     res.sendFile(path.join(__dirname, './www', 'index.html'));
-});
+};
 
 app.get('/', handler);
 app.get('/about', handler);
