@@ -20,7 +20,7 @@ export default class InteractionController {
         const clicked = this.towerInteraction.clicked;
 
         if (clicked && clicked.elem !== tower.elem) {
-            clicked.elem.style.border = '0px solid green';
+            clicked.elem.style.border = '4px solid transparent';
             this.towerInteraction.clicked = tower;
             tower.elem.style.border = '4px solid green';
             return;
@@ -31,7 +31,7 @@ export default class InteractionController {
             tower.elem.style.border = '4px solid green';
             return;
         }
-        clicked.elem.style.border = '0px solid green';
+        clicked.elem.style.border = '4px solid transparent';
         this.towerInteraction.clicked = null;
 
     }
