@@ -1,9 +1,11 @@
 export default class Page {
-    constructor(pageNumber, pageSize, scores) {
+    constructor(pageNumber, pageSize, scores, begin = 0, end = 0) {
         this.pageNumber = pageNumber;
 
         this.scores = scores.map(scoreRow => {
+            console.log(scoreRow);
             return {
+                scoreId: scoreRow.scoreId,
                 place: 0,
                 nickname: scoreRow.nickname,
                 scores: scoreRow.scores,
@@ -14,9 +16,9 @@ export default class Page {
             current.place = place;
             return ++place;
         }, pageNumber * pageSize + 1);
-        console.log(scores);
-        this.endMarker = this.scores ? this.scores[this.scores.length - 1].scoreId : null;
-        this.beginMarker = this.scores ? this.scores[0].scoreId : null;
-    }
+        console.log(this.scores);
 
+        this.endMarker = this.scores.length ? this.scores[this.scores.length - 1].scoreId : end;
+        this.beginMarker = this.scores.length ? this.scores[0].scoreId : begin;
+    }
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v1';
+const CACHE_NAME = 'v2';
 
 const RESOURCES_TO_CACHE = [
     '/bundle.js',
@@ -20,6 +20,7 @@ const RESOURCES_TO_CACHE = [
     '/ed92ab9e8761f7ef025dd0b5f198db35.woff',
     '/index.html',
 ];
+const CACHES_TO_CLEAR = ['v1'];
 
 this.addEventListener('install', event => {
     event.waitUntil(
@@ -28,6 +29,13 @@ this.addEventListener('install', event => {
             .then(cache => {
                 return cache.addAll(RESOURCES_TO_CACHE);
             })
+    );
+});
+
+this.addEventListener('activate', event => {
+    event.waitUntil(
+        Promise.all(
+            CACHES_TO_CLEAR.map(cache => caches.delete(cache)))
     );
 });
 
@@ -46,7 +54,7 @@ this.addEventListener('fetch', event => {
                             if (!response || response.status >= 300 || response.type !== 'basic') {
                                 return response;
                             }
-                            if (!cachedResponse && request.method == 'GET' ) {
+                            if (!cachedResponse && request.method == 'GET') {
                                 const responseToCache = response.clone();
                                 caches
                                     .open(CACHE_NAME)
