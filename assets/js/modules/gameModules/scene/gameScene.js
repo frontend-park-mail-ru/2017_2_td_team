@@ -35,7 +35,7 @@ export default class GameScene {
         this.renderer.autoResize = true;
 
         this.resizers = [];
-
+        this.cleanupScripts = [];
         this.stage = new this.pixi.Container();
 
         parent.appendChild(this.renderer.view);
@@ -162,7 +162,7 @@ export default class GameScene {
     destroy() {
         this.pixi.loader.reset();
         this.pixi.utils.clearTextureCache();
-        this.clenupScripts.forEach(off => off());
+        this.cleanupScripts.forEach(off => off());
         this.taskExecutorService.trigger('destroy');
         this.stage.destroy();
         this.renderer.view.remove();

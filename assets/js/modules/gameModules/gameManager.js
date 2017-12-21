@@ -8,7 +8,7 @@ export default class GameManager {
     constructor(parent, strategy, users) {
         this.bus = globalEventBus;
         this.strategy = new strategy();
-        this.clenupScripts = [];
+        this.cleanupScripts = [];
         this.state = {};
         this.pixi = PIXI;
         this.ticker = this.pixi.ticker.shared;
@@ -22,7 +22,7 @@ export default class GameManager {
                 .prepare()
                 .then(() => {
                     this.ticker.add(loopRunner);
-                    this.clenupScripts.push(() => this.ticker.remove(loopRunner));
+                    this.cleanupScripts.push(() => this.ticker.remove(loopRunner));
 
                     this.bus.emit(Events.SPINNER_OFF);
                 });
@@ -33,7 +33,7 @@ export default class GameManager {
         });
 
         this.bus.emit(Events.NEW_GAME, {players: users});
-        this.clenupScripts.push(unreg1, unreg2);
+        this.cleanupScripts.push(unreg1, unreg2);
     }
 
     gameLoop(msDelta) {
@@ -44,12 +44,12 @@ export default class GameManager {
     destroy() {
 
         this.ticker.stop();
-        this.clenupScripts.forEach(off => off());
+        this.cleanupScripts.forEach(off => off());
         if (this.scene) {
             this.scene.destroy();
         }
         this.strategy.destroy();
-        this.clenupScripts = [];
+        this.cleanupScripts = [];
     }
 
     onGameFinish() {

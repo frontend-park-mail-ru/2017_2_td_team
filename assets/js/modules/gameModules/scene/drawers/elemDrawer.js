@@ -10,7 +10,7 @@ export default class ElementDrawer {
         this.state = gameScene.state;
         this.animationService = animationService;
         this.resizers = new Map();
-        this.clenupScripts = [];
+        this.cleanupScripts = [];
         this.bus = globalEventBus;
         this.textureProvider = gameScene.textureProvider;
         this.tileParams = {tileWidth: gameScene.tileWidth, tileHeight: gameScene.tileHeight};
@@ -33,8 +33,8 @@ export default class ElementDrawer {
 
     destroy() {
         this.cleanup();
-        this.clenupScripts.forEach(cleanup => cleanup());
-        this.clenupScripts.clear();
+        this.cleanupScripts.forEach(cleanup => cleanup());
+        this.cleanupScripts.clear();
         this.resizers.clear();
     }
 
