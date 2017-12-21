@@ -28,7 +28,9 @@ export default class GameManager {
                 });
         });
 
-        const unreg2 = this.bus.register(Events.GAME_STATE_UPDATE, (event, ctx) => Object.assign(this.state, ctx));
+        const unreg2 = this.bus.register(Events.GAME_STATE_UPDATE, (event, ctx) => {
+            Object.assign(this.state, ctx);
+        });
 
         this.bus.emit(Events.NEW_GAME, {players: users});
         this.clenupScripts.push(unreg1, unreg2);

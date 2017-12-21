@@ -44,6 +44,7 @@ export default class MonsterDrawer extends ElementDrawer {
 
         monsterSpritesContainer.interactive = true;
         monsterSpritesContainer.on('pointertap', () => {
+
             this.bus.emit(Events.SHOW_MONSTER_INFO, {hp: monster.hp, damage: monster.weight});
         });
 
@@ -51,6 +52,7 @@ export default class MonsterDrawer extends ElementDrawer {
             monsterSpritesContainer.width = this.tileWidth;
             monsterSpritesContainer.height = this.tileHeight;
         });
+
         const monsterSprite = new MonsterSprite(monsterSpritesContainer, monster);
         this.animationService.runAnimation(monster.id, monsterSprite);
         this.monstersSprites.set(monster.id, monsterSprite);
@@ -85,6 +87,7 @@ export default class MonsterDrawer extends ElementDrawer {
     }
 
     processPassedMonsters() {
+
         for (let passedMonster of this.state.wave.passed) {
             const monsterSprite = this.monstersSprites.get(passedMonster.id);
             if (monsterSprite && !this.graveyard.has(passedMonster.id)) {
@@ -107,6 +110,15 @@ export default class MonsterDrawer extends ElementDrawer {
                 sprite.destroy();
             }
         });
+    }
+
+    sync() {
+        for (let sprite of this.monstersSprites.values()) {
+            if (!this.state.wave.running.has(sprite.meta.id)) {
+                sprite.running = false;
+                this.graveyard.add(sprite.meta.id);
+            }
+        }
     }
 
 }
