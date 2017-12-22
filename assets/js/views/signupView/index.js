@@ -41,7 +41,7 @@ export default class SignupView extends View {
                         return;
                     }
                     globalEventBus.emit(Events.NOTIFY, {
-                        message: errResponse,
+                        message: JSON.stringify(errResponse),
                         duration: 10,
                     });
 
