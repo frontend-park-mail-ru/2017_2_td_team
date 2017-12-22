@@ -9,7 +9,7 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'www')
     },
-    // devtool: 'source-map',
+    devtool: 'source-map',
     module: {
         rules: [
             {
@@ -46,9 +46,10 @@ module.exports = {
         new UglifyJsPlugin({
             parallel: 4,
             cache: true,
+            sourceMap: true,
         }),
         new CompressionPlugin({
-            deleteOriginalAssets: true
+            // deleteOriginalAssets: true
         }),
     ],
 };
