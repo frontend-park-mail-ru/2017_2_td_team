@@ -49,7 +49,7 @@ module.exports = {
             sourceMap: true,
         }),
         new CompressionPlugin({
-            deleteOriginalAssets: true
+            // deleteOriginalAssets: true
         }),
     ],
 };
