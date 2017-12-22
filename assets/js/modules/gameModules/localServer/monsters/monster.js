@@ -80,7 +80,7 @@ export default class Monster {
         return {x: this.coord.x + this.relativeCoord.x, y: this.coord.y + this.relativeCoord.y};
     }
 
-    get titleCoord() {
+    get tileCoord() {
         return this.coord;
     }
 

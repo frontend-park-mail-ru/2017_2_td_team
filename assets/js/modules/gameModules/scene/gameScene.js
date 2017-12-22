@@ -7,28 +7,27 @@ import AnimationService from './animation/animationService';
 import MapDrawer from './drawers/mapDrawer';
 import MissilesEmitter from './animation/misslesEmitter';
 import * as PIXI from 'pixi.js';
+import TasksExecutor from './sheduler/taskExecutor';
 
 export default class GameScene {
 
-    constructor(parent, titlesz, gamectx) {
+    constructor(parent, tilesz, gamectx) {
 
         this.bus = globalEventBus;
-        this.map = gamectx.map.titles;
+        this.map = gamectx.map.tiles;
 
-        this.titlesz = titlesz;
+        this.tilesz = tilesz;
 
-        this.totalTitlesW = 21;
-        this.totalTitlesH = 14;
-        this.aspect = this.totalTitlesW / this.totalTitlesH;
+        this.totaltilesW = 21;
+        this.totaltilesH = 14;
+        this.aspect = this.totaltilesW / this.totaltilesH;
 
         this.calcDimensions();
 
         this.pixi = PIXI;
         this.pixi.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-        const elemResizer = this.resize.bind(this);
-        window.addEventListener('resize', elemResizer);
 
-        this.clenupScripts = [() => window.removeEventListener('resize', elemResizer)];
+
         this.state = gamectx;
 
         this.prepared = false;
@@ -36,21 +35,36 @@ export default class GameScene {
         this.renderer.autoResize = true;
 
         this.resizers = [];
-
+        this.cleanupScripts = [];
         this.stage = new this.pixi.Container();
 
         parent.appendChild(this.renderer.view);
 
-        this.parent = parent;
         this.stateSetters = [];
 
         this.textureProvider = new TextureProvider(this);
         this.animationsService = new AnimationService(this.textureProvider, this.stage);
+        this.taskExecutorService = new TasksExecutor();
+
         this.registerElementDrawer('mapDrawer', MapDrawer, this.stage);
         this.registerElementDrawer('monsterDrawer', MonsterDrawer, this.stage, this.animationsService);
         this.registerElementDrawer('towerDrawer', TowerDrawer, this.stage, this.animationsService);
         this.registerElementDrawer('missilesEmitter', MissilesEmitter, 'missiles', this.monsterDrawer, this.towerDrawer, this.animationsService);
+        this.initEventListeners();
+    }
 
+    initEventListeners() {
+
+        const elemResizer = this.resize.bind(this);
+        window.addEventListener('resize', elemResizer);
+
+        const repairer = this.repair.bind(this);
+        window.addEventListener('visibilitychange', repairer);
+
+        this.taskExecutorService.registerTask('destroy', () => {
+            window.removeEventListener('resize', elemResizer);
+            window.removeEventListener('visibilitychange', repairer);
+        });
     }
 
     registerElementDrawer(serviceName, service, ...args) {
@@ -59,24 +73,33 @@ export default class GameScene {
         this.resizers.push(params => this[serviceName].toggleResizers(params));
     }
 
+    repair() {
+        if (document.visibilityState !== 'visible') {
+            return;
+        }
+        this.taskExecutorService.registerTask('prerender', () => {
+            this.monsterDrawer.sync();
+        });
+    }
+
     resize() {
         this.calcDimensions();
         this.textureProvider.setScale(this.scalex, this.scaley);
-        this.resizers.forEach(resizer => resizer({titleWidth: this.titleWidth, titleHeight: this.titleHeight}));
+        this.resizers.forEach(resizer => resizer({tileWidth: this.tileWidth, tileHeight: this.tileHeight}));
         this.renderer.resize(this.width, this.height);
     }
 
     calcDimensions() {
 
-        let availheight = (window.innerHeight - this.titlesz) - ((window.innerHeight - this.titlesz) % this.titlesz);
+        let availheight = (window.innerHeight - this.tilesz) - ((window.innerHeight - this.tilesz) % this.tilesz);
 
         this.height = availheight;
         this.width = availheight * this.aspect;
-        this.scaley = this.height / (this.totalTitlesH * this.titlesz);
-        this.scalex = this.width / (this.totalTitlesW * this.titlesz);
+        this.scaley = this.height / (this.totaltilesH * this.tilesz);
+        this.scalex = this.width / (this.totaltilesW * this.tilesz);
 
-        this.titleWidth = this.scalex * this.titlesz;
-        this.titleHeight = this.scaley * this.titlesz;
+        this.tileWidth = this.scalex * this.tilesz;
+        this.tileHeight = this.scaley * this.tilesz;
     }
 
     prepare() {
@@ -105,9 +128,10 @@ export default class GameScene {
     createAvailableTowers() {
         this.state.availableTowers.forEach(towerid => {
             const tower = document.createElement('div');
-            tower.style.height = `${this.titleHeight * 2}px`;
-            tower.style.width = `${this.titleWidth * 2}px`;
+            tower.style.height = `${this.tileHeight * 2}px`;
+            tower.style.width = `${this.tileWidth * 2}px`;
             tower.style.backgroundSize = 'cover';
+            tower.style.border = '4px solid #303030';
             tower.style.backgroundImage = `url(img/textures/${this.state.textureAtlas.atlas[towerid].texture})`;
 
             tower.addEventListener('pointerup', () => this.bus.emit(Events.TOWER_CLICKED, {
@@ -120,7 +144,7 @@ export default class GameScene {
 
 
     render(ms) {
-
+        this.taskExecutorService.trigger('prerender');
         this.updateWaveTimer();
         this.towerDrawer.updateTowerSprites();
         this.monsterDrawer.updateMonsterSprites();
@@ -132,12 +156,14 @@ export default class GameScene {
         this.monsterDrawer.processGraveyard();
         this.updateHudIndicators();
         this.renderer.render(this.stage);
+
     }
 
     destroy() {
         this.pixi.loader.reset();
         this.pixi.utils.clearTextureCache();
-        this.clenupScripts.forEach(off => off());
+        this.cleanupScripts.forEach(off => off());
+        this.taskExecutorService.trigger('destroy');
         this.stage.destroy();
         this.renderer.view.remove();
     }

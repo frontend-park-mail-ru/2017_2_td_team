@@ -18,6 +18,7 @@ import globalEventBus from './modules/globalEventBus.js';
 import GameView from './views/gameView/index.js';
 import Events from './events.js';
 import UserService from './services/user-service.js';
+import ScoreboardView from './views/scoreBoardView/scoreboardView';
 
 const application = document.getElementById('application');
 const applicationBlock = new Block(application);
@@ -44,8 +45,8 @@ router.register('/signup', 'TD | Signup', SignupView);
 router.register('/settings', 'TD | Profile', SettingsView);
 router.register('/about', 'TD | About', AboutView);
 router.register('/logout', 'TD | Logout', LogoutView);
-router.register('/game', 'TD| Game', GameView);
-
+router.register('/game', 'TD | Game', GameView);
+router.register('/scoreboard', 'TD | Scores', ScoreboardView);
 UserService
     .requestCurrentUser()
     .then(user => {

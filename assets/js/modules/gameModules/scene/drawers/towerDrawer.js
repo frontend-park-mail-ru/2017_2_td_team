@@ -25,10 +25,10 @@ export default class TowerDrawer extends ElementDrawer {
 
     createTowerArea(tower, towerSprite) {
         const [topx, topy, height, width] = [
-            this.titleWidth * (tower.titlePosition.x - tower.range),
-            this.titleHeight * (tower.titlePosition.y - tower.range),
-            this.titleHeight * (2 * tower.range + 1),
-            this.titleWidth * (2 * tower.range + 1),
+            this.tileWidth * (tower.tilePosition.x - tower.range),
+            this.tileHeight * (tower.tilePosition.y - tower.range),
+            this.tileHeight * (2 * tower.range + 1),
+            this.tileWidth * (2 * tower.range + 1),
         ];
         const area = new this.pixi.Graphics();
         area.fillAlpha = 0.3;
@@ -47,7 +47,7 @@ export default class TowerDrawer extends ElementDrawer {
         const towerSprite = this.textureProvider.getSpriteByTexture(tower.typeid);
         const area = this.createTowerArea(tower, towerSprite);
         const placeSprite = () => {
-            towerSprite.position.set(tower.titlePosition.x * this.titleWidth, tower.titlePosition.y * this.titleHeight);
+            towerSprite.position.set(tower.tilePosition.x * this.tileWidth, tower.tilePosition.y * this.tileHeight);
             this.textureProvider.scaleElements(towerSprite);
         };
 

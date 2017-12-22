@@ -11,8 +11,18 @@ export default class Hud extends Block {
         this._leftSidebar = document.createElement('div');
         this._leftSidebar.className = 'hud__left-sidebar';
 
+        let leftSidebarTitle = document.createElement('div');
+        leftSidebarTitle.innerHTML = 'Scores';
+        leftSidebarTitle.className = 'hud__left-sidebar__title';
+        this.appendToLeftSidebar(leftSidebarTitle);
+
         this._rightSidebar = document.createElement('div');
         this._rightSidebar.className = 'hud__right-sidebar';
+
+        let rightSidebarTitle = document.createElement('div');
+        rightSidebarTitle.innerHTML = 'Towers';
+        rightSidebarTitle.className = 'hud__right-sidebar__title';
+        this.appendToRightSidebar(rightSidebarTitle);
 
         this._bottomBar = document.createElement('div');
         this._bottomBar.className = 'hud__bottombar';

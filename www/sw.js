@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v1';
+const CACHE_NAME = 'v2';
 
 const RESOURCES_TO_CACHE = [
     '/bundle.js',
@@ -11,8 +11,8 @@ const RESOURCES_TO_CACHE = [
     '/img/textures/redtower.png',
     '/img/textures/timerIcon.png',
     '/img/textures/moneyIcon.png',
-    '/img/titleset.png',
-    '/img/titleset.json',
+    '/img/tileset.png',
+    '/img/tileset.json',
     '/7daab5c03279911663a04626da53f397.woff',
     '/1316bd7dab0eccb7c1ae1f7ba5b243c3.woff',
     '/122068bcd0df5f7f97e2d82ed60d9c8b.woff',
@@ -20,6 +20,7 @@ const RESOURCES_TO_CACHE = [
     '/ed92ab9e8761f7ef025dd0b5f198db35.woff',
     '/index.html',
 ];
+const CACHES_TO_CLEAR = ['v1'];
 
 this.addEventListener('install', event => {
     event.waitUntil(
@@ -28,6 +29,13 @@ this.addEventListener('install', event => {
             .then(cache => {
                 return cache.addAll(RESOURCES_TO_CACHE);
             })
+    );
+});
+
+this.addEventListener('activate', event => {
+    event.waitUntil(
+        Promise.all(
+            CACHES_TO_CLEAR.map(cache => caches.delete(cache)))
     );
 });
 
@@ -46,7 +54,7 @@ this.addEventListener('fetch', event => {
                             if (!response || response.status >= 300 || response.type !== 'basic') {
                                 return response;
                             }
-                            if (!cachedResponse) {
+                            if (!cachedResponse && request.method === 'GET') {
                                 const responseToCache = response.clone();
                                 caches
                                     .open(CACHE_NAME)

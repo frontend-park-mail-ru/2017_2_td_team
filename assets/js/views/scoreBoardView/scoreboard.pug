@@ -1,0 +1,12 @@
+div(class=['scoreboard'])
+    span(class='scoreboard__header') Scoreboard
+    each val in context.scores
+        div(class=['row'])
+            div(class=['row__cell']) #{val.place}
+            div(class=['row__cell']) #{val.nickname}
+            div(class=['row__cell']) #{val.scores}
+    div(class=['row'])
+        button(direction='back', class=['button']) <
+        button(direction='forward', class=['button']) >
+
+

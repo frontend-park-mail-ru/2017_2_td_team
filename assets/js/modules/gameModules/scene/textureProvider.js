@@ -59,4 +59,4 @@ export default class TextureProvider {
 
 }
 
-const TEXTURE_PATH = 'img/titleset.json';
+const TEXTURE_PATH = 'img/tileset.json';

@@ -8,6 +8,7 @@ import globalEventBus from '../../modules/globalEventBus.js';
 import {SelectField, SignupButton, SignupFields} from '../../configs/signup-fields.js';
 import Events from '../../events.js';
 import SelectBlock from '../../blocks/form/__select-block/form__select-block';
+import apiErrorParser from '../../services/errorParsingService';
 
 export default class SignupView extends View {
     render() {
@@ -26,36 +27,24 @@ export default class SignupView extends View {
                 .then(user => {
                     UserService.currentUser = user;
                     this.signupForm.reset();
-                    globalEventBus.emit('router:redirect', {path: '/'});
+                    globalEventBus.emit(Events.REDIRECT, {path: '/'});
                 })
                 .catch(errResponse => {
-                    let errors = [];
-                    if (errResponse.incorrectRequestDataErrors) {
-                        errors = errResponse.incorrectRequestDataErrors;
-                    } else if (errResponse.fieldName) {
-                        errors.push(errResponse);
-                    } else {
-                        globalEventBus.emit(Events.NOTIFY, {
-                            message: 'Internal error: try again',
-                            duration: 5,
+                    const [descriptions] = apiErrorParser.parseError(errResponse);
+                    if (descriptions instanceof Array) {
+                        descriptions.map(description => {
+                            globalEventBus.emit(Events.NOTIFY, {
+                                message: description,
+                                duration: 15,
+                            });
                         });
+                        return;
                     }
-                    errors.forEach(err => {
-                        let inputName = '';
-                        switch (err.fieldName) {
-                            case 'email':
-                                inputName = SignupFields.get('EmailField').name;
-                                break;
-                            case 'password':
-                                inputName = SignupFields.get('PasswordField').name;
-                                break;
-                            case 'login':
-                                inputName = SignupFields.get('NameField').name;
-                                break;
-                        }
-                        this.signupForm._element.elements[inputName].setCustomValidity(err.description);
-                        this.signupForm._element.elements[inputName].reportValidity();
+                    globalEventBus.emit(Events.NOTIFY, {
+                        message: 'Internal error, try again',
+                        duration: 10,
                     });
+
                 });
         });
 
@@ -93,7 +82,7 @@ export default class SignupView extends View {
                     case loginField: {
                         const loginLength = input.value.length;
                         if (loginLength < 3 || loginLength > 25) {
-                            input.setCustomValidity('Login is too short');
+                            input.setCustomValidity('Login must be > 3');
                         }
                         break;
                     }

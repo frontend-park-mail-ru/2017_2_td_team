@@ -5,7 +5,7 @@ import Events from '../../../events.js';
 export default class Strategy {
     constructor() {
         this.bus = globalEventBus;
-        this.clenupScripts = [];
+        this.cleanupScripts = [];
         this.gamectx = {
             players: [],
             wave: {},
@@ -26,11 +26,11 @@ export default class Strategy {
 
     subscribe(event, method) {
         const off = this.bus.register(event, method);
-        this.clenupScripts.push(off);
+        this.cleanupScripts.push(off);
     }
 
     destroy() {
-        this.clenupScripts.forEach(off => off());
+        this.cleanupScripts.forEach(off => off());
     }
 
 

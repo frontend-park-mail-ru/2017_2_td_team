@@ -8,6 +8,7 @@ import Auth from '../../modules/auth.js';
 import globalEventBus from '../../modules/globalEventBus.js';
 import {SigninButton, SigninFields} from '../../configs/signin-fields.js';
 import Events from '../../events.js';
+import apiErrorParser from '../../services/errorParsingService';
 
 export default class SigninView extends View {
     render() {
@@ -32,25 +33,15 @@ export default class SigninView extends View {
                 .requestSignIn(formdata)
                 .then(user => {
                     UserService.currentUser = user;
-
                     this.signinForm.reset();
                     globalEventBus.emit('router:redirect', {path: '/'});
                 })
-                .then(errResponse => {
-
-                    let message = '';
-                    if (errResponse.authorizationError) {
-                        message = errResponse.authorizationError.description;
-                    } else {
-                        message = 'Internal error: try again';
-                    }
-
+                .catch(errResponse => {
+                    const [description] = apiErrorParser.parseError(errResponse);
                     globalEventBus.emit(Events.NOTIFY, {
-                        message: message,
-                        duration: 5,
+                        message: description ? description : 'Internal error, try again',
+                        duration: 15,
                     });
-
-
                 });
         });
 

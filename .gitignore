@@ -67,3 +67,5 @@ styles.css
 styles.css.map
 
 package-lock.json
+www/styles.css.gz
+www/bundle.js.gz
