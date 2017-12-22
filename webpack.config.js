@@ -46,6 +46,7 @@ module.exports = {
         new UglifyJsPlugin({
             parallel: 4,
             cache: true,
+            sourceMap: true,
         }),
         new CompressionPlugin({
             deleteOriginalAssets: true
