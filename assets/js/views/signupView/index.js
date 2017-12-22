@@ -41,10 +41,10 @@ export default class SignupView extends View {
                         return;
                     }
                     globalEventBus.emit(Events.NOTIFY, {
-                        message: 'Internal Error, try again',
+                        message: errResponse,
                         duration: 10,
                     });
-                    console.error(errResponse);
+
                 });
         });
 
