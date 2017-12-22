@@ -39,7 +39,7 @@ export default class SigninView extends View {
                 .catch(errResponse => {
                     const [description] = apiErrorParser.parseError(errResponse);
                     globalEventBus.emit(Events.NOTIFY, {
-                        message: JSON.stringify(description),
+                        message: description ? description : 'Internal error, try again',
                         duration: 15,
                     });
                 });
