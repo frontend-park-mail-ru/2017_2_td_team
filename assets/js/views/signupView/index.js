@@ -31,12 +31,20 @@ export default class SignupView extends View {
                 })
                 .catch(errResponse => {
                     const [descriptions] = apiErrorParser.parseError(errResponse);
-                    descriptions.map(description => {
-                        globalEventBus.emit(Events.NOTIFY, {
-                            message: description,
-                            duration: 15,
+                    if (descriptions instanceof Array) {
+                        descriptions.map(description => {
+                            globalEventBus.emit(Events.NOTIFY, {
+                                message: description,
+                                duration: 15,
+                            });
                         });
+                        return;
+                    }
+                    globalEventBus.emit(Events.NOTIFY, {
+                        message: 'Internal Error, try again',
+                        duration: 10,
                     });
+                    console.error(errResponse);
                 });
         });
 

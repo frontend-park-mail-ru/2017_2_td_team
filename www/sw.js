@@ -54,7 +54,7 @@ this.addEventListener('fetch', event => {
                             if (!response || response.status >= 300 || response.type !== 'basic') {
                                 return response;
                             }
-                            if (!cachedResponse && request.method == 'GET') {
+                            if (!cachedResponse && request.method === 'GET') {
                                 const responseToCache = response.clone();
                                 caches
                                     .open(CACHE_NAME)

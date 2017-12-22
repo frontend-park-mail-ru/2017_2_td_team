@@ -10,7 +10,7 @@ class ErrorParsingService {
     parseError(err) {
         const handler = this.errorTypeHandlers.get(err.type);
         if (!handler) {
-            return [null];
+            return [err];
         }
         return handler(err);
     }
