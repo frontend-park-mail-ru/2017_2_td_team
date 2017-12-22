@@ -16,14 +16,14 @@ const MenuButtons = [
         text: 'About',
         classes: ['button', 'menu-button'],
     },
-    {
-        attrs: {
-            'data-section': 'settings',
-            href: '/settings',
-        },
-        text: 'Settings',
-        classes: ['button', 'menu-button'],
-    },
+    // {
+    //     attrs: {
+    //         'data-section': 'settings',
+    //         href: '/settings',
+    //     },
+    //     text: 'Settings',
+    //     classes: ['button', 'menu-button'],
+    // },
     {
         attrs: {
             'data-section': 'scoreboard',
@@ -37,7 +37,7 @@ const MenuButtons = [
             'data-section': 'logout',
             href: '/logout',
         },
-        text: 'Logout',
+        text: 'Exit',
         classes: ['button', 'menu-button'],
     },
 ];
