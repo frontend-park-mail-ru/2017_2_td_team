@@ -16,15 +16,18 @@ export default class AnimationService {
             for (let animation of animSet.values()) {
                 if (!animation.update(ms)) {
                     animSet.delete(animation);
+
                     animation.destroy();
                 }
             }
         });
+
         this.animations.forEach((animSet, targetId, map) => {
             if (!animSet.size) {
                 map.delete(targetId);
             }
         });
+
     }
 
     runAnimation(id, animationSprite) {
@@ -44,14 +47,16 @@ export default class AnimationService {
 
         this.textureProvider.scaleElements(animation);
 
-        this.getAnimationLayer(layer)
+        this
+            .getAnimationLayer(layer)
             .addChild(animation);
         return animation;
     }
 
     createAnimationSpritesContainer(layer, typeid) {
 
-        const animations = this.textureProvider.getTexturesSetForType(typeid)
+        const animations = this.textureProvider
+            .getTexturesSetForType(typeid)
             .map(frames => this.textureProvider
                 .scaleElements(new this.pixi.extras.AnimatedSprite(frames)));
 

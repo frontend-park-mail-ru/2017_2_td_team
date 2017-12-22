@@ -8,7 +8,6 @@ class ScoresService {
     constructor() {
         this.bus = globalEventBus;
         this.pages = [];
-        this.cacheTreshold = 10;
     }
 
     get currentPage() {
@@ -16,9 +15,6 @@ class ScoresService {
     }
 
     set currentPage(page) {
-        if (this.pages.length === this.cacheTreshold) {
-            this.pages = this.pages.slice(this.cacheTreshold / 2);
-        }
         this.pages.push(page);
     }
 
@@ -26,6 +22,7 @@ class ScoresService {
         try {
             const rawPage = await Http.get(buildBackendUrl(`/scores/page/${pageSize}`));
             const rawPageJson = await rawPage.json();
+
             this.currentPage = new Page(0, pageSize, rawPageJson.scores);
         } catch (e) {
             this.bus.emit(Events.NOTIFY, {message: e, duration: 5});
@@ -42,9 +39,15 @@ class ScoresService {
         try {
             const rawPage = await Http.get(buildBackendUrl(url));
             const rawPageJson = await rawPage.json();
-            this.currentPage = new Page(this.currentPage.pageNumber + 1, pageSize, rawPageJson.scores);
+            if (rawPageJson.scores.length) {
+                this.currentPage = new Page(
+                    this.currentPage.pageNumber + 1,
+                    pageSize,
+                    rawPageJson.scores);
+            }
         } catch (err) {
             this.bus.emit(Events.NOTIFY, {message: 'Internal error: try again', duration: 5});
+
         }
         return this.currentPage;
     }
@@ -60,6 +63,7 @@ class ScoresService {
     }
 
 }
+
 const scoresService = new ScoresService();
 export default scoresService;
 
